@@ -1,0 +1,39 @@
+<circuit reactStep="50" type="simulide_0.1" noLinAcc="5" speed="1000000" animate="0" noLinStep="10">
+ 
+Ground-10: 
+<item valLabely="0" itemtype="Ground" hflip="1" y="-244" valLabRot="0" labely="-24" labelx="-16" vflip="1" id="Ground-10" labelrot="0" valLabelx="0" objectName="Ground-10" Show_id="false" x="20" rotation="0"/>
+ 
+Resistor-9: 
+<item labely="-24" labelx="-12" Resistance="100" objectName="Resistor-9" Show_res="true" id="Resistor-9" valLabRot="0" y="-276" hflip="1" valLabely="6" Show_id="false" Unit=" O" vflip="1" itemtype="Resistor" rotation="0" x="-20" labelrot="0" valLabelx="-16"/>
+ 
+Resistor-8: 
+<item labely="-24" labelx="-12" Resistance="100" objectName="Resistor-8" Show_res="true" id="Resistor-8" valLabRot="0" y="-268" hflip="1" valLabely="6" Show_id="false" Unit=" O" vflip="1" itemtype="Resistor" rotation="0" x="-84" labelrot="0" valLabelx="-16"/>
+ 
+Resistor-7: 
+<item labely="-24" labelx="-12" Resistance="100" objectName="Resistor-7" Show_res="true" id="Resistor-7" valLabRot="0" y="-300" hflip="1" valLabely="6" Show_id="false" Unit=" O" vflip="1" itemtype="Resistor" rotation="0" x="-76" labelrot="0" valLabelx="-16"/>
+ 
+Resistor-6: 
+<item labely="-24" labelx="-12" Resistance="100" objectName="Resistor-6" Show_res="true" id="Resistor-6" valLabRot="0" y="-332" hflip="1" valLabely="6" Show_id="false" Unit=" O" vflip="1" itemtype="Resistor" rotation="0" x="-76" labelrot="0" valLabelx="-16"/>
+ 
+Resistor-5: 
+<item labely="-24" labelx="-12" Resistance="100" objectName="Resistor-5" Show_res="true" id="Resistor-5" valLabRot="0" y="-372" hflip="1" valLabely="6" Show_id="false" Unit=" O" vflip="1" itemtype="Resistor" rotation="0" x="-76" labelrot="0" valLabelx="-16"/>
+ 
+Resistor-4: 
+<item labely="-24" labelx="-12" Resistance="100" objectName="Resistor-4" Show_res="true" id="Resistor-4" valLabRot="0" y="-412" hflip="1" valLabely="6" Show_id="false" Unit=" O" vflip="1" itemtype="Resistor" rotation="0" x="-76" labelrot="0" valLabelx="-16"/>
+ 
+Resistor-3: 
+<item labely="-24" labelx="-12" Resistance="100" objectName="Resistor-3" Show_res="true" id="Resistor-3" valLabRot="0" y="-364" hflip="1" valLabely="6" Show_id="false" Unit=" O" vflip="1" itemtype="Resistor" rotation="0" x="-44" labelrot="0" valLabelx="-16"/>
+ 
+Seven Segment-2: 
+<item MaxCurrent="0.02" labely="-24" labelx="-16" CommonCathode="true" Resistance="1" objectName="Seven Segment-2" id="Seven Segment-2" valLabRot="0" y="-340" hflip="1" valLabely="0" Show_id="false" NumDisplays="1" Vertical_Pins="false" vflip="1" itemtype="Seven Segment" rotation="0" Threshold="2.3999999999999999" x="20" labelrot="0" valLabelx="0" Color="0"/>
+ 
+atmega32-1: 
+<item labely="-20" labelx="0" Mhz="16" objectName="atmega32-1" id="atmega32-1" Ser_Monitor="false" valLabRot="0" y="-372" hflip="1" valLabely="0" Show_id="true" vflip="1" itemtype="AVR" rotation="0" Program="" Ser_Port="false" x="-260" labelrot="0" valLabelx="0"/>
+ 
+PlotterWidget: 
+<item pos="" geometry="" windowModified="false" minimumSize="" styleSheet="" windowModality="0" width="200" windowIcon="" minimumWidth="200" objectName="PlotterWidget" whatsThis="" childrenRect="" maximumHeight="200" visible="false" maximumSize="" MinVolt="-500" toolTip="" toolTipDuration="-1" locale="" statusTip="" inputMethodHints="0" accessibleDescription="" maximized="false" acceptDrops="false" MaxVolt="500" maximumWidth="1000" accessibleName="" height="200" size="" sizeIncrement="" minimumHeight="200" windowTitle="" x="0" layoutDirection="0" frameGeometry="" contextMenuPolicy="1" updatesEnabled="true" isActiveWindow="true" modal="false" windowIconText="" windowOpacity="1" childrenRegion="" focus="false" fullScreen="false" itemtype="Plotter" minimized="false" sizeHint="" rect="" y="0" normalGeometry="" enabled="true" minimumSizeHint="" autoFillBackground="false" frameSize="" cursor="" focusPolicy="0" sizePolicy="" font="MS Shell Dlg 2,7.8,-1,5,50,0,0,0,0,0" baseSize="" mouseTracking="false" windowFilePath="" palette=""/>
+ 
+SerialPortWidget: 
+<item pos="" geometry="" windowModified="false" minimumSize="" styleSheet="" windowModality="0" width="313" windowIcon="" minimumWidth="0" objectName="SerialPortWidget" whatsThis="" childrenRect="" maximumHeight="170" visible="false" maximumSize="" toolTip="" toolTipDuration="-1" locale="" statusTip="" inputMethodHints="0" accessibleDescription="" maximized="false" acceptDrops="false" maximumWidth="450" accessibleName="" height="141" size="" sizeIncrement="" minimumHeight="0" windowTitle="Settings" x="0" layoutDirection="0" frameGeometry="" contextMenuPolicy="1" updatesEnabled="true" isActiveWindow="true" modal="false" windowIconText="" windowOpacity="1" childrenRegion="" focus="false" fullScreen="false" itemtype="SerialPort" minimized="false" sizeHint="" rect="" y="0" normalGeometry="" enabled="true" minimumSizeHint="" autoFillBackground="false" frameSize="" cursor="" focusPolicy="0" sizePolicy="" font="MS Shell Dlg 2,7.8,-1,5,50,0,0,0,0,0" baseSize="" SettingsProp=",0,3,0,0,0" mouseTracking="false" windowFilePath="" palette=""/>
+ 
+</circuit>
