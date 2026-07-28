@@ -11,7 +11,7 @@
 | Field | Value |
 |-------|-------|
 | **Project code** | `PRJ-06-MOTOR` |
-| **Team size** | 2 – 3 students |
+| **Team size** | Asmaa Safy – Shorouk Anwar |
 | **Build window** | Days 11 – 15 (Jul 26 – Jul 30, 2026) |
 | **Demo & submission** | July 30, 2026 |
 | **Dominant skill** | Closed-loop fixed-point PI control, ramping, fail-safe E-stop |
