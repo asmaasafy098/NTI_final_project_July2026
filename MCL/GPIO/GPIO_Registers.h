@@ -1,7 +1,7 @@
 #ifndef GPIO_REGISTERS_H
 #define GPIO_REGISTERS_H
 
-#include "../Service/STD_Types.h"
+#include "../../Service/STD_Types.h"
 
 #define GPIO_NUMBER_OF_PORTS    4
 #define GPIO_NUMBER_OF_PINS     8

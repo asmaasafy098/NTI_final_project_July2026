@@ -5,6 +5,9 @@
  * Date: July 29, 2026
  */
 
+#include <avr/io.h>
+#include <avr/interrupt.h>
+
 #include "../Service/STD_Types.h"
 #include "../Service/Bit_Math.h"
 #include "../Logic/Data/data_types.h"
@@ -27,11 +30,11 @@
 
 /* ==================== HAL Includes ==================== */
 #include "../HAL/DC_Motor/dc_motor.h"
-#include "../HAL/Tachometer/Tachometer.h"                  /* TACHO_* functions */
-#include "../HAL/ANALOG_SENSOR/ANALOG_SENSOR.h"            /* ANALOG_* functions */
-#include "../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"      /* LCD_* functions */
-#include "../HAL/BUZZER/BUZZER.h"     
-#include "../HAL/Stepper_L298P/Stepper_L298P.h"                       /* BUZZER_* functions */
+#include "../HAL/Tachometer/Tachometer.h"              /* TACHO_* functions */
+#include "../HAL/ANALOG_SENSOR/ANALOG_SENSOR.h"        /* ANALOG_* functions */
+#include "../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"  /* LCD_* functions */
+#include "../HAL/BUZZER/BUZZER.h"                      /* BUZZER_* functions */
+#include "../HAL/Stepper_L298P/Stepper_L298P.h" 
 
 /* ==================== Global Variables ==================== */
 DriveData_t g_driveData;
@@ -131,7 +134,7 @@ int main(void)
     
     /* ===== STEP 6: Initialize Scheduler ===== */
     SCHED_Init();
-    SCHED_AddTask(Task_Panel, "Panel", 10, 0);      /* Buttons and LEDs */
+    SCHED_AddTask(Task_Panel, "Panel", 10, 0);       /* Buttons and LEDs */
     SCHED_AddTask(Task_Current, "Current", 50, 1);    /* Current + Short Circuit */
     SCHED_AddTask(Task_Control, "Control", 100, 2);   /* ★ MAIN CONTROL LOOP ★ */
     SCHED_AddTask(Task_LCD, "LCD", 250, 4);       /* LCD Update */
@@ -139,7 +142,7 @@ int main(void)
     SCHED_AddTask(Task_Telemetry, "Telemetry", 1000, 5); /* Telemetry + Run Hours */
     
     /* ===== STEP 7: Enable Interrupts ===== */
-    ENABLE_INTERRUPTS();
+    sei(); /* أو استبدالها بـ ENABLE_INTERRUPTS() لو كانت معرفة داخل interrupt_interface.h */
     
     /* ===== STEP 8: Super Loop ===== */
     while (1) {
