@@ -50,7 +50,7 @@ typedef enum
  */
 typedef struct
 {
-    uint32_h sclFrequency;
+    uint32_t sclFrequency;
 } I2C_MasterConfigType;
 
 /* ---------------- Slave Configuration Structure ---------------- */
@@ -61,8 +61,8 @@ typedef struct
  */
 typedef struct
 {
-    uint8_h ownAddress;
-    uint8_h enableGeneralCall;
+    uint8_t ownAddress;
+    uint8_t enableGeneralCall;
 } I2C_SlaveConfigType;
 
 /* ================================================================================
@@ -73,75 +73,75 @@ typedef struct
  * @brief  Initializes the TWI as a bus master: computes TWBR from sclFrequency and
  *         F_CPU (prescaler = 1), then enables the peripheral.
  * @param  addConfig  Pointer to a populated master configuration structure.
- * @return STD_ReturnType  E_OK/E_NOK (E_NOK on NULL pointer).
+ * @return Std_ReturnType  E_OK/E_NOK (E_NOK on NULL pointer).
  */
-STD_ReturnType I2C_InitMaster(const I2C_MasterConfigType *addConfig);
+Std_ReturnType I2C_InitMaster(const I2C_MasterConfigType *addConfig);
 
 /**
  * @brief  Initializes the TWI as an addressable slave: loads TWAR with the own
  *         address (and optional general-call bit) and enables the peripheral
  *         with acknowledge generation on.
  * @param  addConfig  Pointer to a populated slave configuration structure.
- * @return STD_ReturnType  E_OK/E_NOK (E_NOK on NULL pointer).
+ * @return Std_ReturnType  E_OK/E_NOK (E_NOK on NULL pointer).
  */
-STD_ReturnType I2C_InitSlave(const I2C_SlaveConfigType *addConfig);
+Std_ReturnType I2C_InitSlave(const I2C_SlaveConfigType *addConfig);
 
 /**
  * @brief  Disables the TWI peripheral (clears TWEN).
- * @return STD_ReturnType  E_OK/E_NOK.
+ * @return Std_ReturnType  E_OK/E_NOK.
  */
-STD_ReturnType I2C_DeInit(void);
+Std_ReturnType I2C_DeInit(void);
 
 /**
  * @brief  Generates a START (or repeated START) condition on the bus and waits
  *         for it to complete.
- * @return STD_ReturnType  E_OK if the resulting status is START/REP_START, else E_NOK.
+ * @return Std_ReturnType  E_OK if the resulting status is START/REP_START, else E_NOK.
  */
-STD_ReturnType I2C_Start(void);
+Std_ReturnType I2C_Start(void);
 
 /**
  * @brief  Generates a STOP condition, releasing the bus.
- * @return STD_ReturnType  E_OK/E_NOK.
+ * @return Std_ReturnType  E_OK/E_NOK.
  */
-STD_ReturnType I2C_Stop(void);
+Std_ReturnType I2C_Stop(void);
 
 /**
  * @brief  Transmits one byte on the bus and waits for the transfer to finish.
  *         Used both for the address byte (SLA+W/R) and for data bytes.
  * @param  uint8Data  Byte to place on the bus.
- * @return STD_ReturnType  E_OK/E_NOK.
+ * @return Std_ReturnType  E_OK/E_NOK.
  */
-STD_ReturnType I2C_WriteByte(uint8_h uint8Data);
+Std_ReturnType I2C_WriteByte(uint8_t uint8Data);
 
 /**
  * @brief  Reads one byte from the bus and returns ACK to the slave (more to read).
  * @param  puint8Data  Pointer that receives the byte; must not be NULL.
- * @return STD_ReturnType  E_OK/E_NOK.
+ * @return Std_ReturnType  E_OK/E_NOK.
  */
-STD_ReturnType I2C_ReadByteWithAck(uint8_h *puint8Data);
+Std_ReturnType I2C_ReadByteWithAck(uint8_t *puint8Data);
 
 /**
  * @brief  Reads one byte from the bus and returns NACK (this is the last byte).
  * @param  puint8Data  Pointer that receives the byte; must not be NULL.
- * @return STD_ReturnType  E_OK/E_NOK.
+ * @return Std_ReturnType  E_OK/E_NOK.
  */
-STD_ReturnType I2C_ReadByteWithNack(uint8_h *puint8Data);
+Std_ReturnType I2C_ReadByteWithNack(uint8_t *puint8Data);
 
 /**
  * @brief  Returns the current 5-bit TWI status code (TWSR & 0xF8), e.g. one of
  *         the I2C_STATUS_* constants.
  * @return uint8_h  The masked status code.
  */
-uint8_h I2C_GetStatus(void);
+uint8_t I2C_GetStatus(void);
 
 /**
  * @brief  High-level master transmit: START -> SLA+W -> all data bytes -> STOP.
  * @param  slaveAddress  7-bit slave address (R/W bit added internally).
  * @param  pData         Pointer to the bytes to send; must not be NULL.
  * @param  length        Number of bytes to send.
- * @return STD_ReturnType  E_OK if every step acknowledged, otherwise E_NOK.
+ * @return Std_ReturnType  E_OK if every step acknowledged, otherwise E_NOK.
  */
-STD_ReturnType I2C_MasterWrite(uint8_h slaveAddress, const uint8_h *pData, uint16_h length);
+Std_ReturnType I2C_MasterWrite(uint8_t slaveAddress, const uint8_t *pData, uint16_t length);
 
 /**
  * @brief  High-level master receive: START -> SLA+R -> read 'length' bytes
@@ -149,8 +149,8 @@ STD_ReturnType I2C_MasterWrite(uint8_h slaveAddress, const uint8_h *pData, uint1
  * @param  slaveAddress  7-bit slave address (R/W bit added internally).
  * @param  pBuffer       Destination buffer; must not be NULL.
  * @param  length        Number of bytes to read.
- * @return STD_ReturnType  E_OK/E_NOK.
+ * @return Std_ReturnType  E_OK/E_NOK.
  */
-STD_ReturnType I2C_MasterRead(uint8_h slaveAddress, uint8_h *pBuffer, uint16_h length);
+Std_ReturnType I2C_MasterRead(uint8_t slaveAddress, uint8_t *pBuffer, uint16_t length);
 
 #endif /* I2C_INTERFACE_H */

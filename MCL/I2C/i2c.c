@@ -18,7 +18,7 @@
  * ============================================================================== */
 
 
-STD_ReturnType I2C_InitMaster(const I2C_MasterConfigType *addConfig)
+Std_ReturnType I2C_InitMaster(const I2C_MasterConfigType *addConfig)
 {
     /*
      * STEP 1: Validate addConfig != NULL (else E_NOK).
@@ -38,7 +38,7 @@ STD_ReturnType I2C_InitMaster(const I2C_MasterConfigType *addConfig)
 }
 
 
-STD_ReturnType I2C_InitSlave(const I2C_SlaveConfigType *addConfig)
+Std_ReturnType I2C_InitSlave(const I2C_SlaveConfigType *addConfig)
 {
     /*
      * STEP 1: Validate addConfig != NULL (else E_NOK).
@@ -56,7 +56,7 @@ STD_ReturnType I2C_InitSlave(const I2C_SlaveConfigType *addConfig)
 }
 
 
-STD_ReturnType I2C_DeInit(void)
+Std_ReturnType I2C_DeInit(void)
 {
     /*
      * STEP 1: Disable the peripheral: CLR_BIT(I2C_TWCR_REG, I2C_TWEN_BIT).
@@ -66,7 +66,7 @@ STD_ReturnType I2C_DeInit(void)
 }
 
 
-STD_ReturnType I2C_Start(void)
+Std_ReturnType I2C_Start(void)
 {
     /*
      * STEP 1: Trigger a START condition by writing TWCR with TWINT + TWSTA + TWEN set:
@@ -79,7 +79,7 @@ STD_ReturnType I2C_Start(void)
 }
 
 
-STD_ReturnType I2C_Stop(void)
+Std_ReturnType I2C_Stop(void)
 {
     /*
      * STEP 1: Trigger a STOP condition by writing TWCR with TWINT + TWSTO + TWEN set:
@@ -91,7 +91,7 @@ STD_ReturnType I2C_Stop(void)
 }
 
 
-STD_ReturnType I2C_WriteByte(uint8_h uint8Data)
+Std_ReturnType I2C_WriteByte(uint8_t uint8Data)
 {
     /*
      * STEP 1: Load the byte into the data register: I2C_TWDR_REG = uint8Data;
@@ -104,7 +104,7 @@ STD_ReturnType I2C_WriteByte(uint8_h uint8Data)
 }
 
 
-STD_ReturnType I2C_ReadByteWithAck(uint8_h *puint8Data)
+Std_ReturnType I2C_ReadByteWithAck(uint8_t *puint8Data)
 {
     /*
      * STEP 1: Validate puint8Data != NULL (else E_NOK).
@@ -118,7 +118,7 @@ STD_ReturnType I2C_ReadByteWithAck(uint8_h *puint8Data)
 }
 
 
-STD_ReturnType I2C_ReadByteWithNack(uint8_h *puint8Data)
+Std_ReturnType I2C_ReadByteWithNack(uint8_t *puint8Data)
 {
     /*
      * STEP 1: Validate puint8Data != NULL (else E_NOK).
@@ -132,17 +132,17 @@ STD_ReturnType I2C_ReadByteWithNack(uint8_h *puint8Data)
 }
 
 
-uint8_h I2C_GetStatus(void)
+uint8_t I2C_GetStatus(void)
 {
     /*
      * STEP 1: Return the masked status bits:
-     *         return (uint8_h)(I2C_TWSR_REG & I2C_TWSR_STATUS_MASK);
+     *         return (uint8_t)(I2C_TWSR_REG & I2C_TWSR_STATUS_MASK);
      */
     return 0;
 }
 
 
-STD_ReturnType I2C_MasterWrite(uint8_h slaveAddress, const uint8_h *pData, uint16_h length)
+Std_ReturnType I2C_MasterWrite(uint8_t slaveAddress, const uint8_t *pData, uint16_t length)
 {
     /*
      * STEP 1: Validate pData != NULL (else E_NOK).
@@ -158,7 +158,7 @@ STD_ReturnType I2C_MasterWrite(uint8_h slaveAddress, const uint8_h *pData, uint1
 }
 
 
-STD_ReturnType I2C_MasterRead(uint8_h slaveAddress, uint8_h *pBuffer, uint16_h length)
+Std_ReturnType I2C_MasterRead(uint8_t slaveAddress, uint8_t *pBuffer, uint16_t length)
 {
     /*
      * STEP 1: Validate pBuffer != NULL and length > 0 (else E_NOK).
