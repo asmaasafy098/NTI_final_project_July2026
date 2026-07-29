@@ -21,7 +21,7 @@
 #define LED_FWD_PIN         GPIO_PIN3   /* PC3 */
 #define LED_REV_PIN         GPIO_PIN4   /* PC4 */
 
-#define DEBOUNCE_TIME       5           /* 5 * 10ms = 50ms */
+#define DEBOUNCE_TIME       5            /* 5 * 10ms = 50ms */
 
 /* ==================== Static Variables ==================== */
 static Panel_Event_t g_lastEvent = PNL_NONE;
