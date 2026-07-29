@@ -11,7 +11,7 @@
 | Field | Value |
 |-------|-------|
 | **Project code** | `PRJ-06-MOTOR` |
-| **Team size** | Asmaa Safy – Shorouk Anwar |
+| **Team size** | Asmaa Safy (asmaasafy098@gmail.com) – Shorouk Anwar (Shranwer112@gmail.com) |
 | **Build window** | Days 11 – 15 (Jul 26 – Jul 30, 2026) |
 | **Demo & submission** | July 30, 2026 |
 | **Dominant skill** | Closed-loop fixed-point PI control, ramping, fail-safe E-stop |
@@ -1247,4 +1247,52 @@ Maximum **+20**; final score capped at 100.
 ---
 
 *Prepared by Ahmed Ellamie | ahmed.ellamiee@gmail.com*
-??? ??????? ?? ????? ????? ???? ????? ?????? ??????.
+================================================
+Summary
+
+| **Hardware Design** | Complete |
+| **Layer (Service)** | Pending |
+| **Layer (Logic)** | Pending | 
+| **MCL Layer** | Pending | 
+| **HAL Layer** | Pending |
+================================================
+
+Shorouk (Modules)
+
+DataTypes
+
+DataManager      Complete
+
+PIController     Complete
+
+RampGenerator    TIMER            
+
+
+Protection      Pending
+
+DriveFSM        Pending
+
+Scheduler       Pending
+
+Console         Pending
+
+Telemetry       Pending
+
+================================================
+
+Asmaa (drivers)
+
+
+TIMER            Complete
+
+Interrupt        Pending
+
+USART            Pending
+
+Tachometer       Pending
+
+AnalogSensor     Pending
+
+Buzzer           Pending
+
+main.c           Pending
