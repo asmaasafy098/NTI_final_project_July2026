@@ -138,7 +138,7 @@ Std_ReturnType LCD_Aip31068_Init(LCD_Aip31068_HandleType *handle);
  * @param  command  Instruction byte, e.g. LCD_AIP31068_CMD_HOME.
  * @return E_OK/E_NOK (E_NOK if the slave did not acknowledge).
  */
-Std_ReturnType LCD_Aip31068_LCD_Aip31068_SendCommand(HandleType *handle, uint8_t command);
+Std_ReturnType LCD_Aip31068_SendCommand(LCD_Aip31068_HandleType *handle, uint8_t command);
 
 /**
  * @brief  Writes one character at the cursor position (control byte 0x40).

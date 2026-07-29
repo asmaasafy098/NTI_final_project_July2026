@@ -18,7 +18,7 @@ DEPS      := $(patsubst %.c,build/%.d,$(C_SOURCES))
 TARGET    := build/firmware
 
 # Include paths for the current project
-INCLUDE_DIRS := . Src GPIO MCL/ADC
+INCLUDE_DIRS := . Src GPIO MCL/ADC Service Logic/Data
 CFLAGS += $(addprefix -I,$(INCLUDE_DIRS)) $(DEPFLAGS)
 
 -include $(DEPS)

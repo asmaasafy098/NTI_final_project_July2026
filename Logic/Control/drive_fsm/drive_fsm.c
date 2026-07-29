@@ -4,11 +4,11 @@
  */
 
 #include "drive_fsm.h"
-#include "pi_controller.h"
-#include "ramp_generator.h"
-#include "protection.h"
-#include "data_manager.h"
-#include "util_math.h"
+#include "../pi_controller/pi_controller.h"
+#include "../ramp_generator/ramp_generator.h"
+#include "../protection/protection.h"
+#include "../../Data/data_manager.h"
+#include "../../../Service/util_math.h"
 
 /* ==================== External References ==================== */
 extern DriveData_t g_driveData;

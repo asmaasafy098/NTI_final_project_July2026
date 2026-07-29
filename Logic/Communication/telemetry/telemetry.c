@@ -4,9 +4,9 @@
  */
 
 #include "telemetry.h"
-#include "console.h"
-#include "drive_fsm.h"
-#include "protection.h"
+#include "../console/console.h"
+#include "../../Control/drive_fsm/drive_fsm.h"
+#include "../../Control/protection/protection.h"
 #include "../../../MCL/Timer/timer_interface.h"
 
 /* ==================== Static Variables ==================== */
