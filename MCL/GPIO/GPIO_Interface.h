@@ -1,7 +1,7 @@
-#ifndef GPIO_INTERFACE_H
-#define GPIO_INTERFACE_H
+#ifndef GPIO_Interface_H
+#define GPIO_Interface_H
 
-#include "../Service/STD_Types.h"
+#include "../../Service/STD_Types.h"
 #include "GPIO_Registers.h"
 
 /* Macros Definitions */
@@ -25,13 +25,18 @@
 #define GPIO_PIN6        6
 #define GPIO_PIN7        7
 
+
+typedef unsigned char GPIO_pin_status;
+typedef unsigned char GPIO_port_status;
 /* Function Prototypes */
+/*------------------------------pin configuration--------------------------------------------------------------*/
 Std_ReturnType GPIO_set_pin_Direction(uint8_t uint8_port, uint8_t uint8_pin, uint8_t uint8_direction);
-Std_ReturnType GPIO_set_port_Direction(uint8_t uint8_port, uint8_t uint8_direction);
 Std_ReturnType GPIO_get_pin_status(uint8_t uint8_port, uint8_t uint8_pin);
-Std_ReturnType GPIO_get_port_status(uint8_t uint8_port);
 Std_ReturnType GPIO_pin_toggle(uint8_t uint8_port, uint8_t uint8_pin);
 Std_ReturnType GPIO_set_pin_value(uint8_t uint8_port, uint8_t uint8_pin, uint8_t uint8_value);
+/*------------------------------port configuration--------------------------------------------------------------*/
+Std_ReturnType GPIO_set_port_Direction(uint8_t uint8_port, uint8_t uint8_direction);
+Std_ReturnType GPIO_get_port_status(uint8_t uint8_port);
 Std_ReturnType GPIO_set_port_value(uint8_t uint8_port, uint8_t uint8_value);
 
 #endif /* GPIO_INTERFACE_H */
