@@ -1,100 +1,91 @@
-#include "Buzzer.h"
+/* ============================ Buzzer.h ============================ */
+typedef enum {
+    BUZZ_OFF,
+    BUZZ_SLOW,
+    BUZZ_FAST,
+    BUZZ_CONTINUOUS
+} Buzzer_Mode_t;
 
-/* Adjust to match how often BUZZER_Update() is actually called. */
-#define BUZZER_UPDATE_PERIOD_MS   10U
 
-/* Timing patterns, in update ticks */
-#define BEEP_ON_TICKS      (200U  / BUZZER_UPDATE_PERIOD_MS)  /* 200 ms on  */
-#define BEEP_OFF_TICKS     (800U  / BUZZER_UPDATE_PERIOD_MS)  /* 800 ms off */
-#define ALARM_ON_TICKS     (100U  / BUZZER_UPDATE_PERIOD_MS)  /* 100 ms on  */
-#define ALARM_OFF_TICKS    (100U  / BUZZER_UPDATE_PERIOD_MS)  /* 100 ms off */
+/* ============================ Buzzer.c ============================ */
+#include "../../Service/STD_Types.h"
+#include "../MCAL/Timer/timer_interface.h"
+#include "Buzzer_Interface.h"
 
-static BuzzerMode_t mode = BUZZ_OFF;
-static uint32_t tickCounter = 0;
-static uint8_t outputState = 0; /* 0 = silent, 1 = sounding */
+static Buzzer_Mode_t Buzzer_CurrentMode = BUZZ_OFF;
+static uint16_t      Buzzer_TickCounter = 0;
 
-/* Hook: drive the actual buzzer pin/PWM. Replace with your platform's
- * GPIO/PWM call -- I don't know your target hardware. */
-static void BUZZER_HW_SetOutput(uint8_t on)
+#define BUZZ_TONE_SLOW        150   /* OCR2 value -> low tone   */
+#define BUZZ_TONE_FAST        60    /* OCR2 value -> high tone  */
+#define BUZZ_SLOW_PERIOD_TICKS   50 /* toggles every 500ms @10ms tick */
+#define BUZZ_FAST_PERIOD_TICKS   10 /* toggles every 100ms @10ms tick */
+
+
+Std_ReturnType BUZZER_Init(void)
 {
-    (void)on;
-    /* TODO: e.g. GPIO_WritePin(BUZZER_PIN, on ? HIGH : LOW); */
+    Buzzer_CurrentMode = BUZZ_OFF;
+    Buzzer_TickCounter = 0;
+    return Timer2_Init();
 }
 
-void BUZZER_Init(void)
-{
-    mode = BUZZ_OFF;
-    tickCounter = 0;
-    outputState = 0;
-    BUZZER_HW_SetOutput(0);
-}
 
-void BUZZER_SetMode(BuzzerMode_t m)
+Std_ReturnType BUZZER_SetMode(Buzzer_Mode_t mode)
 {
-    if (m != mode)
-    {
-        mode = m;
-        tickCounter = 0; /* restart pattern cleanly on mode change */
-    }
-}
+    Std_ReturnType local_Status = E_OK;
 
-void BUZZER_Update(void)
-{
+    Buzzer_CurrentMode = mode;
+    Buzzer_TickCounter = 0;
+
     switch (mode)
     {
         case BUZZ_OFF:
-            outputState = 0;
-            tickCounter = 0;
+            local_Status = Timer2_SetTone(0);
             break;
-
-        case BUZZ_ON:
-            outputState = 1;
+        case BUZZ_SLOW:
+            local_Status = Timer2_SetTone(BUZZ_TONE_SLOW);
             break;
-
-        case BUZZ_BEEP:
-            tickCounter++;
-            if (outputState)
-            {
-                if (tickCounter >= BEEP_ON_TICKS)
-                {
-                    outputState = 0;
-                    tickCounter = 0;
-                }
-            }
-            else
-            {
-                if (tickCounter >= BEEP_OFF_TICKS)
-                {
-                    outputState = 1;
-                    tickCounter = 0;
-                }
-            }
+        case BUZZ_FAST:
+            local_Status = Timer2_SetTone(BUZZ_TONE_FAST);
             break;
-
-        case BUZZ_ALARM:
-            tickCounter++;
-            if (outputState)
-            {
-                if (tickCounter >= ALARM_ON_TICKS)
-                {
-                    outputState = 0;
-                    tickCounter = 0;
-                }
-            }
-            else
-            {
-                if (tickCounter >= ALARM_OFF_TICKS)
-                {
-                    outputState = 1;
-                    tickCounter = 0;
-                }
-            }
+        case BUZZ_CONTINUOUS:
+            local_Status = Timer2_SetTone(BUZZ_TONE_FAST);
             break;
-
         default:
-            outputState = 0;
+            local_Status = E_NOK;
             break;
     }
 
-    BUZZER_HW_SetOutput(outputState);
+    return local_Status;
+}
+
+
+void BUZZER_Update(void)
+{
+    uint16_t period;
+
+    if (Buzzer_CurrentMode == BUZZ_OFF || Buzzer_CurrentMode == BUZZ_CONTINUOUS)
+    {
+        return;
+    }
+
+    period = (Buzzer_CurrentMode == BUZZ_SLOW) ? BUZZ_SLOW_PERIOD_TICKS
+                                                : BUZZ_FAST_PERIOD_TICKS;
+
+    Buzzer_TickCounter++;
+
+    if (Buzzer_TickCounter >= period)
+    {
+        Buzzer_TickCounter = 0;
+        /* toggle between tone-on and silent */
+        static uint8_t soundOn = 1;
+        if (soundOn)
+        {
+            Timer2_SetTone(0);
+        }
+        else
+        {
+            Timer2_SetTone((Buzzer_CurrentMode == BUZZ_SLOW) ? BUZZ_TONE_SLOW : BUZZ_TONE_FAST);
+        }
+        soundOn = !soundOn;
+    }
 }

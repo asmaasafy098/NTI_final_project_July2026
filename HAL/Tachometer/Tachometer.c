@@ -1,44 +1,32 @@
-#include "Tachometer.h"
-#ifndef TACHO_ENTER_CRITICAL
-#define TACHO_ENTER_CRITICAL()  __disable_irq()
-#endif
-#ifndef TACHO_EXIT_CRITICAL
-#define TACHO_EXIT_CRITICAL()   __enable_irq()
-#endif
 
-static volatile uint16_t pulseCount = 0;
-static int16_t rpm = 0;
 
-void TACHO_Init(void)
+static volatile uint16_t Tacho_PulseCount = 0;
+static uint16_t Tacho_RPM = 0;
+
+void TACHO_OnPulse(void)   /* EXTI0 callback */
 {
-    TACHO_ENTER_CRITICAL();
-    pulseCount = 0;
-    TACHO_EXIT_CRITICAL();
-
-    rpm = 0;
+    Tacho_PulseCount++;
 }
 
-/* Call from the pulse-capture / edge-detect interrupt handler. */
-void TACHO_PulseISR(void)
+Std_ReturnType TACHO_Init(void)
 {
-    pulseCount++;
+    Tacho_PulseCount = 0;
+    Tacho_RPM = 0;
+    return EXTI_SetCallBack(EXTI_INT0, TACHO_OnPulse);
 }
 
-void TACHO_Update(void)
+void TACHO_Update(void)   /* called every 100ms */
 {
     uint16_t count;
+    EXTI_DisableGlobalInterrupt();
+    count = Tacho_PulseCount;
+    Tacho_PulseCount = 0;
+    EXTI_EnableGlobalInterrupt();
 
-    /* Atomically snapshot and clear the pulse counter so a pulse
-     * arriving between the read and the reset isn't lost. */
-    TACHO_ENTER_CRITICAL();
-    count = pulseCount;
-    pulseCount = 0;
-    TACHO_EXIT_CRITICAL();
-
-    rpm = (int16_t)(count * RPM_PER_COUNT);
+    Tacho_RPM = count * 100;   /* RPM_PER_COUNT = 100 */
 }
 
-int16_t TACHO_GetRPM(void)
+uint16_t TACHO_GetRPM(void)
 {
-    return rpm;
+    return Tacho_RPM;
 }
