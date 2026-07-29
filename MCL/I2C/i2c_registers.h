@@ -13,11 +13,11 @@
  * ============================================================================== */
 
 /* ---------------- Control / Status / Data / Address Registers ---------------- */
-#define I2C_TWBR_REG       (*(volatile u8 *)0x20)   /* TWI Bit Rate Register        */
-#define I2C_TWSR_REG       (*(volatile u8 *)0x21)   /* TWI Status Register          */
-#define I2C_TWAR_REG       (*(volatile u8 *)0x22)   /* TWI (own) Slave Address Reg  */
-#define I2C_TWDR_REG       (*(volatile u8 *)0x23)   /* TWI Data Register            */
-#define I2C_TWCR_REG       (*(volatile u8 *)0x56)   /* TWI Control Register         */
+#define I2C_TWBR_REG       (*(volatile uint8_t *)0x20)   /* TWI Bit Rate Register        */
+#define I2C_TWSR_REG       (*(volatile uint8_h *)0x21)   /* TWI Status Register          */
+#define I2C_TWAR_REG       (*(volatile uint8_t *)0x22)   /* TWI (own) Slave Address Reg  */
+#define I2C_TWDR_REG       (*(volatile uint8_h *)0x23)   /* TWI Data Register            */
+#define I2C_TWCR_REG       (*(volatile uint8_h *)0x56)   /* TWI Control Register         */
 
 /* ---------------- TWCR bit positions ---------------- */
 #define I2C_TWIE_BIT       0    /* TWI Interrupt Enable         */
@@ -49,6 +49,6 @@
 #define I2C_STATUS_MR_DATA_NACK     0x58   /* Data byte received, NACK returned          */
 
 #define I2C_GLOBAL_INT_BIT    7    /* I-bit inside SREG */
-#define I2C_SREG_REG       (*(volatile u8 *)0x5F)   /* Status Register */
+#define I2C_SREG_REG       (*(volatile uint8_h *)0x5F)   /* Status Register */
 
 #endif /* I2C_REGISTERS_H */

@@ -7,7 +7,7 @@
 Std_ReturnType I2C_Init(void)
 {
     /* Set bit rate for 100kHz @ F_CPU=8MHz, prescaler=1 */
-    I2C_TWBR_REG = 32;   /* SCL = F_CPU / (16 + 2*TWBR*Prescaler) */
+    I2C_TWBR_REG  = 32;   /* SCL = F_CPU / (16 + 2*TWBR*Prescaler) */
     CLR_BIT(I2C_TWSR_REG, I2C_TWPS0_BIT);
     CLR_BIT(I2C_TWSR_REG, I2C_TWPS1_BIT);
 
