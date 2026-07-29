@@ -1253,13 +1253,13 @@ Summary
 
 | **Hardware Design** | Complete |
 
-| **Layer (Service)** | Pending |
+| **Layer (Service)** | Complete |
 
 | **Layer (Logic)** | Pending | 
 
-| **MCL Layer** | Pending | 
+| **MCL Layer** | Complete | 
 
-| **HAL Layer** | Pending |
+| **HAL Layer** | Complete |
 
 ================================================
 
@@ -1278,9 +1278,9 @@ Protection   |   Complete
 
 DriveFSM     |   Complete
 
-Scheduler    |    Pending
+Scheduler    |    Complete
 
-Console     |    Pending
+Console     |    Complete
 
 Telemetry    |   Pending
 
@@ -1295,10 +1295,10 @@ Interrupt    |    Complete
 
 USART       |     Complete
 
-Tachometer    |   Pending
+Tachometer    |   Complete
 
-AnalogSensor   |   Pending
+AnalogSensor   |   Complete
 
-Buzzer     |      Pending
+Buzzer     |      Complete
 
 main.c      |     Pending
