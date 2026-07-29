@@ -27,7 +27,11 @@
 
 /* ==================== HAL Includes ==================== */
 #include "../HAL/DC_Motor/dc_motor.h"
-#include "../HAL/LCD/lcd_interface.h"
+#include "../HAL/Tachometer/Tachometer.h"                  /* TACHO_* functions */
+#include "../HAL/ANALOG_SENSOR/ANALOG_SENSOR.h"            /* ANALOG_* functions */
+#include "../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"      /* LCD_* functions */
+#include "../HAL/BUZZER/BUZZER.h"     
+#include "../HAL/Stepper_L298P/Stepper_L298P.h"                       /* BUZZER_* functions */
 
 /* ==================== Global Variables ==================== */
 DriveData_t g_driveData;
@@ -75,15 +79,6 @@ int main(void)
     I2C_MasterConfigType i2cCfg = {
         .sclFrequency = I2C_SCL_100KHZ
     };
-    LCD_ConfigType lcdCfg = {
-        .mode = LCD_MODE_4BIT,
-        .dataPort = GPIO_PORTC,
-        .dataStartPin = GPIO_PIN4,
-        .controlPort = GPIO_PORTD,
-        .rsPin = GPIO_PIN0,
-        .rwPin = GPIO_PIN1,
-        .enPin = GPIO_PIN2
-    };
 
     ADC_Init(&adcCfg);
     Timer0_Init();
@@ -98,7 +93,6 @@ int main(void)
     TACHO_Init();   /* Tacho measurement */
     ANALOG_Init();  /* 4 ADC channels */
     PANEL_Init();   /* Buttons and LEDs */
-    LCD_Init(&lcdCfg);     /* 16x2 LCD via GPIO */
     BUZZER_Init();  /* Buzzer */
     EEPROM_Init();  /* 25LC256 SPI EEPROM */
     TRIPLOG_Init(); /* Trip log */
