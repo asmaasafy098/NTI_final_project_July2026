@@ -1266,38 +1266,38 @@ Shorouk (Modules)
 
 DataTypes
 
-DataManager      Complete
+DataManager   |   Complete
 
-PIController     Complete
+PIController  |   Complete
 
-RampGenerator    TIMER            
+RampGenerator   |   TIMER            
 
 
-Protection      Pending
+Protection   |   Pending
 
-DriveFSM        Pending
+DriveFSM     |   Pending
 
-Scheduler       Pending
+Scheduler    |    Pending
 
-Console         Pending
+Console     |    Pending
 
-Telemetry       Pending
+Telemetry    |   Pending
 
 ================================================
 
 Asmaa (drivers)
 
 
-TIMER            Complete
+TIMER      |      Complete
 
-Interrupt        Pending
+Interrupt    |    Pending
 
-USART            Pending
+USART       |     Pending
 
-Tachometer       Pending
+Tachometer    |   Pending
 
-AnalogSensor     Pending
+AnalogSensor   |   Pending
 
-Buzzer           Pending
+Buzzer     |      Pending
 
-main.c           Pending
+main.c      |     Pending
