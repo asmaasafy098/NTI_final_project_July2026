@@ -1,3 +1,6 @@
+#include "MotorBridge.h"
+#include "../../Service/STD_Types.h"
+#include "../../MCL/GPIO/GPIO_interface.h"
 typedef enum { DIR_STOP, DIR_FWD, DIR_REV } Dir_t;
 
 Std_ReturnType BRIDGE_Init(void)

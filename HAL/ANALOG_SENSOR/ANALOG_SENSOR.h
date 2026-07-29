@@ -17,9 +17,7 @@ typedef enum
     ANALOG_CH_COUNT
 } AnalogChannel_t;
 
-void ANALOG_Init(void);
-void ANALOG_Update(void); /* call periodically to refresh cached readings */
-
+Std_ReturnType ANALOG_Init(void);
 uint16_t ANALOG_GetSetpoint(void);
 uint16_t ANALOG_GetCurrent(void);
 uint16_t ANALOG_GetBusVoltage(void);

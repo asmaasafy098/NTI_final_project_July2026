@@ -1,6 +1,7 @@
 
 #include "../../Service/STD_Types.h"
-#include "../MCAL/Timer/timer_interface.h"
+#include "HAL/ADC/ADC.h"
+
 Std_ReturnType ANALOG_Init(void)
 {
     ADC_ConfigType cfg;
