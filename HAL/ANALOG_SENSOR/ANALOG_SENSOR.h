@@ -3,6 +3,9 @@
 
 #include <stdint.h>
 
+
+
+
 /* Logical ADC channel indices - map these to your actual pin/channel
  * assignments in AnalogSensor.c */
 typedef enum

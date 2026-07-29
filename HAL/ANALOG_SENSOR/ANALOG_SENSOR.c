@@ -5,6 +5,8 @@ Std_ReturnType ANALOG_Init(void)
 {
     ADC_ConfigType cfg;
     return ADC_Init(&cfg);
+
+    
 }
 
 uint16_t ANALOG_GetSetpoint(void)   /* channel 0 -> 0..3000 RPM */

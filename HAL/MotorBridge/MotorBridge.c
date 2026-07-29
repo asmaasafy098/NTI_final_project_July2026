@@ -8,6 +8,8 @@ Std_ReturnType BRIDGE_Init(void)
     return Timer1_Init();
 }
 
+
+
 Std_ReturnType BRIDGE_SetDirection(Dir_t dir)
 {
     switch (dir)
