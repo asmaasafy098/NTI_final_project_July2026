@@ -1,9 +1,6 @@
 #include "../../Service/STD_Types.h"
-
 #include "userpanel.h"
-typedef enum { PNL_NONE, PNL_START, PNL_STOP, PNL_REVERSE, PNL_RESET } Panel_Event_t;
-
-
+#include"../../MCL/GPIO/GPIO_Interface.h"
 
 Std_ReturnType PANEL_Init(void)
 {
