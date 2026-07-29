@@ -1334,7 +1334,7 @@ typedef enum
 
 typedef struct
 {
-    uint32_h sclFrequency;
+    uint32_t sclFrequency;
 } I2C_MasterConfigType;
 
 
@@ -1345,65 +1345,65 @@ typedef struct
 
 typedef struct
 {
-    uint8_h ownAddress;
-    uint8_h enableGeneralCall;
+    uint8_t ownAddress;
+    uint8_t enableGeneralCall;
 } I2C_SlaveConfigType;
 # 78 "Src/../MCL/I2C/i2c_interface.h"
-STD_ReturnType I2C_InitMaster(const I2C_MasterConfigType *addConfig);
+Std_ReturnType I2C_InitMaster(const I2C_MasterConfigType *addConfig);
 # 87 "Src/../MCL/I2C/i2c_interface.h"
-STD_ReturnType I2C_InitSlave(const I2C_SlaveConfigType *addConfig);
+Std_ReturnType I2C_InitSlave(const I2C_SlaveConfigType *addConfig);
 
 
 
 
 
-STD_ReturnType I2C_DeInit(void);
-
-
-
-
-
-
-STD_ReturnType I2C_Start(void);
-
-
-
-
-
-STD_ReturnType I2C_Stop(void);
+Std_ReturnType I2C_DeInit(void);
 
 
 
 
 
 
-
-STD_ReturnType I2C_WriteByte(uint8_h uint8Data);
-
+Std_ReturnType I2C_Start(void);
 
 
 
 
 
-STD_ReturnType I2C_ReadByteWithAck(uint8_h *puint8Data);
+Std_ReturnType I2C_Stop(void);
 
 
 
 
 
 
-STD_ReturnType I2C_ReadByteWithNack(uint8_h *puint8Data);
+
+Std_ReturnType I2C_WriteByte(uint8_t uint8Data);
 
 
 
 
 
 
-uint8_h I2C_GetStatus(void);
+Std_ReturnType I2C_ReadByteWithAck(uint8_t *puint8Data);
+
+
+
+
+
+
+Std_ReturnType I2C_ReadByteWithNack(uint8_t *puint8Data);
+
+
+
+
+
+
+uint8_t I2C_GetStatus(void);
 # 144 "Src/../MCL/I2C/i2c_interface.h"
-STD_ReturnType I2C_MasterWrite(uint8_h slaveAddress, const uint8_h *pData, uint16_h length);
+Std_ReturnType I2C_MasterWrite(uint8_t slaveAddress, const uint8_t *pData, uint16_t length);
 # 154 "Src/../MCL/I2C/i2c_interface.h"
-STD_ReturnType I2C_MasterRead(uint8_h slaveAddress, uint8_h *pBuffer, uint16_h length);
+Std_ReturnType I2C_MasterRead(uint8_t slaveAddress, uint8_t *pBuffer, uint16_t length);
 # 27 "Src/main.c" 2
 
 
@@ -1490,33 +1490,70 @@ Std_ReturnType DC_Motor_GetSpeed(const DC_MotorHandleType *handle, uint8_t *pSpe
 # 264 "Src/../HAL/DC_Motor/dc_motor.h"
 Std_ReturnType DC_Motor_DeInit(DC_MotorHandleType *handle);
 # 30 "Src/main.c" 2
-# 1 "Src/../HAL/LCD/lcd_interface.h" 1
+# 1 "Src/../HAL/Tachometer/Tachometer.h" 1
 
 
 
-# 1 "Src/../HAL/LCD/../../Service/STD_Types.h" 1
-# 5 "Src/../HAL/LCD/lcd_interface.h" 2
-# 1 "Src/../HAL/LCD/../../MCL/GPIO/gpio_interface.h" 1
-# 6 "Src/../HAL/LCD/lcd_interface.h" 2
-# 25 "Src/../HAL/LCD/lcd_interface.h"
+
+
+
+void TACHO_Init(void);
+void TACHO_Update(void);
+void TACHO_PulseISR(void);
+int16_t TACHO_GetRPM(void);
+# 31 "Src/main.c" 2
+# 1 "Src/../HAL/ANALOG_SENSOR/ANALOG_SENSOR.h" 1
+
+
+
+
+
+
+
 typedef enum
 {
-    LCD_MODE_4BIT = 0,
-    LCD_MODE_8BIT = 1
-} LCD_ModeType;
-# 65 "Src/../HAL/LCD/lcd_interface.h"
+    ANALOG_CH_SETPOINT = 0,
+    ANALOG_CH_CURRENT,
+    ANALOG_CH_BUS_VOLTAGE,
+    ANALOG_CH_TEMPERATURE,
+    ANALOG_CH_COUNT
+} AnalogChannel_t;
+
+void ANALOG_Init(void);
+void ANALOG_Update(void);
+
+uint16_t ANALOG_GetSetpoint(void);
+uint16_t ANALOG_GetCurrent(void);
+uint16_t ANALOG_GetBusVoltage(void);
+uint8_t ANALOG_GetTemperature(void);
+# 32 "Src/main.c" 2
+# 1 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h" 1
+
+
+
+# 1 "Src/../HAL/LCD_Aip31068_i2c/../../Service/STD_Types.h" 1
+# 5 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h" 2
+# 1 "Src/../HAL/LCD_Aip31068_i2c/../../MCL/I2C/i2c_interface.h" 1
+# 6 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h" 2
+# 101 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
 typedef struct
 {
-    LCD_ModeType mode;
-    uint8_t dataPort;
-    uint8_t dataStartPin;
-    uint8_t controlPort;
-    uint8_t rsPin;
-    uint8_t rwPin;
-    uint8_t enPin;
-} LCD_ConfigType;
-# 87 "Src/../HAL/LCD/lcd_interface.h"
-Std_ReturnType LCD_Init(const LCD_ConfigType *addConfig);
+
+    uint8_t i2cAddress;
+    uint8_t rows;
+    uint8_t cols;
+
+
+    uint8_t initialized;
+    uint8_t displayControl;
+    uint8_t entryMode;
+    uint8_t cursorRow;
+    uint8_t cursorCol;
+} LCD_Aip31068_HandleType;
+# 132 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
+Std_ReturnType LCD_Aip31068_Init(LCD_Aip31068_HandleType *handle);
+# 141 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
+Std_ReturnType LCD_Aip31068_SendCommand(LCD_Aip31068_HandleType *handle, uint8_t command);
 
 
 
@@ -1524,7 +1561,18 @@ Std_ReturnType LCD_Init(const LCD_ConfigType *addConfig);
 
 
 
-Std_ReturnType LCD_SendCommand(const LCD_ConfigType *addConfig, uint8_t command);
+Std_ReturnType LCD_Aip31068_WriteChar(LCD_Aip31068_HandleType *handle, uint8_t character);
+# 161 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
+Std_ReturnType LCD_Aip31068_WriteString(LCD_Aip31068_HandleType *handle, const uint8_t *pString);
+# 171 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
+Std_ReturnType LCD_Aip31068_WriteStringAt(LCD_Aip31068_HandleType *handle,
+                                          uint8_t row, uint8_t column,
+                                          const uint8_t *pString);
+# 183 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
+Std_ReturnType LCD_Aip31068_WriteNumber(LCD_Aip31068_HandleType *handle, sint32 number);
+# 193 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
+Std_ReturnType LCD_Aip31068_SetCursor(LCD_Aip31068_HandleType *handle,
+                                      uint8_t row, uint8_t column);
 
 
 
@@ -1532,7 +1580,14 @@ Std_ReturnType LCD_SendCommand(const LCD_ConfigType *addConfig, uint8_t command)
 
 
 
-Std_ReturnType LCD_WriteChar(const LCD_ConfigType *addConfig, uint8_t character);
+Std_ReturnType LCD_Aip31068_Clear(LCD_Aip31068_HandleType *handle);
+
+
+
+
+
+
+Std_ReturnType LCD_Aip31068_Home(LCD_Aip31068_HandleType *handle);
 
 
 
@@ -1540,7 +1595,7 @@ Std_ReturnType LCD_WriteChar(const LCD_ConfigType *addConfig, uint8_t character)
 
 
 
-Std_ReturnType LCD_WriteString(const LCD_ConfigType *addConfig, const uint8_t *pString);
+Std_ReturnType LCD_Aip31068_DisplayOnOff(LCD_Aip31068_HandleType *handle, uint8_t on);
 
 
 
@@ -1548,20 +1603,133 @@ Std_ReturnType LCD_WriteString(const LCD_ConfigType *addConfig, const uint8_t *p
 
 
 
-Std_ReturnType LCD_WriteNumber(const LCD_ConfigType *addConfig, sint32 number);
-# 128 "Src/../HAL/LCD/lcd_interface.h"
-Std_ReturnType LCD_SetCursor(const LCD_ConfigType *addConfig, uint8_t row, uint8_t column);
+Std_ReturnType LCD_Aip31068_CursorOnOff(LCD_Aip31068_HandleType *handle, uint8_t on);
 
 
 
 
 
 
-Std_ReturnType LCD_Clear(const LCD_ConfigType *addConfig);
-# 144 "Src/../HAL/LCD/lcd_interface.h"
-Std_ReturnType LCD_CreateCustomChar(const LCD_ConfigType *addConfig,
-                                    uint8_t location, const uint8_t *pPattern);
-# 31 "Src/main.c" 2
+
+Std_ReturnType LCD_Aip31068_BlinkOnOff(LCD_Aip31068_HandleType *handle, uint8_t on);
+# 242 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
+Std_ReturnType LCD_Aip31068_ShiftDisplay(LCD_Aip31068_HandleType *handle, uint8_t toRight);
+# 252 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
+Std_ReturnType LCD_Aip31068_CreateCustomChar(LCD_Aip31068_HandleType *handle,
+                                             uint8_t location, const uint8_t *pPattern);
+# 33 "Src/main.c" 2
+# 1 "Src/../HAL/BUZZER/BUZZER.h" 1
+
+
+
+
+
+typedef enum
+{
+    BUZZ_OFF,
+    BUZZ_ON,
+    BUZZ_BEEP,
+    BUZZ_ALARM
+} BuzzerMode_t;
+
+void BUZZER_Init(void);
+void BUZZER_SetMode(BuzzerMode_t mode);
+
+void BUZZER_Update(void);
+# 34 "Src/main.c" 2
+# 1 "Src/../HAL/Stepper_L298P/Stepper_L298P.h" 1
+
+
+
+# 1 "Src/../HAL/Stepper_L298P/../../Service/STD_Types.h" 1
+# 5 "Src/../HAL/Stepper_L298P/Stepper_L298P.h" 2
+# 1 "Src/../HAL/Stepper_L298P/../../MCL/GPIO/gpio_interface.h" 1
+# 6 "Src/../HAL/Stepper_L298P/Stepper_L298P.h" 2
+# 73 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
+typedef enum
+{
+    STEPPER_L298P_MODE_WAVE = 0,
+    STEPPER_L298P_MODE_FULL = 1,
+    STEPPER_L298P_MODE_HALF = 2
+} Stepper_L298P_ModeType;
+
+
+
+
+
+
+
+typedef enum
+{
+    STEPPER_L298P_DIR_CW = 0,
+    STEPPER_L298P_DIR_CCW = 1
+} Stepper_L298P_DirType;
+# 117 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
+typedef struct
+{
+
+    uint8_t in1Port; uint8_t in1Pin;
+    uint8_t in2Port; uint8_t in2Pin;
+    uint8_t in3Port; uint8_t in3Pin;
+    uint8_t in4Port; uint8_t in4Pin;
+    uint8_t enAPort; uint8_t enAPin;
+    uint8_t enBPort; uint8_t enBPin;
+    uint8_t useEnablePins;
+
+    Stepper_L298P_ModeType stepMode;
+    uint16_t stepsPerRev;
+    uint16_t stepDelayMs;
+
+
+    uint8_t initialized;
+    uint8_t phaseIndex;
+    uint8_t energized;
+    sint32 position;
+} Stepper_L298P_HandleType;
+# 152 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
+Std_ReturnType Stepper_L298P_Init(Stepper_L298P_HandleType *handle);
+# 163 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
+Std_ReturnType Stepper_L298P_SetStepMode(Stepper_L298P_HandleType *handle,
+                                         Stepper_L298P_ModeType mode);
+
+
+
+
+
+
+
+Std_ReturnType Stepper_L298P_SetStepDelay(Stepper_L298P_HandleType *handle,
+                                          uint16_t stepDelayMs);
+# 185 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
+Std_ReturnType Stepper_L298P_SetSpeedRpm(Stepper_L298P_HandleType *handle, uint16_t rpm);
+# 199 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
+Std_ReturnType Stepper_L298P_Step(Stepper_L298P_HandleType *handle,
+                                  uint16_t steps, Stepper_L298P_DirType dir);
+# 222 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
+Std_ReturnType Stepper_L298P_StepOnce(Stepper_L298P_HandleType *handle,
+                                      Stepper_L298P_DirType dir);
+# 236 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
+Std_ReturnType Stepper_L298P_RotateAngle(Stepper_L298P_HandleType *handle,
+                                         uint16_t degrees, Stepper_L298P_DirType dir);
+# 247 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
+Std_ReturnType Stepper_L298P_Hold(Stepper_L298P_HandleType *handle);
+# 258 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
+Std_ReturnType Stepper_L298P_Release(Stepper_L298P_HandleType *handle);
+# 267 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
+Std_ReturnType Stepper_L298P_GetPosition(const Stepper_L298P_HandleType *handle,
+                                         sint32 *pPosition);
+
+
+
+
+
+
+
+Std_ReturnType Stepper_L298P_ResetPosition(Stepper_L298P_HandleType *handle);
+# 286 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
+Std_ReturnType Stepper_L298P_GetStepsPerRev(const Stepper_L298P_HandleType *handle,
+                                            uint16_t *pStepsPerRev);
+# 35 "Src/main.c" 2
 
 
 DriveData_t g_driveData;
@@ -1609,15 +1777,6 @@ int main(void)
     I2C_MasterConfigType i2cCfg = {
         .sclFrequency = 100000UL
     };
-    LCD_ConfigType lcdCfg = {
-        .mode = LCD_MODE_4BIT,
-        .dataPort = 2,
-        .dataStartPin = 4,
-        .controlPort = 3,
-        .rsPin = 0,
-        .rwPin = 1,
-        .enPin = 2
-    };
 
     ADC_Init(&adcCfg);
     Timer0_Init();
@@ -1632,7 +1791,6 @@ int main(void)
     TACHO_Init();
     ANALOG_Init();
     PANEL_Init();
-    LCD_Init(&lcdCfg);
     BUZZER_Init();
     EEPROM_Init();
     TRIPLOG_Init();
@@ -1884,55 +2042,55 @@ void Task_Telemetry(void)
 
 
 
-# 352 "Src/main.c" 3
+# 346 "Src/main.c" 3
 void __vector_1 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_1 (void)
 
-# 353 "Src/main.c"
+# 347 "Src/main.c"
 {
 
     TACHO_OnPulse();
 }
-# 366 "Src/main.c"
+# 360 "Src/main.c"
 
-# 366 "Src/main.c" 3
+# 360 "Src/main.c" 3
 void __vector_2 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_2 (void)
 
-# 367 "Src/main.c"
+# 361 "Src/main.c"
 {
 
     
-# 369 "Src/main.c" 3
+# 363 "Src/main.c" 3
    (*(volatile uint16_t *)((0x2A) + 0x20)) 
-# 369 "Src/main.c"
+# 363 "Src/main.c"
          = 0;
 
 
     ((
-# 372 "Src/main.c" 3
+# 366 "Src/main.c" 3
    (*(volatile uint8_t *)((0x18) + 0x20))
-# 372 "Src/main.c"
+# 366 "Src/main.c"
    ) &= ~(1 << (
-# 372 "Src/main.c" 3
+# 366 "Src/main.c" 3
    2
-# 372 "Src/main.c"
+# 366 "Src/main.c"
    )));
     ((
-# 373 "Src/main.c" 3
+# 367 "Src/main.c" 3
    (*(volatile uint8_t *)((0x18) + 0x20))
-# 373 "Src/main.c"
+# 367 "Src/main.c"
    ) &= ~(1 << (
-# 373 "Src/main.c" 3
+# 367 "Src/main.c" 3
    1
-# 373 "Src/main.c"
+# 367 "Src/main.c"
    )));
     ((
-# 374 "Src/main.c" 3
+# 368 "Src/main.c" 3
    (*(volatile uint8_t *)((0x18) + 0x20))
-# 374 "Src/main.c"
+# 368 "Src/main.c"
    ) &= ~(1 << (
-# 374 "Src/main.c" 3
+# 368 "Src/main.c" 3
    0
-# 374 "Src/main.c"
+# 368 "Src/main.c"
    )));
 
 
@@ -1945,15 +2103,15 @@ void __vector_2 (void) __attribute__ ((signal,used, externally_visible)) ; void 
 
 
 
-# 385 "Src/main.c" 3
+# 379 "Src/main.c" 3
 void __vector_13 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_13 (void)
 
-# 386 "Src/main.c"
+# 380 "Src/main.c"
 {
     uint8_t ch = 
-# 387 "Src/main.c" 3
+# 381 "Src/main.c" 3
                 (*(volatile uint8_t *)((0x0C) + 0x20))
-# 387 "Src/main.c"
+# 381 "Src/main.c"
                    ;
     CONSOLE_ProcessChar(ch);
 }

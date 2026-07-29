@@ -25,8 +25,14 @@ main.o: Src/main.c Src/../Service/STD_Types.h Src/../Service/Bit_Math.h \
  Src/../HAL/DC_Motor/dc_motor.h \
  Src/../HAL/DC_Motor/../../Service/STD_Types.h \
  Src/../HAL/DC_Motor/../../MCL/GPIO/gpio_interface.h \
- Src/../HAL/LCD/lcd_interface.h Src/../HAL/LCD/../../Service/STD_Types.h \
- Src/../HAL/LCD/../../MCL/GPIO/gpio_interface.h
+ Src/../HAL/Tachometer/Tachometer.h \
+ Src/../HAL/ANALOG_SENSOR/ANALOG_SENSOR.h \
+ Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h \
+ Src/../HAL/LCD_Aip31068_i2c/../../Service/STD_Types.h \
+ Src/../HAL/LCD_Aip31068_i2c/../../MCL/I2C/i2c_interface.h \
+ Src/../HAL/BUZZER/BUZZER.h Src/../HAL/Stepper_L298P/Stepper_L298P.h \
+ Src/../HAL/Stepper_L298P/../../Service/STD_Types.h \
+ Src/../HAL/Stepper_L298P/../../MCL/GPIO/gpio_interface.h
 
 Src/../Service/STD_Types.h:
 
@@ -100,8 +106,20 @@ Src/../HAL/DC_Motor/../../Service/STD_Types.h:
 
 Src/../HAL/DC_Motor/../../MCL/GPIO/gpio_interface.h:
 
-Src/../HAL/LCD/lcd_interface.h:
+Src/../HAL/Tachometer/Tachometer.h:
 
-Src/../HAL/LCD/../../Service/STD_Types.h:
+Src/../HAL/ANALOG_SENSOR/ANALOG_SENSOR.h:
 
-Src/../HAL/LCD/../../MCL/GPIO/gpio_interface.h:
+Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h:
+
+Src/../HAL/LCD_Aip31068_i2c/../../Service/STD_Types.h:
+
+Src/../HAL/LCD_Aip31068_i2c/../../MCL/I2C/i2c_interface.h:
+
+Src/../HAL/BUZZER/BUZZER.h:
+
+Src/../HAL/Stepper_L298P/Stepper_L298P.h:
+
+Src/../HAL/Stepper_L298P/../../Service/STD_Types.h:
+
+Src/../HAL/Stepper_L298P/../../MCL/GPIO/gpio_interface.h:
