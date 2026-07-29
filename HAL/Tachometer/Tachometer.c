@@ -1,32 +1,40 @@
-
+#include "Tachometer.h"
+#include "../../Service/STD_Types.h"
+#include "../../MCL/Interrupt/interrupt_interface.h"
 
 static volatile uint16_t Tacho_PulseCount = 0;
-static uint16_t Tacho_RPM = 0;
+static volatile int16_t Tacho_RPM = 0;
 
-void TACHO_OnPulse(void)   /* EXTI0 callback */
+void TACHO_PulseISR(void)
 {
     Tacho_PulseCount++;
 }
 
-Std_ReturnType TACHO_Init(void)
+void TACHO_Init(void)
 {
     Tacho_PulseCount = 0;
     Tacho_RPM = 0;
-    return EXTI_SetCallBack(EXTI_INT0, TACHO_OnPulse);
+
+    /* إعداد دالة الـ Callback وتفعيل المقاطعة الخارجية EXTI0 */
+    EXTI_SetCallBack(EXTI_INT0, TACHO_PulseISR);
+    EXTI_Enable(EXTI_INT0);
 }
 
-void TACHO_Update(void)   /* called every 100ms */
+void TACHO_Update(void)
 {
     uint16_t count;
-    EXTI_DisableGlobalInterrupt();
+
+    /* إيقاف المقاطعات العامة مؤقتاً لقراءة المتغير بشكل أتمي (Atomic Read) */
+    __asm__ volatile ("cli" ::: "memory");
     count = Tacho_PulseCount;
     Tacho_PulseCount = 0;
-    EXTI_EnableGlobalInterrupt();
+    __asm__ volatile ("sei" ::: "memory");
 
-    Tacho_RPM = count * 100;   /* RPM_PER_COUNT = 100 */
+    /* حساب الـ RPM */
+    Tacho_RPM = count * RPM_PER_COUNT;
 }
 
-uint16_t TACHO_GetRPM(void)
+int16_t TACHO_GetRPM(void)
 {
     return Tacho_RPM;
 }

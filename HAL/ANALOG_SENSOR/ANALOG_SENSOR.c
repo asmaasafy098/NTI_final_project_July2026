@@ -1,6 +1,6 @@
 
 #include "../../Service/STD_Types.h"
-#include "HAL/ADC/ADC.h"
+#include "../../MCL/ADC/ADC_Interface.h"
 
 Std_ReturnType ANALOG_Init(void)
 {

@@ -2,6 +2,7 @@
 #define TACHOMETER_H
 
 #include <stdint.h>
+
 #ifndef RPM_PER_COUNT
 #define RPM_PER_COUNT 60
 #endif

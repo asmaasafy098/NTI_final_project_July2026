@@ -53,7 +53,7 @@ Std_ReturnType BRIDGE_Disable(void)
 
 void BRIDGE_ForceStop(void)   /* used directly inside E-stop ISR */
 {
-    TIMER_OCR1A_REG = 0;
+    Timer1_SetDuty(0);
     GPIO_set_pin_value(GPIO_PORTB, GPIO_PIN2, GPIO_LOW);
     GPIO_set_pin_value(GPIO_PORTB, GPIO_PIN0, GPIO_LOW);
     GPIO_set_pin_value(GPIO_PORTB, GPIO_PIN1, GPIO_LOW);

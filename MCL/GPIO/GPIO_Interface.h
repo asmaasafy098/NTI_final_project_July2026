@@ -39,4 +39,10 @@ Std_ReturnType GPIO_set_port_Direction(uint8_t uint8_port, uint8_t uint8_directi
 Std_ReturnType GPIO_get_port_status(uint8_t uint8_port);
 Std_ReturnType GPIO_set_port_value(uint8_t uint8_port, uint8_t uint8_value);
 
+
+#ifndef GPIO_ENABLE
+  #define GPIO_ENABLE    1
+  #define GPIO_DISABLE   0
+#endif
+
 #endif /* GPIO_INTERFACE_H */
