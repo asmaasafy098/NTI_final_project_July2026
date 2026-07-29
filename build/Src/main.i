@@ -1491,25 +1491,14 @@ Std_ReturnType DC_Motor_GetSpeed(const DC_MotorHandleType *handle, uint8_t *pSpe
 Std_ReturnType DC_Motor_DeInit(DC_MotorHandleType *handle);
 # 30 "Src/main.c" 2
 # 1 "Src/../HAL/Tachometer/Tachometer.h" 1
-
-
-
-
-
-
+# 9 "Src/../HAL/Tachometer/Tachometer.h"
 void TACHO_Init(void);
 void TACHO_Update(void);
 void TACHO_PulseISR(void);
 int16_t TACHO_GetRPM(void);
 # 31 "Src/main.c" 2
 # 1 "Src/../HAL/ANALOG_SENSOR/ANALOG_SENSOR.h" 1
-
-
-
-
-
-
-
+# 11 "Src/../HAL/ANALOG_SENSOR/ANALOG_SENSOR.h"
 typedef enum
 {
     ANALOG_CH_SETPOINT = 0,
@@ -1619,6 +1608,8 @@ Std_ReturnType LCD_Aip31068_CreateCustomChar(LCD_Aip31068_HandleType *handle,
                                              uint8_t location, const uint8_t *pPattern);
 # 33 "Src/main.c" 2
 # 1 "Src/../HAL/BUZZER/BUZZER.h" 1
+
+
 
 
 
