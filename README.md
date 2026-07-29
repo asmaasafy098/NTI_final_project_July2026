@@ -1248,12 +1248,18 @@ Maximum **+20**; final score capped at 100.
 
 *Prepared by Ahmed Ellamie | ahmed.ellamiee@gmail.com*
 ================================================
+[Hardware Design](image.png)
+================================================
 Summary
 
 | **Hardware Design** | Complete |
+
 | **Layer (Service)** | Pending |
+
 | **Layer (Logic)** | Pending | 
+
 | **MCL Layer** | Pending | 
+
 | **HAL Layer** | Pending |
 ================================================
 
