@@ -1,6 +1,7 @@
 #ifndef TIMER_REGISTERS_H
 #define TIMER_REGISTERS_H
 
+#include <stdint.h>
 #include "../../Service/STD_Types.h"
 
 /* ================================================================================
@@ -14,9 +15,9 @@
  * ============================================================================== */
 
 /* ---------------- Timer0 (8-bit) ---------------- */
-#define TIMER_TCCR0_REG    (*(volatile u8 *)0x53)   /* Timer0 Control Register            */
-#define TIMER_TCNT0_REG    (*(volatile u8 *)0x52)   /* Timer0 Counter Value Register      */
-#define TIMER_OCR0_REG     (*(volatile u8 *)0x5C)   /* Timer0 Output Compare Register     */
+#define TIMER_TCCR0_REG    (*(volatile uint8_t *)0x53)   /* Timer0 Control Register            */
+#define TIMER_TCNT0_REG    (*(volatile uint8_t *)0x52)   /* Timer0 Counter Value Register      */
+#define TIMER_OCR0_REG     (*(volatile uint8_t *)0x5C)   /* Timer0 Output Compare Register     */
 
 /* TCCR0 bit positions */
 #define TIMER_CS00_BIT     0    /* Clock Select bit 0 (CS02:CS00 = prescaler) */
@@ -29,14 +30,14 @@
 #define TIMER_FOC0_BIT     7    /* Force Output Compare                       */
 
 /* ---------------- Timer1 (16-bit) ---------------- */
-#define TIMER_TCCR1A_REG   (*(volatile u8  *)0x4F)  /* Timer1 Control Register A          */
-#define TIMER_TCCR1B_REG   (*(volatile u8  *)0x4E)  /* Timer1 Control Register B          */
-#define TIMER_TCNT1_REG    (*(volatile u16 *)0x4C)  /* Timer1 Counter (16-bit combined)   */
-#define TIMER_TCNT1L_REG   (*(volatile u8  *)0x4C)  /* Timer1 Counter low byte            */
-#define TIMER_TCNT1H_REG   (*(volatile u8  *)0x4D)  /* Timer1 Counter high byte           */
-#define TIMER_OCR1A_REG    (*(volatile u16 *)0x4A)  /* Timer1 Output Compare A (16-bit)   */
-#define TIMER_OCR1B_REG    (*(volatile u16 *)0x48)  /* Timer1 Output Compare B (16-bit)   */
-#define TIMER_ICR1_REG     (*(volatile u16 *)0x46)  /* Timer1 Input Capture (16-bit)      */
+#define TIMER_TCCR1A_REG   (*(volatile uint8_t  *)0x4F)  /* Timer1 Control Register A          */
+#define TIMER_TCCR1B_REG   (*(volatile uint8_t  *)0x4E)  /* Timer1 Control Register B          */
+#define TIMER_TCNT1_REG    (*(volatile uint16_t *)0x4C)  /* Timer1 Counter (16-bit combined)   */
+#define TIMER_TCNT1L_REG   (*(volatile uint8_t  *)0x4C)  /* Timer1 Counter low byte            */
+#define TIMER_TCNT1H_REG   (*(volatile uint8_t  *)0x4D)  /* Timer1 Counter high byte           */
+#define TIMER_OCR1A_REG    (*(volatile uint16_t *)0x4A)  /* Timer1 Output Compare A (16-bit)   */
+#define TIMER_OCR1B_REG    (*(volatile uint16_t *)0x48)  /* Timer1 Output Compare B (16-bit)   */
+#define TIMER_ICR1_REG     (*(volatile uint16_t *)0x46)  /* Timer1 Input Capture (16-bit)      */
 
 /* TCCR1A bit positions */
 #define TIMER_WGM10_BIT    0
@@ -58,10 +59,10 @@
 #define TIMER_ICNC1_BIT    7    /* Input Capture Noise Canceler               */
 
 /* ---------------- Timer2 (8-bit) ---------------- */
-#define TIMER_TCCR2_REG    (*(volatile u8 *)0x45)   /* Timer2 Control Register            */
-#define TIMER_TCNT2_REG    (*(volatile u8 *)0x44)   /* Timer2 Counter Value Register      */
-#define TIMER_OCR2_REG     (*(volatile u8 *)0x43)   /* Timer2 Output Compare Register     */
-#define TIMER_ASSR_REG     (*(volatile u8 *)0x42)   /* Timer2 Asynchronous Status Register*/
+#define TIMER_TCCR2_REG    (*(volatile uint8_t *)0x45)   /* Timer2 Control Register            */
+#define TIMER_TCNT2_REG    (*(volatile uint8_t *)0x44)   /* Timer2 Counter Value Register      */
+#define TIMER_OCR2_REG     (*(volatile uint8_t *)0x43)   /* Timer2 Output Compare Register     */
+#define TIMER_ASSR_REG     (*(volatile uint8_t *)0x42)   /* Timer2 Asynchronous Status Register*/
 
 /* TCCR2 bit positions */
 #define TIMER_CS20_BIT     0    /* Clock Select bit 0 (CS22:CS20 = prescaler) */
@@ -74,9 +75,9 @@
 #define TIMER_FOC2_BIT     7
 
 /* ---------------- Shared Interrupt Registers ---------------- */
-#define TIMER_TIMSK_REG    (*(volatile u8 *)0x59)   /* Timer/Counter Interrupt Mask Register  */
-#define TIMER_TIFR_REG     (*(volatile u8 *)0x58)   /* Timer/Counter Interrupt Flag Register  */
-#define TIMER_SREG_REG     (*(volatile u8 *)0x5F)   /* Status Register (global interrupt bit) */
+#define TIMER_TIMSK_REG    (*(volatile uint8_t *)0x59)   /* Timer/Counter Interrupt Mask Register  */
+#define TIMER_TIFR_REG     (*(volatile uint8_t *)0x58)   /* Timer/Counter Interrupt Flag Register  */
+#define TIMER_SREG_REG     (*(volatile uint8_t *)0x5F)   /* Status Register (global interrupt bit) */
 
 /* TIMSK bit positions */
 #define TIMER_TOIE0_BIT    0    /* Timer0 Overflow Interrupt Enable        */

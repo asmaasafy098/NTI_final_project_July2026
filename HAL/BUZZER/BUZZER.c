@@ -1,9 +1,10 @@
-/* ============================ Buzzer.c ============================ */
 #include "../../Service/STD_Types.h"
-#include "../../MCAL/Timer/timer_interface.h"
-#include "Buzzer_Interface.h"
+#include "../../MCL/Timer/timer_interface.h"
+#include "BUZZER.h"
 
-
+/* Global Variable Definitions */
+Buzzer_Mode_t Buzzer_CurrentMode = BUZZ_OFF;
+uint16_t      Buzzer_TickCounter = 0;
 
 Std_ReturnType BUZZER_Init(void)
 {
@@ -11,7 +12,6 @@ Std_ReturnType BUZZER_Init(void)
     Buzzer_TickCounter = 0;
     return Timer2_Init();
 }
-
 
 Std_ReturnType BUZZER_SetMode(Buzzer_Mode_t mode)
 {
@@ -41,7 +41,6 @@ Std_ReturnType BUZZER_SetMode(Buzzer_Mode_t mode)
 
     return local_Status;
 }
-
 
 void BUZZER_Update(void)
 {

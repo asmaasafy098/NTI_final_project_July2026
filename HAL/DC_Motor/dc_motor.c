@@ -13,21 +13,21 @@
  *  the header asks you to give each timer one owner.
  *
  *  PWM: 8-bit fast PWM, non-inverting, prescaler 64.
- *       At F_CPU = 16 MHz that is 16 MHz / 64 / 256 = ~976 Hz, which is above the
- *       audible whine of a slow PWM and slow enough that an L298 keeps up.
+ *        At F_CPU = 16 MHz that is 16 MHz / 64 / 256 = ~976 Hz, which is above the
+ *        audible whine of a slow PWM and slow enough that an L298 keeps up.
  * ============================================================================== */
 
 /* Compare-output pins fixed by the silicon. */
-#define DC_MOTOR_OC0_PORT     GPIO_PORTB
-#define DC_MOTOR_OC0_PIN      GPIO_PIN3
-#define DC_MOTOR_OC1A_PORT    GPIO_PORTD
-#define DC_MOTOR_OC1A_PIN     GPIO_PIN5
-#define DC_MOTOR_OC1B_PORT    GPIO_PORTD
-#define DC_MOTOR_OC1B_PIN     GPIO_PIN4
-#define DC_MOTOR_OC2_PORT     GPIO_PORTD
-#define DC_MOTOR_OC2_PIN      GPIO_PIN7
+#define DC_MOTOR_OC0_PORT    GPIO_PORTB
+#define DC_MOTOR_OC0_PIN     GPIO_PIN3
+#define DC_MOTOR_OC1A_PORT   GPIO_PORTD
+#define DC_MOTOR_OC1A_PIN    GPIO_PIN5
+#define DC_MOTOR_OC1B_PORT   GPIO_PORTD
+#define DC_MOTOR_OC1B_PIN    GPIO_PIN4
+#define DC_MOTOR_OC2_PORT    GPIO_PORTD
+#define DC_MOTOR_OC2_PIN     GPIO_PIN7
 
-#define DC_MOTOR_PWM_MAX      255U
+#define DC_MOTOR_PWM_MAX     255U
 
 
 /* --------------------------------------------------------------------------
@@ -126,11 +126,11 @@ static void DC_Motor_PwmSetDuty(DC_MotorPwmChannelType channel, uint8_t duty)
 {
     switch (channel)
     {
-        case DC_MOTOR_PWM_OC0:  TIMER_OCR0_REG  = duty;                break;
-        case DC_MOTOR_PWM_OC1A: TIMER_OCR1A_REG = (uint16_h)duty;      break;
-        case DC_MOTOR_PWM_OC1B: TIMER_OCR1B_REG = (uint16_h)duty;      break;
-        case DC_MOTOR_PWM_OC2:  TIMER_OCR2_REG  = duty;                break;
-        default:                                                       break;
+        case DC_MOTOR_PWM_OC0:  TIMER_OCR0_REG  = duty;             break;
+        case DC_MOTOR_PWM_OC1A: TIMER_OCR1A_REG = (uint16_t)duty;   break; /* تصحيح uint16_h */
+        case DC_MOTOR_PWM_OC1B: TIMER_OCR1B_REG = (uint16_t)duty;   break; /* تصحيح uint16_h */
+        case DC_MOTOR_PWM_OC2:  TIMER_OCR2_REG  = duty;             break;
+        default:                                                     break;
     }
 }
 
@@ -151,7 +151,7 @@ static void DC_Motor_ApplySpeed(const DC_MotorHandleType *handle)
     {
         /* No PWM: the enable is either on or off. */
         (void)GPIO_SetPinValue(handle->enPort, handle->enPin,
-                               (handle->speedPercent > 0U) ? PIN_HIGH : PIN_LOW);
+                               (handle->speedPercent > 0U) ? GPIO_HIGH : GPIO_LOW);
         return;
     }
 
@@ -160,12 +160,12 @@ static void DC_Motor_ApplySpeed(const DC_MotorHandleType *handle)
     if (handle->speedPercent == 0U)
     {
         DC_Motor_PwmConnect(handle->pwmChannel, 0U);
-        (void)GPIO_SetPinValue(local_Port, local_Pin, PIN_LOW);
+        (void)GPIO_SetPinValue(local_Port, local_Pin, GPIO_LOW);
         return;
     }
 
-    /* percent -> 8-bit compare value, rounded down. */
-    local_Duty = (uint8_t)(((uint16_h)handle->speedPercent * DC_MOTOR_PWM_MAX) / 100U);
+    /* percent -> 8-bit compare value, rounded down. (تصحيح uint16_h) */
+    local_Duty = (uint8_t)(((uint16_t)handle->speedPercent * DC_MOTOR_PWM_MAX) / 100U);
 
     DC_Motor_PwmSetDuty(handle->pwmChannel, local_Duty);
     DC_Motor_PwmConnect(handle->pwmChannel, 1U);
@@ -174,16 +174,16 @@ static void DC_Motor_ApplySpeed(const DC_MotorHandleType *handle)
 /* Drives the two bridge inputs for one of the four bridge states. */
 static void DC_Motor_ApplyState(DC_MotorHandleType *handle, DC_MotorStateType state)
 {
-    uint8_t local_In1 = PIN_LOW;
-    uint8_t local_In2 = PIN_LOW;
+    uint8_t local_In1 = GPIO_LOW;
+    uint8_t local_In2 = GPIO_LOW;
 
     switch (state)
     {
-        case DC_MOTOR_STATE_FORWARD:   local_In1 = PIN_HIGH; local_In2 = PIN_LOW;  break;
-        case DC_MOTOR_STATE_BACKWARD:  local_In1 = PIN_LOW;  local_In2 = PIN_HIGH; break;
-        case DC_MOTOR_STATE_BRAKE:     local_In1 = PIN_HIGH; local_In2 = PIN_HIGH; break;
+        case DC_MOTOR_STATE_FORWARD:   local_In1 = GPIO_HIGH; local_In2 = GPIO_LOW;  break;
+        case DC_MOTOR_STATE_BACKWARD:  local_In1 = GPIO_LOW;  local_In2 = GPIO_HIGH; break;
+        case DC_MOTOR_STATE_BRAKE:     local_In1 = GPIO_HIGH; local_In2 = GPIO_HIGH; break;
         case DC_MOTOR_STATE_STOP:
-        default:                       local_In1 = PIN_LOW;  local_In2 = PIN_LOW;  break;
+        default:                       local_In1 = GPIO_LOW;  local_In2 = GPIO_LOW;  break;
     }
 
     /*
@@ -234,7 +234,7 @@ Std_ReturnType DC_Motor_Init(DC_MotorHandleType *handle)
     (void)GPIO_SetPinDirection(handle->in1Port, handle->in1Pin, GPIO_OUTPUT);
     (void)GPIO_SetPinDirection(handle->in2Port, handle->in2Pin, GPIO_OUTPUT);
     (void)GPIO_SetPinValue(handle->in1Port, handle->in1Pin, GPIO_LOW);
-    (void)GPIO_SetPinValue(handle->in2Port, handle->in2Pin,GPIO_LOW);
+    (void)GPIO_SetPinValue(handle->in2Port, handle->in2Pin, GPIO_LOW);
 
     /* STEP 3: Set up whichever enable this motor uses. */
     if (handle->pwmChannel == DC_MOTOR_PWM_NONE)
@@ -246,7 +246,7 @@ Std_ReturnType DC_Motor_Init(DC_MotorHandleType *handle)
         }
 
         (void)GPIO_SetPinDirection(handle->enPort, handle->enPin, GPIO_OUTPUT);
-        (void)GPIO_SetPinValue(handle->enPort, handle->enPin,GPIO_LOW);
+        (void)GPIO_SetPinValue(handle->enPort, handle->enPin, GPIO_LOW);
     }
     else
     {
@@ -402,7 +402,7 @@ Std_ReturnType DC_Motor_Brake(DC_MotorHandleType *handle)
      */
     if (handle->pwmChannel == DC_MOTOR_PWM_NONE)
     {
-        (void)GPIO_SetPinValue(handle->enPort, handle->enPin,GPIO_HIGH);
+        (void)GPIO_SetPinValue(handle->enPort, handle->enPin, GPIO_HIGH);
     }
     else
     {
@@ -468,7 +468,7 @@ Std_ReturnType DC_Motor_DeInit(DC_MotorHandleType *handle)
         DC_Motor_PwmPin(handle->pwmChannel, &local_Port, &local_Pin);
         DC_Motor_PwmConnect(handle->pwmChannel, 0U);
         DC_Motor_PwmSetDuty(handle->pwmChannel, 0U);
-        (void)GPIO_SetPinValue(local_Port, local_Pin,GPIO_LOW);
+        (void)GPIO_SetPinValue(local_Port, local_Pin, GPIO_LOW);
     }
 
     /* STEP 4: The handle is unusable until Init() runs again. */
