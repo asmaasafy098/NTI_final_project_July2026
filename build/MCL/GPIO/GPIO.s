@@ -13,61 +13,55 @@ GPIO_set_pin_Direction:
 /* stack size = 0 */
 .L__stack_usage = 0
 	cpi r24,lo8(4)
-	brsh .L16
+	brsh .L8
 	cpi r22,lo8(8)
-	brsh .L16
+	brsh .L8
 	tst r20
 	breq .L3
 	cpi r20,lo8(1)
 	breq .L4
-.L16:
+.L8:
 	ldi r24,lo8(1)
 	ldi r25,0
 /* epilogue start */
 	ret
 .L3:
-	ldi r18,lo8(1)
-	ldi r19,0
+	mov r30,r24
+	ldi r31,0
+	lsl r30
+	rol r31
+	subi r30,lo8(-(GPIO_DDRx))
+	sbci r31,hi8(-(GPIO_DDRx))
+	ld __tmp_reg__,Z+
+	ld r31,Z
+	mov r30,__tmp_reg__
+	ld r18,Z
+	ldi r24,lo8(1)
+	ldi r25,0
 	rjmp 2f
 	1:
-	lsl r18
+	lsl r24
 	2:
 	dec r22
 	brpl 1b
-	com r18
-	cpi r24,lo8(2)
-	breq .L6
-	cpi r24,lo8(3)
-	breq .L7
-	cpi r24,lo8(1)
-	breq .L8
-	in r24,0x1a
-	and r18,r24
-.L19:
-	out 0x1a,r18
-	rjmp .L17
-.L8:
-	in r24,0x17
-	and r18,r24
-.L18:
-	out 0x17,r18
-.L17:
+	com r24
+	and r24,r18
+.L9:
+	st Z,r24
 	ldi r25,0
 	ldi r24,0
 	ret
-.L6:
-	in r24,0x14
-	and r18,r24
-.L20:
-	out 0x14,r18
-	rjmp .L17
-.L7:
-	in r24,0x11
-	and r18,r24
-.L21:
-	out 0x11,r18
-	rjmp .L17
 .L4:
+	mov r30,r24
+	ldi r31,0
+	lsl r30
+	rol r31
+	subi r30,lo8(-(GPIO_DDRx))
+	sbci r31,hi8(-(GPIO_DDRx))
+	ld __tmp_reg__,Z+
+	ld r31,Z
+	mov r30,__tmp_reg__
+	ld r24,Z
 	ldi r18,lo8(1)
 	ldi r19,0
 	rjmp 2f
@@ -76,27 +70,8 @@ GPIO_set_pin_Direction:
 	2:
 	dec r22
 	brpl 1b
-	cpi r24,lo8(2)
-	breq .L10
-	cpi r24,lo8(3)
-	breq .L11
-	cpi r24,lo8(1)
-	breq .L12
-	in r24,0x1a
-	or r18,r24
-	rjmp .L19
-.L12:
-	in r24,0x17
-	or r18,r24
-	rjmp .L18
-.L10:
-	in r24,0x14
-	or r18,r24
-	rjmp .L20
-.L11:
-	in r24,0x11
-	or r18,r24
-	rjmp .L21
+	or r24,r18
+	rjmp .L9
 	.size	GPIO_set_pin_Direction, .-GPIO_set_pin_Direction
 .global	GPIO_set_pin_value
 	.type	GPIO_set_pin_value, @function
@@ -106,61 +81,55 @@ GPIO_set_pin_value:
 /* stack size = 0 */
 .L__stack_usage = 0
 	cpi r24,lo8(4)
-	brsh .L37
+	brsh .L17
 	cpi r22,lo8(8)
-	brsh .L37
+	brsh .L17
 	tst r20
-	breq .L24
+	breq .L12
 	cpi r20,lo8(1)
-	breq .L25
-.L37:
+	breq .L13
+.L17:
 	ldi r24,lo8(1)
 	ldi r25,0
 /* epilogue start */
 	ret
-.L24:
-	ldi r18,lo8(1)
-	ldi r19,0
+.L12:
+	mov r30,r24
+	ldi r31,0
+	lsl r30
+	rol r31
+	subi r30,lo8(-(GPIO_PORTx))
+	sbci r31,hi8(-(GPIO_PORTx))
+	ld __tmp_reg__,Z+
+	ld r31,Z
+	mov r30,__tmp_reg__
+	ld r18,Z
+	ldi r24,lo8(1)
+	ldi r25,0
 	rjmp 2f
 	1:
-	lsl r18
+	lsl r24
 	2:
 	dec r22
 	brpl 1b
-	com r18
-	cpi r24,lo8(2)
-	breq .L27
-	cpi r24,lo8(3)
-	breq .L28
-	cpi r24,lo8(1)
-	breq .L29
-	in r24,0x1b
-	and r18,r24
-.L40:
-	out 0x1b,r18
-	rjmp .L38
-.L29:
-	in r24,0x18
-	and r18,r24
-.L39:
-	out 0x18,r18
-.L38:
+	com r24
+	and r24,r18
+.L18:
+	st Z,r24
 	ldi r25,0
 	ldi r24,0
 	ret
-.L27:
-	in r24,0x15
-	and r18,r24
-.L41:
-	out 0x15,r18
-	rjmp .L38
-.L28:
-	in r24,0x12
-	and r18,r24
-.L42:
-	out 0x12,r18
-	rjmp .L38
-.L25:
+.L13:
+	mov r30,r24
+	ldi r31,0
+	lsl r30
+	rol r31
+	subi r30,lo8(-(GPIO_PORTx))
+	sbci r31,hi8(-(GPIO_PORTx))
+	ld __tmp_reg__,Z+
+	ld r31,Z
+	mov r30,__tmp_reg__
+	ld r24,Z
 	ldi r18,lo8(1)
 	ldi r19,0
 	rjmp 2f
@@ -169,27 +138,8 @@ GPIO_set_pin_value:
 	2:
 	dec r22
 	brpl 1b
-	cpi r24,lo8(2)
-	breq .L31
-	cpi r24,lo8(3)
-	breq .L32
-	cpi r24,lo8(1)
-	breq .L33
-	in r24,0x1b
-	or r18,r24
-	rjmp .L40
-.L33:
-	in r24,0x18
-	or r18,r24
-	rjmp .L39
-.L31:
-	in r24,0x15
-	or r18,r24
-	rjmp .L41
-.L32:
-	in r24,0x12
-	or r18,r24
-	rjmp .L42
+	or r24,r18
+	rjmp .L18
 	.size	GPIO_set_pin_value, .-GPIO_set_pin_value
 .global	GPIO_pin_toggle
 	.type	GPIO_pin_toggle, @function
@@ -199,9 +149,19 @@ GPIO_pin_toggle:
 /* stack size = 0 */
 .L__stack_usage = 0
 	cpi r24,lo8(4)
-	brsh .L50
+	brsh .L22
 	cpi r22,lo8(8)
-	brsh .L50
+	brsh .L22
+	mov r30,r24
+	ldi r31,0
+	lsl r30
+	rol r31
+	subi r30,lo8(-(GPIO_PORTx))
+	sbci r31,hi8(-(GPIO_PORTx))
+	ld __tmp_reg__,Z+
+	ld r31,Z
+	mov r30,__tmp_reg__
+	ld r24,Z
 	ldi r18,lo8(1)
 	ldi r19,0
 	rjmp 2f
@@ -210,35 +170,12 @@ GPIO_pin_toggle:
 	2:
 	dec r22
 	brpl 1b
-	cpi r24,lo8(2)
-	breq .L46
-	cpi r24,lo8(3)
-	breq .L47
-	cpi r24,lo8(1)
-	breq .L48
-	in r24,0x1b
-	eor r18,r24
-	out 0x1b,r18
-.L51:
+	eor r24,r18
+	st Z,r24
 	ldi r25,0
 	ldi r24,0
 	ret
-.L48:
-	in r24,0x18
-	eor r18,r24
-	out 0x18,r18
-	rjmp .L51
-.L46:
-	in r24,0x15
-	eor r18,r24
-	out 0x15,r18
-	rjmp .L51
-.L47:
-	in r24,0x12
-	eor r18,r24
-	out 0x12,r18
-	rjmp .L51
-.L50:
+.L22:
 	ldi r24,lo8(1)
 	ldi r25,0
 /* epilogue start */
@@ -252,28 +189,33 @@ GPIO_set_port_Direction:
 /* stack size = 0 */
 .L__stack_usage = 0
 	cpi r24,lo8(4)
-	brsh .L58
-	cpi r24,lo8(2)
-	breq .L55
-	cpi r24,lo8(3)
-	breq .L56
-	cpi r24,lo8(1)
-	breq .L57
-	out 0x1a,r22
-.L59:
+	brsh .L27
+	mov r30,r24
+	ldi r31,0
+	lsl r30
+	rol r31
+	subi r30,lo8(-(GPIO_DDRx))
+	sbci r31,hi8(-(GPIO_DDRx))
+	ld __tmp_reg__,Z+
+	ld r31,Z
+	mov r30,__tmp_reg__
+	cpse r22,__zero_reg__
+	rjmp .L25
+	st Z,__zero_reg__
+.L28:
 	ldi r25,0
 	ldi r24,0
 	ret
-.L57:
-	out 0x17,r22
-	rjmp .L59
-.L55:
-	out 0x14,r22
-	rjmp .L59
-.L56:
-	out 0x11,r22
-	rjmp .L59
-.L58:
+.L25:
+	cpi r22,lo8(1)
+	brne .L26
+	ldi r24,lo8(-1)
+	st Z,r24
+	rjmp .L28
+.L26:
+	st Z,r22
+	rjmp .L28
+.L27:
 	ldi r24,lo8(1)
 	ldi r25,0
 /* epilogue start */
@@ -287,28 +229,33 @@ GPIO_set_port_value:
 /* stack size = 0 */
 .L__stack_usage = 0
 	cpi r24,lo8(4)
-	brsh .L66
-	cpi r24,lo8(2)
-	breq .L63
-	cpi r24,lo8(3)
-	breq .L64
-	cpi r24,lo8(1)
-	breq .L65
-	out 0x1b,r22
-.L67:
+	brsh .L33
+	mov r30,r24
+	ldi r31,0
+	lsl r30
+	rol r31
+	subi r30,lo8(-(GPIO_PORTx))
+	sbci r31,hi8(-(GPIO_PORTx))
+	ld __tmp_reg__,Z+
+	ld r31,Z
+	mov r30,__tmp_reg__
+	cpse r22,__zero_reg__
+	rjmp .L31
+	st Z,__zero_reg__
+.L34:
 	ldi r25,0
 	ldi r24,0
 	ret
-.L65:
-	out 0x18,r22
-	rjmp .L67
-.L63:
-	out 0x15,r22
-	rjmp .L67
-.L64:
-	out 0x12,r22
-	rjmp .L67
-.L66:
+.L31:
+	cpi r22,lo8(1)
+	brne .L32
+	ldi r24,lo8(-1)
+	st Z,r24
+	rjmp .L34
+.L32:
+	st Z,r22
+	rjmp .L34
+.L33:
 	ldi r24,lo8(1)
 	ldi r25,0
 /* epilogue start */
@@ -322,17 +269,22 @@ GPIO_get_pin_status:
 /* stack size = 0 */
 .L__stack_usage = 0
 	cpi r24,lo8(4)
-	brsh .L75
+	brsh .L39
 	cpi r22,lo8(8)
-	brsh .L75
-	cpi r24,lo8(2)
-	breq .L71
-	cpi r24,lo8(3)
-	breq .L72
-	cpi r24,lo8(1)
-	breq .L73
-	in r24,0x19
-.L76:
+	brsh .L39
+	cp r20,__zero_reg__
+	cpc r21,__zero_reg__
+	breq .L39
+	mov r30,r24
+	ldi r31,0
+	lsl r30
+	rol r31
+	subi r30,lo8(-(GPIO_PINx))
+	sbci r31,hi8(-(GPIO_PINx))
+	ld __tmp_reg__,Z+
+	ld r31,Z
+	mov r30,__tmp_reg__
+	ld r24,Z
 	ldi r25,0
 	rjmp 2f
 	1:
@@ -342,22 +294,16 @@ GPIO_get_pin_status:
 	dec r22
 	brpl 1b
 	andi r24,lo8(1)
-.L69:
+	movw r30,r20
+	st Z,r24
+	ldi r25,0
+	ldi r24,0
+	ret
+.L39:
+	ldi r24,lo8(1)
 	ldi r25,0
 /* epilogue start */
 	ret
-.L73:
-	in r24,0x16
-	rjmp .L76
-.L71:
-	in r24,0x13
-	rjmp .L76
-.L72:
-	in r24,0x10
-	rjmp .L76
-.L75:
-	ldi r24,0
-	rjmp .L69
 	.size	GPIO_get_pin_status, .-GPIO_get_pin_status
 .global	GPIO_get_port_status
 	.type	GPIO_get_port_status, @function
@@ -367,29 +313,52 @@ GPIO_get_port_status:
 /* stack size = 0 */
 .L__stack_usage = 0
 	cpi r24,lo8(4)
-	brsh .L83
-	cpi r24,lo8(2)
-	breq .L80
-	cpi r24,lo8(3)
-	breq .L81
-	cpi r24,lo8(1)
-	breq .L82
-	in r24,0x19
-.L78:
+	brsh .L43
+	cp r22,__zero_reg__
+	cpc r23,__zero_reg__
+	breq .L43
+	mov r30,r24
+	ldi r31,0
+	lsl r30
+	rol r31
+	subi r30,lo8(-(GPIO_PINx))
+	sbci r31,hi8(-(GPIO_PINx))
+	ld __tmp_reg__,Z+
+	ld r31,Z
+	mov r30,__tmp_reg__
+	ld r24,Z
+	movw r30,r22
+	st Z,r24
+	ldi r25,0
+	ldi r24,0
+	ret
+.L43:
+	ldi r24,lo8(1)
 	ldi r25,0
 /* epilogue start */
 	ret
-.L82:
-	in r24,0x16
-	rjmp .L78
-.L80:
-	in r24,0x13
-	rjmp .L78
-.L81:
-	in r24,0x10
-	rjmp .L78
-.L83:
-	ldi r24,0
-	rjmp .L78
 	.size	GPIO_get_port_status, .-GPIO_get_port_status
+	.section	.rodata
+	.type	GPIO_PINx, @object
+	.size	GPIO_PINx, 8
+GPIO_PINx:
+	.word	57
+	.word	54
+	.word	51
+	.word	48
+	.type	GPIO_PORTx, @object
+	.size	GPIO_PORTx, 8
+GPIO_PORTx:
+	.word	59
+	.word	56
+	.word	53
+	.word	50
+	.type	GPIO_DDRx, @object
+	.size	GPIO_DDRx, 8
+GPIO_DDRx:
+	.word	58
+	.word	55
+	.word	52
+	.word	49
 	.ident	"GCC: (GNU) 7.3.0"
+.global __do_copy_data

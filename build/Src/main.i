@@ -9,10 +9,12 @@
 
 
 
-# 1 "Src/../Service/STD_Types.h" 1
-
-
-
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 1 3
+# 99 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\sfr_defs.h" 1 3
+# 126 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\sfr_defs.h" 3
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 1 3
+# 37 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 3
 # 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 1 3 4
 # 9 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 3 4
 # 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 1 3 4
@@ -127,7 +129,81 @@ typedef int64_t intmax_t;
 
 typedef uint64_t uintmax_t;
 # 10 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 2 3 4
-# 5 "Src/../Service/STD_Types.h" 2
+# 38 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 2 3
+# 77 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 3
+typedef int32_t int_farptr_t;
+
+
+
+typedef uint32_t uint_farptr_t;
+# 127 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\sfr_defs.h" 2 3
+# 100 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+# 244 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 1 3
+# 720 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 3
+       
+# 721 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 3
+
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+# 245 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+# 703 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\portpins.h" 1 3
+# 704 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\common.h" 1 3
+# 706 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\version.h" 1 3
+# 708 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+
+
+
+
+
+
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\fuse.h" 1 3
+# 248 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\fuse.h" 3
+typedef struct
+{
+    unsigned char low;
+    unsigned char high;
+} __fuse_t;
+# 715 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+
+
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\lock.h" 1 3
+# 718 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+# 9 "Src/main.c" 2
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\interrupt.h" 1 3
+# 10 "Src/main.c" 2
+
+# 1 "Src/../Service/STD_Types.h" 1
+
+
+
+
 
 
 
@@ -169,9 +245,9 @@ typedef enum {
 } Std_ReturnType;
 
 typedef Std_ReturnType STD_ReturnType;
-# 9 "Src/main.c" 2
+# 12 "Src/main.c" 2
 # 1 "Src/../Service/Bit_Math.h" 1
-# 10 "Src/main.c" 2
+# 13 "Src/main.c" 2
 # 1 "Src/../Logic/Data/data_types.h" 1
 # 9 "Src/../Logic/Data/data_types.h"
 # 1 "Service/STD_Types.h" 1
@@ -304,7 +380,7 @@ typedef struct {
 # 153 "Src/../Logic/Data/data_types.h"
 extern DriveData_t g_driveData;
 extern DriveCfg_t g_driveCfg;
-# 11 "Src/main.c" 2
+# 14 "Src/main.c" 2
 # 1 "Src/../Logic/Data/data_manager.h" 1
 # 10 "Src/../Logic/Data/data_manager.h"
 # 1 "Src/../Logic/Data/data_types.h" 1
@@ -358,7 +434,7 @@ void DataManager_IncrementRunSeconds(void);
 
 
 void DataManager_Persist(void);
-# 12 "Src/main.c" 2
+# 15 "Src/main.c" 2
 # 1 "Src/../Logic/Control/drive_fsm/drive_fsm.h" 1
 # 10 "Src/../Logic/Control/drive_fsm/drive_fsm.h"
 # 1 "Logic/Data/data_types.h" 1
@@ -477,7 +553,7 @@ void FSM_SetDeadTime(uint32_t ms);
 
 
 uint32_t FSM_GetStateTime(void);
-# 13 "Src/main.c" 2
+# 16 "Src/main.c" 2
 # 1 "Src/../Logic/Control/pi_controller/pi_controller.h" 1
 # 13 "Src/../Logic/Control/pi_controller/pi_controller.h"
 typedef struct {
@@ -530,7 +606,7 @@ int32_t PI_GetIntegral(const PI_Handle_t* pi);
 
 
 int16_t PI_GetError(const PI_Handle_t* pi);
-# 14 "Src/main.c" 2
+# 17 "Src/main.c" 2
 # 1 "Src/../Logic/Control/ramp_generator/ramp_generator.h" 1
 # 12 "Src/../Logic/Control/ramp_generator/ramp_generator.h"
 typedef struct {
@@ -608,7 +684,7 @@ void RAMP_Reset(Ramp_t* ramp);
 
 
 uint16_t RAMP_GetTimeToTarget(const Ramp_t* ramp);
-# 15 "Src/main.c" 2
+# 18 "Src/main.c" 2
 # 1 "Src/../Logic/Control/protection/protection.h" 1
 # 13 "Src/../Logic/Control/protection/protection.h"
 typedef struct {
@@ -689,7 +765,7 @@ uint8_t PROTECT_GetI2TPercent(void);
 
 
 const char* PROTECT_GetTripString(Trip_t trip);
-# 16 "Src/main.c" 2
+# 19 "Src/main.c" 2
 # 1 "Src/../Logic/Scheduler/scheduler.h" 1
 # 14 "Src/../Logic/Scheduler/scheduler.h"
 typedef struct {
@@ -743,7 +819,7 @@ uint8_t SCHED_GetMaxLoadPercent(void);
 
 
 void SCHED_ReportStatus(void);
-# 17 "Src/main.c" 2
+# 20 "Src/main.c" 2
 # 1 "Src/../Logic/Communication/console/console.h" 1
 # 18 "Src/../Logic/Communication/console/console.h"
 typedef struct {
@@ -816,7 +892,7 @@ char* CONSOLE_GetCommand(void);
 
 
 void CONSOLE_ClearCommand(void);
-# 18 "Src/main.c" 2
+# 21 "Src/main.c" 2
 # 1 "Src/../Logic/Communication/telemetry/telemetry.h" 1
 # 17 "Src/../Logic/Communication/telemetry/telemetry.h"
 void TELEMETRY_Init(void);
@@ -851,7 +927,7 @@ void TELEMETRY_SetEnabled(uint8_t enable);
 
 
 uint8_t TELEMETRY_IsEnabled(void);
-# 19 "Src/main.c" 2
+# 22 "Src/main.c" 2
 
 
 # 1 "Src/../MCL/GPIO/GPIO_Interface.h" 1
@@ -860,27 +936,22 @@ uint8_t TELEMETRY_IsEnabled(void);
 
 # 1 "Src/../MCL/GPIO/../../Service/STD_Types.h" 1
 # 5 "Src/../MCL/GPIO/GPIO_Interface.h" 2
-# 1 "Src/../MCL/GPIO/GPIO_Registers.h" 1
-
-
-
-# 1 "Src/../Service/STD_Types.h" 1
-# 5 "Src/../MCL/GPIO/GPIO_Registers.h" 2
-# 6 "Src/../MCL/GPIO/GPIO_Interface.h" 2
-# 29 "Src/../MCL/GPIO/GPIO_Interface.h"
+# 27 "Src/../MCL/GPIO/GPIO_Interface.h"
 typedef unsigned char GPIO_pin_status;
 typedef unsigned char GPIO_port_status;
 
 
+
 Std_ReturnType GPIO_set_pin_Direction(uint8_t uint8_port, uint8_t uint8_pin, uint8_t uint8_direction);
-Std_ReturnType GPIO_get_pin_status(uint8_t uint8_port, uint8_t uint8_pin);
+Std_ReturnType GPIO_get_pin_status(uint8_t uint8_port, uint8_t uint8_pin, uint8_t *pu8PinStatus);
 Std_ReturnType GPIO_pin_toggle(uint8_t uint8_port, uint8_t uint8_pin);
 Std_ReturnType GPIO_set_pin_value(uint8_t uint8_port, uint8_t uint8_pin, uint8_t uint8_value);
 
+
 Std_ReturnType GPIO_set_port_Direction(uint8_t uint8_port, uint8_t uint8_direction);
-Std_ReturnType GPIO_get_port_status(uint8_t uint8_port);
+Std_ReturnType GPIO_get_port_status(uint8_t uint8_port, uint8_t *pu8PortStatus);
 Std_ReturnType GPIO_set_port_value(uint8_t uint8_port, uint8_t uint8_value);
-# 22 "Src/main.c" 2
+# 25 "Src/main.c" 2
 # 1 "Src/../MCL/ADC/ADC_Interfaces.h" 1
 
 
@@ -933,7 +1004,7 @@ uint8_t ADC_IsConversionComplete(void);
 Std_ReturnType ADC_ReadResult(uint16_t *puint16Result);
 # 87 "Src/../MCL/ADC/ADC_Interfaces.h"
 Std_ReturnType ADC_ReadChannelBlocking(uint8_t uint8Channel, uint16_t *puint16Result);
-# 23 "Src/main.c" 2
+# 26 "Src/main.c" 2
 # 1 "Src/../MCL/Timer/timer_interface.h" 1
 
 
@@ -1055,93 +1126,19 @@ void Timer_EnableGlobalInterrupt(void);
 
 
 void Timer_DisableGlobalInterrupt(void);
-# 24 "Src/main.c" 2
+# 27 "Src/main.c" 2
 # 1 "Src/../MCL/Interrupt/interrupt_interface.h" 1
-
-
-# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\interrupt.h" 1 3
-# 38 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\interrupt.h" 3
-# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 1 3
-# 99 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
-# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\sfr_defs.h" 1 3
-# 126 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\sfr_defs.h" 3
-# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 1 3
-# 77 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 3
-
-# 77 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 3
-typedef int32_t int_farptr_t;
-
-
-
-typedef uint32_t uint_farptr_t;
-# 127 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\sfr_defs.h" 2 3
-# 100 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
-# 244 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
-# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 1 3
-# 720 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 3
-       
-# 721 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 3
-
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-# 245 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
-# 703 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
-# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\portpins.h" 1 3
-# 704 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
-
-# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\common.h" 1 3
-# 706 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
-
-# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\version.h" 1 3
-# 708 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
-
-
-
-
-
-
-# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\fuse.h" 1 3
-# 248 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\fuse.h" 3
-typedef struct
-{
-    unsigned char low;
-    unsigned char high;
-} __fuse_t;
-# 715 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
-
-
-# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\lock.h" 1 3
-# 718 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
-# 39 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\interrupt.h" 2 3
-# 4 "Src/../MCL/Interrupt/interrupt_interface.h" 2
+# 13 "Src/../MCL/Interrupt/interrupt_interface.h"
 # 1 "Src/../MCL/Interrupt/../../Service/STD_Types.h" 1
-# 5 "Src/../MCL/Interrupt/interrupt_interface.h" 2
+# 14 "Src/../MCL/Interrupt/interrupt_interface.h" 2
 # 1 "Src/../MCL/Interrupt/interrupt_registers.h" 1
-# 6 "Src/../MCL/Interrupt/interrupt_interface.h" 2
-# 25 "Src/../MCL/Interrupt/interrupt_interface.h"
+# 15 "Src/../MCL/Interrupt/interrupt_interface.h" 2
 
-# 25 "Src/../MCL/Interrupt/interrupt_interface.h"
+
+
+
+
+
 typedef enum
 {
     EXTI_INT0 = 0,
@@ -1149,7 +1146,8 @@ typedef enum
     EXTI_INT2 = 2,
     EXTI_LINE_MAX
 } EXTI_LineType;
-# 42 "Src/../MCL/Interrupt/interrupt_interface.h"
+
+
 typedef enum
 {
     EXTI_SENSE_LOW_LEVEL = 0,
@@ -1159,11 +1157,6 @@ typedef enum
 } EXTI_SenseType;
 
 
-
-
-
-
-
 typedef struct
 {
     EXTI_LineType line;
@@ -1171,48 +1164,20 @@ typedef struct
 } EXTI_ConfigType;
 
 
-
-
-
-
 typedef void (*EXTI_CallBackType)(void);
-# 80 "Src/../MCL/Interrupt/interrupt_interface.h"
+
+
+
+
+
 Std_ReturnType EXTI_Init(const EXTI_ConfigType *addConfig);
-
-
-
-
-
-
 Std_ReturnType EXTI_Enable(EXTI_LineType line);
-
-
-
-
-
-
 Std_ReturnType EXTI_Disable(EXTI_LineType line);
-# 103 "Src/../MCL/Interrupt/interrupt_interface.h"
 Std_ReturnType EXTI_SetSenseControl(EXTI_LineType line, EXTI_SenseType sense);
-
-
-
-
-
-
-
 Std_ReturnType EXTI_SetCallBack(EXTI_LineType line, EXTI_CallBackType callBack);
-
-
-
-
 void EXTI_EnableGlobalInterrupt(void);
-
-
-
-
 void EXTI_DisableGlobalInterrupt(void);
-# 25 "Src/main.c" 2
+# 28 "Src/main.c" 2
 # 1 "Src/../MCL/UART/uart_interface.h" 1
 
 
@@ -1311,7 +1276,7 @@ Std_ReturnType UART_SetRxCallBack(UART_RxCallBackType callBack);
 
 
 Std_ReturnType UART_TxBusy(void);
-# 26 "Src/main.c" 2
+# 29 "Src/main.c" 2
 # 1 "Src/../MCL/I2C/i2c_interface.h" 1
 
 
@@ -1348,63 +1313,18 @@ typedef struct
     uint8_t ownAddress;
     uint8_t enableGeneralCall;
 } I2C_SlaveConfigType;
-# 78 "Src/../MCL/I2C/i2c_interface.h"
-Std_ReturnType I2C_InitMaster(const I2C_MasterConfigType *addConfig);
-# 87 "Src/../MCL/I2C/i2c_interface.h"
-Std_ReturnType I2C_InitSlave(const I2C_SlaveConfigType *addConfig);
 
 
 
 
-
-Std_ReturnType I2C_DeInit(void);
-
-
-
-
-
+Std_ReturnType I2C_Init(void);
 
 Std_ReturnType I2C_Start(void);
 
-
-
-
-
 Std_ReturnType I2C_Stop(void);
 
-
-
-
-
-
-
-Std_ReturnType I2C_WriteByte(uint8_t uint8Data);
-
-
-
-
-
-
-Std_ReturnType I2C_ReadByteWithAck(uint8_t *puint8Data);
-
-
-
-
-
-
-Std_ReturnType I2C_ReadByteWithNack(uint8_t *puint8Data);
-
-
-
-
-
-
-uint8_t I2C_GetStatus(void);
-# 144 "Src/../MCL/I2C/i2c_interface.h"
-Std_ReturnType I2C_MasterWrite(uint8_t slaveAddress, const uint8_t *pData, uint16_t length);
-# 154 "Src/../MCL/I2C/i2c_interface.h"
-Std_ReturnType I2C_MasterRead(uint8_t slaveAddress, uint8_t *pBuffer, uint16_t length);
-# 27 "Src/main.c" 2
+Std_ReturnType I2C_WriteByte(uint8_t data);
+# 30 "Src/main.c" 2
 
 
 # 1 "Src/../HAL/DC_Motor/dc_motor.h" 1
@@ -1489,16 +1409,23 @@ Std_ReturnType DC_Motor_GetState(const DC_MotorHandleType *handle, DC_MotorState
 Std_ReturnType DC_Motor_GetSpeed(const DC_MotorHandleType *handle, uint8_t *pSpeed);
 # 264 "Src/../HAL/DC_Motor/dc_motor.h"
 Std_ReturnType DC_Motor_DeInit(DC_MotorHandleType *handle);
-# 30 "Src/main.c" 2
+# 33 "Src/main.c" 2
 # 1 "Src/../HAL/Tachometer/Tachometer.h" 1
-# 9 "Src/../HAL/Tachometer/Tachometer.h"
+# 10 "Src/../HAL/Tachometer/Tachometer.h"
 void TACHO_Init(void);
 void TACHO_Update(void);
 void TACHO_PulseISR(void);
 int16_t TACHO_GetRPM(void);
-# 31 "Src/main.c" 2
+# 34 "Src/main.c" 2
 # 1 "Src/../HAL/ANALOG_SENSOR/ANALOG_SENSOR.h" 1
-# 11 "Src/../HAL/ANALOG_SENSOR/ANALOG_SENSOR.h"
+
+
+
+
+# 1 "Src/../HAL/ANALOG_SENSOR/../../Service/STD_Types.h" 1
+# 6 "Src/../HAL/ANALOG_SENSOR/ANALOG_SENSOR.h" 2
+
+
 typedef enum
 {
     ANALOG_CH_SETPOINT = 0,
@@ -1508,14 +1435,13 @@ typedef enum
     ANALOG_CH_COUNT
 } AnalogChannel_t;
 
-void ANALOG_Init(void);
-void ANALOG_Update(void);
 
+Std_ReturnType ANALOG_Init(void);
 uint16_t ANALOG_GetSetpoint(void);
 uint16_t ANALOG_GetCurrent(void);
 uint16_t ANALOG_GetBusVoltage(void);
 uint8_t ANALOG_GetTemperature(void);
-# 32 "Src/main.c" 2
+# 35 "Src/main.c" 2
 # 1 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h" 1
 
 
@@ -1606,28 +1532,36 @@ Std_ReturnType LCD_Aip31068_ShiftDisplay(LCD_Aip31068_HandleType *handle, uint8_
 # 252 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
 Std_ReturnType LCD_Aip31068_CreateCustomChar(LCD_Aip31068_HandleType *handle,
                                              uint8_t location, const uint8_t *pPattern);
-# 33 "Src/main.c" 2
+# 36 "Src/main.c" 2
 # 1 "Src/../HAL/BUZZER/BUZZER.h" 1
 
 
 
+
+# 1 "Src/../HAL/BUZZER/../../Service/STD_Types.h" 1
+# 6 "Src/../HAL/BUZZER/BUZZER.h" 2
 
 
 
 
 typedef enum
 {
-    BUZZ_OFF,
-    BUZZ_ON,
-    BUZZ_BEEP,
-    BUZZ_ALARM
-} BuzzerMode_t;
+    BUZZ_OFF = 0,
+    BUZZ_SLOW,
+    BUZZ_FAST,
+    BUZZ_CONTINUOUS
+} Buzzer_Mode_t;
+# 29 "Src/../HAL/BUZZER/BUZZER.h"
+extern Buzzer_Mode_t Buzzer_CurrentMode;
+extern uint16_t Buzzer_TickCounter;
 
-void BUZZER_Init(void);
-void BUZZER_SetMode(BuzzerMode_t mode);
 
+
+
+Std_ReturnType BUZZER_Init(void);
+Std_ReturnType BUZZER_SetMode(Buzzer_Mode_t mode);
 void BUZZER_Update(void);
-# 34 "Src/main.c" 2
+# 37 "Src/main.c" 2
 # 1 "Src/../HAL/Stepper_L298P/Stepper_L298P.h" 1
 
 
@@ -1720,7 +1654,7 @@ Std_ReturnType Stepper_L298P_ResetPosition(Stepper_L298P_HandleType *handle);
 # 286 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
 Std_ReturnType Stepper_L298P_GetStepsPerRev(const Stepper_L298P_HandleType *handle,
                                             uint16_t *pStepsPerRev);
-# 35 "Src/main.c" 2
+# 38 "Src/main.c" 2
 
 
 DriveData_t g_driveData;
@@ -1828,7 +1762,11 @@ int main(void)
     SCHED_AddTask(Task_Telemetry, "Telemetry", 1000, 5);
 
 
-    asm volatile("sei"::);
+    
+# 145 "Src/main.c" 3
+   __asm__ __volatile__ ("sei" ::: "memory")
+# 145 "Src/main.c"
+        ;
 
 
     while (1) {
@@ -2033,55 +1971,55 @@ void Task_Telemetry(void)
 
 
 
-# 346 "Src/main.c" 3
+# 349 "Src/main.c" 3
 void __vector_1 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_1 (void)
 
-# 347 "Src/main.c"
+# 350 "Src/main.c"
 {
 
     TACHO_OnPulse();
 }
-# 360 "Src/main.c"
+# 363 "Src/main.c"
 
-# 360 "Src/main.c" 3
+# 363 "Src/main.c" 3
 void __vector_2 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_2 (void)
 
-# 361 "Src/main.c"
+# 364 "Src/main.c"
 {
 
     
-# 363 "Src/main.c" 3
+# 366 "Src/main.c" 3
    (*(volatile uint16_t *)((0x2A) + 0x20)) 
-# 363 "Src/main.c"
+# 366 "Src/main.c"
          = 0;
 
 
     ((
-# 366 "Src/main.c" 3
+# 369 "Src/main.c" 3
    (*(volatile uint8_t *)((0x18) + 0x20))
-# 366 "Src/main.c"
+# 369 "Src/main.c"
    ) &= ~(1 << (
-# 366 "Src/main.c" 3
+# 369 "Src/main.c" 3
    2
-# 366 "Src/main.c"
+# 369 "Src/main.c"
    )));
     ((
-# 367 "Src/main.c" 3
+# 370 "Src/main.c" 3
    (*(volatile uint8_t *)((0x18) + 0x20))
-# 367 "Src/main.c"
+# 370 "Src/main.c"
    ) &= ~(1 << (
-# 367 "Src/main.c" 3
+# 370 "Src/main.c" 3
    1
-# 367 "Src/main.c"
+# 370 "Src/main.c"
    )));
     ((
-# 368 "Src/main.c" 3
+# 371 "Src/main.c" 3
    (*(volatile uint8_t *)((0x18) + 0x20))
-# 368 "Src/main.c"
+# 371 "Src/main.c"
    ) &= ~(1 << (
-# 368 "Src/main.c" 3
+# 371 "Src/main.c" 3
    0
-# 368 "Src/main.c"
+# 371 "Src/main.c"
    )));
 
 
@@ -2094,15 +2032,15 @@ void __vector_2 (void) __attribute__ ((signal,used, externally_visible)) ; void 
 
 
 
-# 379 "Src/main.c" 3
+# 382 "Src/main.c" 3
 void __vector_13 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_13 (void)
 
-# 380 "Src/main.c"
+# 383 "Src/main.c"
 {
     uint8_t ch = 
-# 381 "Src/main.c" 3
+# 384 "Src/main.c" 3
                 (*(volatile uint8_t *)((0x0C) + 0x20))
-# 381 "Src/main.c"
+# 384 "Src/main.c"
                    ;
     CONSOLE_ProcessChar(ch);
 }

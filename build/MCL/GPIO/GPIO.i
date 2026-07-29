@@ -2,7 +2,7 @@
 # 1 "<built-in>"
 # 1 "<command-line>"
 # 1 "MCL/GPIO/GPIO.c"
-# 1 "Src/../Service/STD_Types.h" 1
+# 1 "MCL/GPIO/../../Service/STD_Types.h" 1
 
 
 
@@ -120,41 +120,83 @@ typedef int64_t intmax_t;
 
 typedef uint64_t uintmax_t;
 # 10 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 2 3 4
-# 5 "Src/../Service/STD_Types.h" 2
+# 5 "MCL/GPIO/../../Service/STD_Types.h" 2
 
 
 
-# 7 "Src/../Service/STD_Types.h"
+# 7 "MCL/GPIO/../../Service/STD_Types.h"
 typedef int8_t sint8_t;
 typedef int16_t sint16_t;
 typedef int32_t sint32_t;
 typedef int64_t sint64_t;
+
+typedef sint8_t sint8;
+typedef sint16_t sint16;
+typedef sint32_t sint32;
+typedef sint64_t sint64;
+
+
+typedef uint8_t uint8_h;
+typedef uint16_t uint16_h;
+typedef uint32_t uint32_h;
+typedef uint64_t uint64_h;
 
 
 typedef float float32_t;
 typedef double float64_t;
 
 
-typedef enum
-{
+typedef enum {
+    FALSE = 0,
+    TRUE = 1
+} bool_t;
+
+
+typedef enum {
     E_OK = 0,
-    E_NOK
+    E_NOK,
+    E_BUSY,
+    E_TIMEOUT,
+    E_INVALID,
+    E_NOT_READY
 } Std_ReturnType;
+
+typedef Std_ReturnType STD_ReturnType;
 # 2 "MCL/GPIO/GPIO.c" 2
-# 1 "Src/../Service/Bit_Math.h" 1
+# 1 "MCL/GPIO/../../Service/Bit_Math.h" 1
 # 3 "MCL/GPIO/GPIO.c" 2
 # 1 "MCL/GPIO/GPIO_Registers.h" 1
 # 4 "MCL/GPIO/GPIO.c" 2
 # 1 "MCL/GPIO/GPIO_Interface.h" 1
-# 28 "MCL/GPIO/GPIO_Interface.h"
+# 27 "MCL/GPIO/GPIO_Interface.h"
+typedef unsigned char GPIO_pin_status;
+typedef unsigned char GPIO_port_status;
+
+
+
 Std_ReturnType GPIO_set_pin_Direction(uint8_t uint8_port, uint8_t uint8_pin, uint8_t uint8_direction);
-Std_ReturnType GPIO_set_port_Direction(uint8_t uint8_port, uint8_t uint8_direction);
-Std_ReturnType GPIO_get_pin_status(uint8_t uint8_port, uint8_t uint8_pin);
-Std_ReturnType GPIO_get_port_status(uint8_t uint8_port);
+Std_ReturnType GPIO_get_pin_status(uint8_t uint8_port, uint8_t uint8_pin, uint8_t *pu8PinStatus);
 Std_ReturnType GPIO_pin_toggle(uint8_t uint8_port, uint8_t uint8_pin);
 Std_ReturnType GPIO_set_pin_value(uint8_t uint8_port, uint8_t uint8_pin, uint8_t uint8_value);
+
+
+Std_ReturnType GPIO_set_port_Direction(uint8_t uint8_port, uint8_t uint8_direction);
+Std_ReturnType GPIO_get_port_status(uint8_t uint8_port, uint8_t *pu8PortStatus);
 Std_ReturnType GPIO_set_port_value(uint8_t uint8_port, uint8_t uint8_value);
 # 5 "MCL/GPIO/GPIO.c" 2
+
+
+static volatile uint8_t * const GPIO_DDRx[4] = {
+    &(*(volatile uint8_t *)0x3A), &(*(volatile uint8_t *)0x37), &(*(volatile uint8_t *)0x34), &(*(volatile uint8_t *)0x31)
+};
+
+static volatile uint8_t * const GPIO_PORTx[4] = {
+    &(*(volatile uint8_t *)0x3B), &(*(volatile uint8_t *)0x38), &(*(volatile uint8_t *)0x35), &(*(volatile uint8_t *)0x32)
+};
+
+static volatile uint8_t * const GPIO_PINx[4] = {
+    &(*(volatile uint8_t *)0x39), &(*(volatile uint8_t *)0x36), &(*(volatile uint8_t *)0x33), &(*(volatile uint8_t *)0x30)
+};
 
 
 Std_ReturnType GPIO_set_pin_Direction(uint8_t uint8_port, uint8_t uint8_pin, uint8_t uint8_direction)
@@ -170,27 +212,11 @@ Std_ReturnType GPIO_set_pin_Direction(uint8_t uint8_port, uint8_t uint8_pin, uin
         switch (uint8_direction)
         {
             case 0:
-                switch (uint8_port)
-                {
-                    case 0: (((*(volatile uint8_t *)0x3A)) &= ~(1 << (uint8_pin))); break;
-                    case 1: (((*(volatile uint8_t *)0x37)) &= ~(1 << (uint8_pin))); break;
-                    case 2: (((*(volatile uint8_t *)0x34)) &= ~(1 << (uint8_pin))); break;
-                    case 3: (((*(volatile uint8_t *)0x31)) &= ~(1 << (uint8_pin))); break;
-                    default: local_Status = E_NOK; break;
-                }
+                ((*GPIO_DDRx[uint8_port]) &= ~(1 << (uint8_pin)));
                 break;
-
             case 1:
-                switch (uint8_port)
-                {
-                    case 0: (((*(volatile uint8_t *)0x3A)) |= (1 << (uint8_pin))); break;
-                    case 1: (((*(volatile uint8_t *)0x37)) |= (1 << (uint8_pin))); break;
-                    case 2: (((*(volatile uint8_t *)0x34)) |= (1 << (uint8_pin))); break;
-                    case 3: (((*(volatile uint8_t *)0x31)) |= (1 << (uint8_pin))); break;
-                    default: local_Status = E_NOK; break;
-                }
+                ((*GPIO_DDRx[uint8_port]) |= (1 << (uint8_pin)));
                 break;
-
             default:
                 local_Status = E_NOK;
                 break;
@@ -213,27 +239,11 @@ Std_ReturnType GPIO_set_pin_value(uint8_t uint8_port, uint8_t uint8_pin, uint8_t
         switch (uint8_value)
         {
             case 0:
-                switch (uint8_port)
-                {
-                    case 0: (((*(volatile uint8_t *)0x3B)) &= ~(1 << (uint8_pin))); break;
-                    case 1: (((*(volatile uint8_t *)0x38)) &= ~(1 << (uint8_pin))); break;
-                    case 2: (((*(volatile uint8_t *)0x35)) &= ~(1 << (uint8_pin))); break;
-                    case 3: (((*(volatile uint8_t *)0x32)) &= ~(1 << (uint8_pin))); break;
-                    default: local_Status = E_NOK; break;
-                }
+                ((*GPIO_PORTx[uint8_port]) &= ~(1 << (uint8_pin)));
                 break;
-
             case 1:
-                switch (uint8_port)
-                {
-                    case 0: (((*(volatile uint8_t *)0x3B)) |= (1 << (uint8_pin))); break;
-                    case 1: (((*(volatile uint8_t *)0x38)) |= (1 << (uint8_pin))); break;
-                    case 2: (((*(volatile uint8_t *)0x35)) |= (1 << (uint8_pin))); break;
-                    case 3: (((*(volatile uint8_t *)0x32)) |= (1 << (uint8_pin))); break;
-                    default: local_Status = E_NOK; break;
-                }
+                ((*GPIO_PORTx[uint8_port]) |= (1 << (uint8_pin)));
                 break;
-
             default:
                 local_Status = E_NOK;
                 break;
@@ -253,14 +263,7 @@ Std_ReturnType GPIO_pin_toggle(uint8_t uint8_port, uint8_t uint8_pin)
     }
     else
     {
-        switch (uint8_port)
-        {
-            case 0: (((*(volatile uint8_t *)0x3B)) ^= (1 << (uint8_pin))); break;
-            case 1: (((*(volatile uint8_t *)0x38)) ^= (1 << (uint8_pin))); break;
-            case 2: (((*(volatile uint8_t *)0x35)) ^= (1 << (uint8_pin))); break;
-            case 3: (((*(volatile uint8_t *)0x32)) ^= (1 << (uint8_pin))); break;
-            default: local_Status = E_NOK; break;
-        }
+        ((*GPIO_PORTx[uint8_port]) ^= (1 << (uint8_pin)));
     }
     return local_Status;
 }
@@ -276,13 +279,12 @@ Std_ReturnType GPIO_set_port_Direction(uint8_t uint8_port, uint8_t uint8_directi
     }
     else
     {
-        switch (uint8_port)
-        {
-            case 0: (*(volatile uint8_t *)0x3A) = uint8_direction; break;
-            case 1: (*(volatile uint8_t *)0x37) = uint8_direction; break;
-            case 2: (*(volatile uint8_t *)0x34) = uint8_direction; break;
-            case 3: (*(volatile uint8_t *)0x31) = uint8_direction; break;
-            default: local_Status = E_NOK; break;
+        if (uint8_direction == 0) {
+            *GPIO_DDRx[uint8_port] = 0x00;
+        } else if (uint8_direction == 1) {
+            *GPIO_DDRx[uint8_port] = 0xFF;
+        } else {
+            *GPIO_DDRx[uint8_port] = uint8_direction;
         }
     }
     return local_Status;
@@ -299,52 +301,45 @@ Std_ReturnType GPIO_set_port_value(uint8_t uint8_port, uint8_t uint8_value)
     }
     else
     {
-        switch (uint8_port)
-        {
-            case 0: (*(volatile uint8_t *)0x3B) = uint8_value; break;
-            case 1: (*(volatile uint8_t *)0x38) = uint8_value; break;
-            case 2: (*(volatile uint8_t *)0x35) = uint8_value; break;
-            case 3: (*(volatile uint8_t *)0x32) = uint8_value; break;
-            default: local_Status = E_NOK; break;
+        if (uint8_value == 0) {
+            *GPIO_PORTx[uint8_port] = 0x00;
+        } else if (uint8_value == 1) {
+            *GPIO_PORTx[uint8_port] = 0xFF;
+        } else {
+            *GPIO_PORTx[uint8_port] = uint8_value;
         }
     }
     return local_Status;
 }
 
 
-Std_ReturnType GPIO_get_pin_status(uint8_t uint8_port, uint8_t uint8_pin)
+Std_ReturnType GPIO_get_pin_status(uint8_t uint8_port, uint8_t uint8_pin, uint8_t *pu8PinStatus)
 {
-    uint8_t pin_status = 0;
+    Std_ReturnType local_Status = E_OK;
 
-    if ((uint8_port < 4) && (uint8_pin < 8))
+    if ((uint8_port >= 4) || (uint8_pin >= 8) || (pu8PinStatus == 0))
     {
-        switch (uint8_port)
-        {
-            case 0: pin_status = ((((*(volatile uint8_t *)0x39)) >> (uint8_pin)) & 0x01); break;
-            case 1: pin_status = ((((*(volatile uint8_t *)0x36)) >> (uint8_pin)) & 0x01); break;
-            case 2: pin_status = ((((*(volatile uint8_t *)0x33)) >> (uint8_pin)) & 0x01); break;
-            case 3: pin_status = ((((*(volatile uint8_t *)0x30)) >> (uint8_pin)) & 0x01); break;
-            default: break;
-        }
+        local_Status = E_NOK;
     }
-    return pin_status;
+    else
+    {
+        *pu8PinStatus = (((*GPIO_PINx[uint8_port]) >> (uint8_pin)) & 0x01);
+    }
+    return local_Status;
 }
 
 
-Std_ReturnType GPIO_get_port_status(uint8_t uint8_port)
+Std_ReturnType GPIO_get_port_status(uint8_t uint8_port, uint8_t *pu8PortStatus)
 {
-    uint8_t port_status = 0;
+    Std_ReturnType local_Status = E_OK;
 
-    if (uint8_port < 4)
+    if ((uint8_port >= 4) || (pu8PortStatus == 0))
     {
-        switch (uint8_port)
-        {
-            case 0: port_status = (*(volatile uint8_t *)0x39); break;
-            case 1: port_status = (*(volatile uint8_t *)0x36); break;
-            case 2: port_status = (*(volatile uint8_t *)0x33); break;
-            case 3: port_status = (*(volatile uint8_t *)0x30); break;
-            default: break;
-        }
+        local_Status = E_NOK;
     }
-    return port_status;
+    else
+    {
+        *pu8PortStatus = *GPIO_PINx[uint8_port];
+    }
+    return local_Status;
 }

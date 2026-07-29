@@ -14,21 +14,42 @@ typedef sint16_t sint16;
 typedef sint32_t sint32;
 typedef sint64_t sint64;
 
+typedef int8_t   s8;
+typedef int16_t  s16;
+typedef int32_t  s32;
+typedef int64_t  s64;
+
 /* ==================== Unsigned Data Types ==================== */
-typedef uint8_t  uint8_h;
-typedef uint16_t uint16_h;
-typedef uint32_t uint32_h;
-typedef uint64_t uint64_h;
+typedef uint8_t  uint8;
+typedef uint16_t uint16;
+typedef uint32_t uint32;
+typedef uint64_t uint64;
+
+/* Short names used across MCAL/HAL drivers */
+typedef uint8_t  u8;
+typedef uint16_t u16;
+typedef uint32_t u32;
+typedef uint64_t u64;
 
 /* ==================== Floating Point Data Types ==================== */
 typedef float    float32_t;
 typedef double   float64_t;
+typedef float    f32;
+typedef double   f64;
 
 /* ==================== Boolean Type ==================== */
 typedef enum {
     FALSE = 0,
-    TRUE = 1
+    TRUE  = 1
 } bool_t;
+
+#ifndef TRUE
+  #define TRUE  1
+#endif
+
+#ifndef FALSE
+  #define FALSE 0
+#endif
 
 /* ==================== Standard Return Types ==================== */
 typedef enum {
@@ -42,17 +63,31 @@ typedef enum {
 
 typedef Std_ReturnType STD_ReturnType;
 
+#ifndef E_OK
+  #define E_OK       ((Std_ReturnType)0x00)
+#endif
+
+#ifndef E_NOK
+  #define E_NOK      ((Std_ReturnType)0x01)
+#endif
+
+#ifndef E_NOT_OK
+  #define E_NOT_OK   E_NOK
+#endif
+
 /* ==================== Macros ==================== */
-#define NULL    ((void *)0)
+#ifndef NULL
+  #define NULL       ((void *)0)
+#endif
 
 /* ==================== Interrupt Control ==================== */
 #define DISABLE_INTERRUPTS()    asm volatile("cli"::)
 #define ENABLE_INTERRUPTS()     asm volatile("sei"::)
 
 /* ==================== Utility Macros ==================== */
-#define MAX(a, b)   ((a) > (b) ? (a) : (b))
-#define MIN(a, b)   ((a) < (b) ? (a) : (b))
-#define ABS(a)      ((a) < 0 ? -(a) : (a))
+#define MAX(a, b)           ((a) > (b) ? (a) : (b))
+#define MIN(a, b)           ((a) < (b) ? (a) : (b))
+#define ABS(a)              ((a) < 0 ? -(a) : (a))
 #define CLAMP(x, lo, hi)    ((x) < (lo) ? (lo) : ((x) > (hi) ? (hi) : (x)))
 
 #endif /* STD_TYPES_H */

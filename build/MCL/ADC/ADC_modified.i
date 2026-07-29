@@ -1,7 +1,7 @@
-# 1 "MCL/ADC/ADC.c"
+# 1 "MCL/ADC/ADC_modified.c"
 # 1 "<built-in>"
 # 1 "<command-line>"
-# 1 "MCL/ADC/ADC.c"
+# 1 "MCL/ADC/ADC_modified.c"
 # 1 "MCL/ADC/../../Service/STD_Types.h" 1
 
 
@@ -130,21 +130,43 @@ typedef int16_t sint16_t;
 typedef int32_t sint32_t;
 typedef int64_t sint64_t;
 
+typedef sint8_t sint8;
+typedef sint16_t sint16;
+typedef sint32_t sint32;
+typedef sint64_t sint64;
+
+
+typedef uint8_t uint8_h;
+typedef uint16_t uint16_h;
+typedef uint32_t uint32_h;
+typedef uint64_t uint64_h;
+
 
 typedef float float32_t;
 typedef double float64_t;
 
 
-typedef enum
-{
+typedef enum {
+    FALSE = 0,
+    TRUE = 1
+} bool_t;
+
+
+typedef enum {
     E_OK = 0,
-    E_NOK
+    E_NOK,
+    E_BUSY,
+    E_TIMEOUT,
+    E_INVALID,
+    E_NOT_READY
 } Std_ReturnType;
-# 2 "MCL/ADC/ADC.c" 2
+
+typedef Std_ReturnType STD_ReturnType;
+# 2 "MCL/ADC/ADC_modified.c" 2
 # 1 "MCL/ADC/../../Service/Bit_Math.h" 1
-# 3 "MCL/ADC/ADC.c" 2
+# 3 "MCL/ADC/ADC_modified.c" 2
 # 1 "MCL/ADC/ADC_Registers.h" 1
-# 4 "MCL/ADC/ADC.c" 2
+# 4 "MCL/ADC/ADC_modified.c" 2
 # 1 "MCL/ADC/ADC_Interfaces.h" 1
 # 39 "MCL/ADC/ADC_Interfaces.h"
 typedef struct
@@ -189,10 +211,7 @@ uint8_t ADC_IsConversionComplete(void);
 Std_ReturnType ADC_ReadResult(uint16_t *puint16Result);
 # 87 "MCL/ADC/ADC_Interfaces.h"
 Std_ReturnType ADC_ReadChannelBlocking(uint8_t uint8Channel, uint16_t *puint16Result);
-# 5 "MCL/ADC/ADC.c" 2
-
-
-
+# 5 "MCL/ADC/ADC_modified.c" 2
 
 
 Std_ReturnType ADC_Init(const ADC_ConfigType *addConfig)
@@ -208,31 +227,10 @@ Std_ReturnType ADC_Init(const ADC_ConfigType *addConfig)
     else
     {
 
-        switch (addConfig->uint8ReferenceVoltage)
-        {
-            case 0:
-                (((*(volatile uint8_t *)0x27)) &= ~(1 << (6)));
-                (((*(volatile uint8_t *)0x27)) &= ~(1 << (7)));
-                break;
-
-            case 1:
-                (((*(volatile uint8_t *)0x27)) |= (1 << (6)));
-                (((*(volatile uint8_t *)0x27)) &= ~(1 << (7)));
-                break;
-
-            case 3:
-                (((*(volatile uint8_t *)0x27)) |= (1 << (6)));
-                (((*(volatile uint8_t *)0x27)) |= (1 << (7)));
-                break;
-
-            default:
-                local_Status = E_NOK;
-                break;
-        }
+         (((*(volatile uint8_t *)0x27)) |= (1 << (6)));
+         (((*(volatile uint8_t *)0x27)) &= ~(1 << (7)));
 
 
-        if (local_Status == E_OK)
-        {
 
             (((*(volatile uint8_t *)0x27)) &= ~(1 << (5)));
 
@@ -241,48 +239,17 @@ Std_ReturnType ADC_Init(const ADC_ConfigType *addConfig)
             (((*(volatile uint8_t *)0x27)) &= ~(1 << (1)));
             (((*(volatile uint8_t *)0x27)) &= ~(1 << (2)));
             (((*(volatile uint8_t *)0x27)) &= ~(1 << (3)));
-            (((*(volatile uint8_t *)0x27)) &= ~(1 << (4)));
-
 
             (((*(volatile uint8_t *)0x26)) &= ~(1 << (0)));
-            (((*(volatile uint8_t *)0x26)) &= ~(1 << (1)));
-            (((*(volatile uint8_t *)0x26)) &= ~(1 << (2)));
-
-            if ((((addConfig->uint8Prescaler) >> (0)) & 0x01) == 1)
-            {
-                (((*(volatile uint8_t *)0x26)) |= (1 << (0)));
-            }
-            if ((((addConfig->uint8Prescaler) >> (1)) & 0x01) == 1)
-            {
-                (((*(volatile uint8_t *)0x26)) |= (1 << (1)));
-            }
-            if ((((addConfig->uint8Prescaler) >> (2)) & 0x01) == 1)
-            {
-                (((*(volatile uint8_t *)0x26)) |= (1 << (2)));
-            }
-
+            (((*(volatile uint8_t *)0x26)) |= (1 << (1)));
+            (((*(volatile uint8_t *)0x26)) |= (1 << (2)));
 
             (((*(volatile uint8_t *)0x26)) |= (1 << (7)));
         }
-    }
 
 
     return local_Status;
 }
-
-
-
-
-Std_ReturnType ADC_DeInit(void)
-{
-
-    (((*(volatile uint8_t *)0x26)) &= ~(1 << (7)));
-
-
-    return E_OK;
-}
-
-
 
 
 Std_ReturnType ADC_StartConversion(uint8_t uint8Channel)
@@ -302,7 +269,7 @@ Std_ReturnType ADC_StartConversion(uint8_t uint8Channel)
         (((*(volatile uint8_t *)0x27)) &= ~(1 << (1)));
         (((*(volatile uint8_t *)0x27)) &= ~(1 << (2)));
         (((*(volatile uint8_t *)0x27)) &= ~(1 << (3)));
-        (((*(volatile uint8_t *)0x27)) &= ~(1 << (4)));
+
 
         if ((((uint8Channel) >> (0)) & 0x01) == 1)
         {
@@ -316,6 +283,10 @@ Std_ReturnType ADC_StartConversion(uint8_t uint8Channel)
         {
             (((*(volatile uint8_t *)0x27)) |= (1 << (2)));
         }
+        if ((((uint8Channel) >> (3)) & 0x01) == 1)
+        {
+            (((*(volatile uint8_t *)0x27)) |= (1 << (3)));
+        }
 
 
         (((*(volatile uint8_t *)0x26)) |= (1 << (6)));
@@ -324,25 +295,6 @@ Std_ReturnType ADC_StartConversion(uint8_t uint8Channel)
 
     return local_Status;
 }
-
-
-
-
-uint8_t ADC_IsConversionComplete(void)
-{
-
-    if (((((*(volatile uint8_t *)0x26)) >> (6)) & 0x01) == 0)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-
-
 
 Std_ReturnType ADC_ReadResult(uint16_t *puint16Result)
 {
@@ -364,11 +316,18 @@ Std_ReturnType ADC_ReadResult(uint16_t *puint16Result)
 
     return E_OK;
 }
+uint8_t ADC_IsConversionComplete(void)
+{
 
-
-
-
-
+    if (((((*(volatile uint8_t *)0x26)) >> (6)) & 0x01) == 0)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
 Std_ReturnType ADC_ReadChannelBlocking(uint8_t uint8Channel, uint16_t *puint16Result)
 {
 
@@ -388,4 +347,12 @@ Std_ReturnType ADC_ReadChannelBlocking(uint8_t uint8Channel, uint16_t *puint16Re
 
 
     return local_Status;
+}
+Std_ReturnType ADC_DeInit(void)
+{
+
+    (((*(volatile uint8_t *)0x26)) &= ~(1 << (7)));
+
+
+    return E_OK;
 }
