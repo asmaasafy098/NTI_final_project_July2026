@@ -42,12 +42,12 @@
  * control byte once and then every payload byte is what lets a whole string go
  * out in a single transfer instead of one transfer per character.
  */
-static STD_ReturnType LCD_Aip31068_Transfer(const LCD_Aip31068_HandleType *handle,
-                                            uint8_h control,
-                                            const uint8_h *pPayload,
-                                            uint16_h length)
+static Std_ReturnType LCD_Aip31068_Transfer(const LCD_Aip31068_HandleType *handle,
+                                            uint8_t control,
+                                            const uint8_t *pPayload,
+                                            uint16_t length)
 {
-    uint16_h local_Index = 0U;
+    uint16_t local_Index = 0U;
 
     /* STEP 1: Claim the bus. */
     if (I2C_Start() != E_OK)
@@ -56,7 +56,7 @@ static STD_ReturnType LCD_Aip31068_Transfer(const LCD_Aip31068_HandleType *handl
     }
 
     /* STEP 2: Address the display for writing (7-bit address + R/W = 0). */
-    if (I2C_WriteByte((uint8_h)((handle->i2cAddress << 1) | 0x00U)) != E_OK)
+    if (I2C_WriteByte((uint8_t)((handle->i2cAddress << 1) | 0x00U)) != E_OK)
     {
         (void)I2C_Stop();
         return E_NOK;
@@ -89,17 +89,17 @@ static STD_ReturnType LCD_Aip31068_Transfer(const LCD_Aip31068_HandleType *handl
  * DDRAM address of the first character of a row. Rows 2 and 3 of a 4-line module
  * continue rows 0 and 1, offset by the line length - hence the geometry lookup.
  */
-static uint8_h LCD_Aip31068_RowBase(const LCD_Aip31068_HandleType *handle, uint8_h row)
+static uint8_t LCD_Aip31068_RowBase(const LCD_Aip31068_HandleType *handle, uint8_t row)
 {
-    uint8_h local_Base = 0x00U;
+    uint8_t local_Base = 0x00U;
 
     switch (row)
     {
-        case 0U:  local_Base = (uint8_h)0x00U;                   break;
-        case 1U:  local_Base = (uint8_h)0x40U;                   break;
-        case 2U:  local_Base = (uint8_h)(0x00U + handle->cols);  break;
-        case 3U:  local_Base = (uint8_h)(0x40U + handle->cols);  break;
-        default:  local_Base = (uint8_h)0x00U;                   break;
+        case 0U:  local_Base = ( uint8_t)0x00U;                   break;
+        case 1U:  local_Base = ( uint8_t)0x40U;                   break;
+        case 2U:  local_Base = ( uint8_t)(0x00U + handle->cols);  break;
+        case 3U:  local_Base = ( uint8_t)(0x40U + handle->cols);  break;
+        default:  local_Base = ( uint8_t)0x00U;                   break;
     }
 
     return local_Base;
@@ -110,9 +110,9 @@ static uint8_h LCD_Aip31068_RowBase(const LCD_Aip31068_HandleType *handle, uint8
  *  PUBLIC FUNCTIONS
  * ------------------------------------------------------------------------ */
 
-STD_ReturnType LCD_Aip31068_Init(LCD_Aip31068_HandleType *handle)
+Std_ReturnType LCD_Aip31068_Init(LCD_Aip31068_HandleType *handle)
 {
-    uint8_h local_FunctionSet = 0U;
+     uint8_t local_FunctionSet = 0U;
 
     /* STEP 1: Validate the handle, the 7-bit address and the geometry. */
     if (handle == NULL)
@@ -184,9 +184,9 @@ STD_ReturnType LCD_Aip31068_Init(LCD_Aip31068_HandleType *handle)
 }
 
 
-STD_ReturnType LCD_Aip31068_SendCommand(LCD_Aip31068_HandleType *handle, uint8_h command)
+Std_ReturnType LCD_Aip31068_SendCommand(LCD_Aip31068_HandleType *handle,  uint8_t command)
 {
-    STD_ReturnType local_Status = E_NOK;
+    Std_ReturnType local_Status = E_NOK;
 
     /* STEP 1: Validate the handle. */
     if (handle == NULL)
@@ -204,9 +204,9 @@ STD_ReturnType LCD_Aip31068_SendCommand(LCD_Aip31068_HandleType *handle, uint8_h
 }
 
 
-STD_ReturnType LCD_Aip31068_WriteChar(LCD_Aip31068_HandleType *handle, uint8_h character)
+Std_ReturnType LCD_Aip31068_WriteChar(LCD_Aip31068_HandleType *handle,  uint8_t character)
 {
-    STD_ReturnType local_Status = E_NOK;
+    Std_ReturnType local_Status = E_NOK;
 
     /* STEP 1: Validate the handle and that Init() has run. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -224,9 +224,9 @@ STD_ReturnType LCD_Aip31068_WriteChar(LCD_Aip31068_HandleType *handle, uint8_h c
 }
 
 
-STD_ReturnType LCD_Aip31068_WriteString(LCD_Aip31068_HandleType *handle, const uint8_h *pString)
+Std_ReturnType LCD_Aip31068_WriteString(LCD_Aip31068_HandleType *handle, const  uint8_t *pString)
 {
-    uint16_h local_Length = 0U;
+    uint8_t local_Length = 0U;
 
     /* STEP 1: Validate the handle and the pointer. */
     if ((handle == NULL) || (handle->initialized == 0U) || (pString == NULL))
@@ -250,9 +250,9 @@ STD_ReturnType LCD_Aip31068_WriteString(LCD_Aip31068_HandleType *handle, const u
 }
 
 
-STD_ReturnType LCD_Aip31068_WriteStringAt(LCD_Aip31068_HandleType *handle,
-                                          uint8_h row, uint8_h column,
-                                          const uint8_h *pString)
+Std_ReturnType LCD_Aip31068_WriteStringAt(LCD_Aip31068_HandleType *handle,
+                                          uint8_t row,  uint8_t column,
+                                          const  uint8_t *pString)
 {
     /* STEP 1: Move the cursor first; an impossible position must fail early. */
     if (LCD_Aip31068_SetCursor(handle, row, column) != E_OK)
@@ -265,13 +265,13 @@ STD_ReturnType LCD_Aip31068_WriteStringAt(LCD_Aip31068_HandleType *handle,
 }
 
 
-STD_ReturnType LCD_Aip31068_WriteNumber(LCD_Aip31068_HandleType *handle, sint32 number)
+Std_ReturnType LCD_Aip31068_WriteNumber(LCD_Aip31068_HandleType *handle, sint32 number)
 {
-    uint8_h  local_Text[12];
-    uint8_h  local_Digits[10];
-    uint8_h  local_Count  = 0U;
-    uint8_h  local_Length = 0U;
-    uint32_h local_Value  = 0UL;
+    uint8_t  local_Text[12];
+    uint8_t  local_Digits[10];
+    uint8_t  local_Count  = 0U;
+    uint8_t  local_Length = 0U;
+    uint32_t local_Value  = 0UL;
 
     /* STEP 1: Validate the handle. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -282,7 +282,7 @@ STD_ReturnType LCD_Aip31068_WriteNumber(LCD_Aip31068_HandleType *handle, sint32 
     /* STEP 2: Zero is the one value the digit loop below never produces. */
     if (number == 0)
     {
-        return LCD_Aip31068_WriteChar(handle, (uint8_h)'0');
+        return LCD_Aip31068_WriteChar(handle, (uint8_t)'0');
     }
 
     /*
@@ -291,19 +291,19 @@ STD_ReturnType LCD_Aip31068_WriteNumber(LCD_Aip31068_HandleType *handle, sint32 
      */
     if (number < 0)
     {
-        local_Text[local_Length] = (uint8_h)'-';
+        local_Text[local_Length] = (uint8_t)'-';
         local_Length++;
         local_Value = (uint32_h)(-(sint32)number);
     }
     else
     {
-        local_Value = (uint32_h)number;
+        local_Value = (uint32_t)number;
     }
 
     /* STEP 4: Extract digits least-significant first (so, reversed). */
     while ((local_Value > 0UL) && (local_Count < 10U))
     {
-        local_Digits[local_Count] = (uint8_h)('0' + (uint8_h)(local_Value % 10UL));
+        local_Digits[local_Count] = (uint8_h)('0' + (uint8_t)(local_Value % 10UL));
         local_Value /= 10UL;
         local_Count++;
     }
@@ -323,10 +323,10 @@ STD_ReturnType LCD_Aip31068_WriteNumber(LCD_Aip31068_HandleType *handle, sint32 
 }
 
 
-STD_ReturnType LCD_Aip31068_SetCursor(LCD_Aip31068_HandleType *handle,
-                                      uint8_h row, uint8_h column)
+Std_ReturnType LCD_Aip31068_SetCursor(LCD_Aip31068_HandleType *handle,
+                                      uint8_t row, uint8_t column)
 {
-    uint8_h local_Address = 0U;
+    uint8_t local_Address = 0U;
 
     /* STEP 1: Validate the handle and that the position exists on this module. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -340,11 +340,11 @@ STD_ReturnType LCD_Aip31068_SetCursor(LCD_Aip31068_HandleType *handle,
     }
 
     /* STEP 2: DDRAM address = row base + column. */
-    local_Address = (uint8_h)(LCD_Aip31068_RowBase(handle, row) + column);
+    local_Address = (uint8_t)(LCD_Aip31068_RowBase(handle, row) + column);
 
     /* STEP 3: Bit 7 marks the instruction as "set DDRAM address". */
     if (LCD_Aip31068_SendCommand(handle,
-            (uint8_h)(LCD_AIP31068_CMD_SET_DDRAM_ADDR | local_Address)) != E_OK)
+            (uint8_t)(LCD_AIP31068_CMD_SET_DDRAM_ADDR | local_Address)) != E_OK)
     {
         return E_NOK;
     }
@@ -356,7 +356,7 @@ STD_ReturnType LCD_Aip31068_SetCursor(LCD_Aip31068_HandleType *handle,
 }
 
 
-STD_ReturnType LCD_Aip31068_Clear(LCD_Aip31068_HandleType *handle)
+Std_ReturnType LCD_Aip31068_Clear(LCD_Aip31068_HandleType *handle)
 {
     /* STEP 1: Validate the handle. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -379,7 +379,7 @@ STD_ReturnType LCD_Aip31068_Clear(LCD_Aip31068_HandleType *handle)
 }
 
 
-STD_ReturnType LCD_Aip31068_Home(LCD_Aip31068_HandleType *handle)
+Std_ReturnType LCD_Aip31068_Home(LCD_Aip31068_HandleType *handle)
 {
     /* STEP 1: Validate the handle. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -402,7 +402,7 @@ STD_ReturnType LCD_Aip31068_Home(LCD_Aip31068_HandleType *handle)
 }
 
 
-STD_ReturnType LCD_Aip31068_DisplayOnOff(LCD_Aip31068_HandleType *handle, uint8_h on)
+Std_ReturnType LCD_Aip31068_DisplayOnOff(LCD_Aip31068_HandleType *handle, uint8_t on)
 {
     /* STEP 1: Validate the handle. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -420,7 +420,7 @@ STD_ReturnType LCD_Aip31068_DisplayOnOff(LCD_Aip31068_HandleType *handle, uint8_
     }
     else
     {
-        handle->displayControl &= (uint8_h)(~LCD_AIP31068_DISPLAY_ON);
+        handle->displayControl &= (uint8_t)(~LCD_AIP31068_DISPLAY_ON);
     }
 
     /* STEP 3: Re-send it. */
@@ -428,7 +428,7 @@ STD_ReturnType LCD_Aip31068_DisplayOnOff(LCD_Aip31068_HandleType *handle, uint8_
 }
 
 
-STD_ReturnType LCD_Aip31068_CursorOnOff(LCD_Aip31068_HandleType *handle, uint8_h on)
+Std_ReturnType LCD_Aip31068_CursorOnOff(LCD_Aip31068_HandleType *handle, uint8_t on)
 {
     /* STEP 1: Validate the handle. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -443,7 +443,7 @@ STD_ReturnType LCD_Aip31068_CursorOnOff(LCD_Aip31068_HandleType *handle, uint8_h
     }
     else
     {
-        handle->displayControl &= (uint8_h)(~LCD_AIP31068_CURSOR_ON);
+        handle->displayControl &= (uint8_t)(~LCD_AIP31068_CURSOR_ON);
     }
 
     /* STEP 3: Re-send it. */
@@ -451,7 +451,7 @@ STD_ReturnType LCD_Aip31068_CursorOnOff(LCD_Aip31068_HandleType *handle, uint8_h
 }
 
 
-STD_ReturnType LCD_Aip31068_BlinkOnOff(LCD_Aip31068_HandleType *handle, uint8_h on)
+Std_ReturnType LCD_Aip31068_BlinkOnOff(LCD_Aip31068_HandleType *handle, uint8_t on)
 {
     /* STEP 1: Validate the handle. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -466,7 +466,7 @@ STD_ReturnType LCD_Aip31068_BlinkOnOff(LCD_Aip31068_HandleType *handle, uint8_h 
     }
     else
     {
-        handle->displayControl &= (uint8_h)(~LCD_AIP31068_BLINK_ON);
+        handle->displayControl &= (uint8_t)(~LCD_AIP31068_BLINK_ON);
     }
 
     /* STEP 3: Re-send it. */
@@ -474,9 +474,9 @@ STD_ReturnType LCD_Aip31068_BlinkOnOff(LCD_Aip31068_HandleType *handle, uint8_h 
 }
 
 
-STD_ReturnType LCD_Aip31068_ShiftDisplay(LCD_Aip31068_HandleType *handle, uint8_h toRight)
+Std_ReturnType LCD_Aip31068_ShiftDisplay(LCD_Aip31068_HandleType *handle, uint8_t toRight)
 {
-    uint8_h local_Command = 0U;
+    uint8_t local_Command = 0U;
 
     /* STEP 1: Validate the handle. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -488,7 +488,7 @@ STD_ReturnType LCD_Aip31068_ShiftDisplay(LCD_Aip31068_HandleType *handle, uint8_
      * STEP 2: Bit 3 (S/C) selects "shift display" over "move cursor";
      *         bit 2 (R/L) picks the direction.
      */
-    local_Command = (uint8_h)(LCD_AIP31068_CMD_SHIFT | 0x08U);
+    local_Command = (uint8_t)(LCD_AIP31068_CMD_SHIFT | 0x08U);
 
     if (toRight != 0U)
     {
@@ -500,11 +500,11 @@ STD_ReturnType LCD_Aip31068_ShiftDisplay(LCD_Aip31068_HandleType *handle, uint8_
 }
 
 
-STD_ReturnType LCD_Aip31068_CreateCustomChar(LCD_Aip31068_HandleType *handle,
-                                             uint8_h location, const uint8_h *pPattern)
+Std_ReturnType LCD_Aip31068_CreateCustomChar(LCD_Aip31068_HandleType *handle,
+                                             uint8_t location, const uint8_t *pPattern)
 {
-    uint8_h local_Rows[8];
-    uint8_h local_Index = 0U;
+    uint8_t local_Rows[8];
+    uint8_t local_Index = 0U;
 
     /* STEP 1: Validate the handle, the slot (0..7) and the pattern pointer. */
     if ((handle == NULL) || (handle->initialized == 0U) || (pPattern == NULL))
@@ -519,7 +519,7 @@ STD_ReturnType LCD_Aip31068_CreateCustomChar(LCD_Aip31068_HandleType *handle,
 
     /* STEP 2: Point the address counter at that slot - 8 bytes per glyph. */
     if (LCD_Aip31068_SendCommand(handle,
-            (uint8_h)(LCD_AIP31068_CMD_SET_CGRAM_ADDR | (uint8_h)(location << 3))) != E_OK)
+            (uint8_h)(LCD_AIP31068_CMD_SET_CGRAM_ADDR | (uint8_t)(location << 3))) != E_OK)
     {
         return E_NOK;
     }

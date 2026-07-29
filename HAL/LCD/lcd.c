@@ -31,7 +31,7 @@
  */
 
 
-STD_ReturnType LCD_Init(const LCD_ConfigType *addConfig)
+Std_ReturnType LCD_Init(const LCD_ConfigType *addConfig)
 {
     /*
      * STEP 1: Validate addConfig != NULL and the ports are in range (else E_NOK).
@@ -57,7 +57,7 @@ STD_ReturnType LCD_Init(const LCD_ConfigType *addConfig)
 }
 
 
-STD_ReturnType LCD_SendCommand(const LCD_ConfigType *addConfig, uint8_h command)
+Std_ReturnType LCD_SendCommand(const LCD_ConfigType *addConfig, uint8_t command)
 {
     /*
      * STEP 1: Validate addConfig != NULL (else E_NOK).
@@ -71,7 +71,7 @@ STD_ReturnType LCD_SendCommand(const LCD_ConfigType *addConfig, uint8_h command)
 }
 
 
-STD_ReturnType LCD_WriteChar(const LCD_ConfigType *addConfig, uint8_h character)
+Std_ReturnType LCD_WriteChar(const LCD_ConfigType *addConfig, uint8_t character)
 {
     /*
      * STEP 1: Validate addConfig != NULL (else E_NOK).
@@ -84,7 +84,7 @@ STD_ReturnType LCD_WriteChar(const LCD_ConfigType *addConfig, uint8_h character)
 }
 
 
-STD_ReturnType LCD_WriteString(const LCD_ConfigType *addConfig, const uint8_h *pString)
+Std_ReturnType LCD_WriteString(const LCD_ConfigType *addConfig, const uint8_t *pString)
 {
     /*
      * STEP 1: Validate addConfig != NULL and pString != NULL (else E_NOK).
@@ -95,7 +95,7 @@ STD_ReturnType LCD_WriteString(const LCD_ConfigType *addConfig, const uint8_h *p
 }
 
 
-STD_ReturnType LCD_WriteNumber(const LCD_ConfigType *addConfig, sint32 number)
+Std_ReturnType LCD_WriteNumber(const LCD_ConfigType *addConfig, sint32 number)
 {
     /*
      * STEP 1: Validate addConfig != NULL (else E_NOK).
@@ -110,7 +110,7 @@ STD_ReturnType LCD_WriteNumber(const LCD_ConfigType *addConfig, sint32 number)
 }
 
 
-STD_ReturnType LCD_SetCursor(const LCD_ConfigType *addConfig, uint8_h row, uint8_h column)
+Std_ReturnType LCD_SetCursor(const LCD_ConfigType *addConfig, uint8_h row, uint8_h column)
 {
     /*
      * STEP 1: Validate addConfig != NULL (else E_NOK).
@@ -125,7 +125,7 @@ STD_ReturnType LCD_SetCursor(const LCD_ConfigType *addConfig, uint8_h row, uint8
 }
 
 
-STD_ReturnType LCD_Clear(const LCD_ConfigType *addConfig)
+Std_ReturnType LCD_Clear(const LCD_ConfigType *addConfig)
 {
     /*
      * STEP 1: Validate addConfig != NULL (else E_NOK).
@@ -137,7 +137,7 @@ STD_ReturnType LCD_Clear(const LCD_ConfigType *addConfig)
 }
 
 
-STD_ReturnType LCD_CreateCustomChar(const LCD_ConfigType *addConfig,
+Std_ReturnType LCD_CreateCustomChar(const LCD_ConfigType *addConfig,
                                     uint8_h location, const uint8_h *pPattern)
 {
     /*

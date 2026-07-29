@@ -143,15 +143,15 @@ typedef enum
 typedef struct
 {
     /* ---- configuration: fill these before Init ---- */
-    uint8_h in1Port;  uint8_h in1Pin;
-    uint8_h in2Port;  uint8_h in2Pin;
-    uint8_h enPort;   uint8_h enPin;
+    uint8_t in1Port;  uint8_t in1Pin;
+    uint8_t in2Port;  uint8_t in2Pin;
+    uint8_t enPort;   uint8_t enPin;
     DC_MotorPwmChannelType pwmChannel;
-    uint8_h invertDirection;
+    uint8_t invertDirection;
 
     /* ---- runtime: owned by the driver, do not modify ---- */
-    uint8_h           initialized;
-    uint8_h           speedPercent;   /* last speed commanded, 0..100 */
+    uint8_t           initialized;
+    uint8_t           speedPercent;   /* last speed commanded, 0..100 */
     DC_MotorStateType state;          /* last state commanded        */
 } DC_MotorHandleType;
 
@@ -171,7 +171,7 @@ typedef struct
  * @note   Two motors that share a timer (OC1A + OC1B) may both call this; the
  *         timer setup is written twice with the same values, which is harmless.
  */
-STD_ReturnType DC_Motor_Init(DC_MotorHandleType *handle);
+Std_ReturnType DC_Motor_Init(DC_MotorHandleType *handle);
 
 /**
  * @brief  Sets the speed as a percentage of full scale, applied immediately
@@ -186,7 +186,7 @@ STD_ReturnType DC_Motor_Init(DC_MotorHandleType *handle);
  *         rather than leaving a 0 % duty waveform that still produces a spike
  *         at the start of every PWM period.
  */
-STD_ReturnType DC_Motor_SetSpeed(DC_MotorHandleType *handle, uint8_h speedPercent);
+Std_ReturnType DC_Motor_SetSpeed(DC_MotorHandleType *handle, uint8_t speedPercent);
 
 /**
  * @brief  Drives the motor forward at the current speed setting.
@@ -197,14 +197,14 @@ STD_ReturnType DC_Motor_SetSpeed(DC_MotorHandleType *handle, uint8_h speedPercen
  *         current spike through the bridge and the supply. Stop or brake first,
  *         and give the motor a few tens of milliseconds, if you can.
  */
-STD_ReturnType DC_Motor_Forward(DC_MotorHandleType *handle);
+Std_ReturnType DC_Motor_Forward(DC_MotorHandleType *handle);
 
 /**
  * @brief  Drives the motor backward at the current speed setting.
  * @param  handle  Initialized motor.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType DC_Motor_Backward(DC_MotorHandleType *handle);
+Std_ReturnType DC_Motor_Backward(DC_MotorHandleType *handle);
 
 /**
  * @brief  Sets the direction without touching the speed - handy when the
@@ -213,7 +213,7 @@ STD_ReturnType DC_Motor_Backward(DC_MotorHandleType *handle);
  * @param  dir     DC_MOTOR_DIR_FORWARD or DC_MOTOR_DIR_BACKWARD.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType DC_Motor_SetDirection(DC_MotorHandleType *handle, DC_MotorDirectionType dir);
+Std_ReturnType DC_Motor_SetDirection(DC_MotorHandleType *handle, DC_MotorDirectionType dir);
 
 /**
  * @brief  Cuts the drive and lets the motor coast: both bridge inputs low, the
@@ -222,7 +222,7 @@ STD_ReturnType DC_Motor_SetDirection(DC_MotorHandleType *handle, DC_MotorDirecti
  * @return E_OK/E_NOK.
  * @note   The stored speed is kept, so a later Forward() resumes at that speed.
  */
-STD_ReturnType DC_Motor_Stop(DC_MotorHandleType *handle);
+Std_ReturnType DC_Motor_Stop(DC_MotorHandleType *handle);
 
 /**
  * @brief  Brakes: both bridge inputs high shorts the windings, and the motor's
@@ -233,7 +233,7 @@ STD_ReturnType DC_Motor_Stop(DC_MotorHandleType *handle);
  *         is fine as an occasional stop and unkind as a habit, especially at
  *         high speed with a heavy load.
  */
-STD_ReturnType DC_Motor_Brake(DC_MotorHandleType *handle);
+Std_ReturnType DC_Motor_Brake(DC_MotorHandleType *handle);
 
 /**
  * @brief  Reports what the motor was last told to do (a command, not a
@@ -242,7 +242,7 @@ STD_ReturnType DC_Motor_Brake(DC_MotorHandleType *handle);
  * @param  pState  Receives the state; must not be NULL.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType DC_Motor_GetState(const DC_MotorHandleType *handle, DC_MotorStateType *pState);
+Std_ReturnType DC_Motor_GetState(const DC_MotorHandleType *handle, DC_MotorStateType *pState);
 
 /**
  * @brief  Reports the last speed percentage commanded.
@@ -250,7 +250,7 @@ STD_ReturnType DC_Motor_GetState(const DC_MotorHandleType *handle, DC_MotorState
  * @param  pSpeed  Receives 0..100; must not be NULL.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType DC_Motor_GetSpeed(const DC_MotorHandleType *handle, uint8_h *pSpeed);
+Std_ReturnType DC_Motor_GetSpeed(const DC_MotorHandleType *handle, uint8_t *pSpeed);
 
 /**
  * @brief  Stops the motor and releases its PWM channel: the compare output is
@@ -261,6 +261,6 @@ STD_ReturnType DC_Motor_GetSpeed(const DC_MotorHandleType *handle, uint8_h *pSpe
  *         Timer1, stopping the timer here would silently kill the other motor's
  *         waveform too. Only this motor's channel is released.
  */
-STD_ReturnType DC_Motor_DeInit(DC_MotorHandleType *handle);
+Std_ReturnType DC_Motor_DeInit(DC_MotorHandleType *handle);
 
 #endif /* DC_MOTOR_H */

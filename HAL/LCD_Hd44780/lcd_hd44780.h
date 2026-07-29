@@ -52,7 +52,7 @@
  *      lcd.cols         = 16;
  *
  *      LCD_Hd44780_Init(&lcd);
- *      LCD_Hd44780_WriteStringAt(&lcd, 0, 0, (const uint8_h *)"ALARM PANEL");
+ *      LCD_Hd44780_WriteStringAt(&lcd, 0, 0, (const uint8_t *)"ALARM PANEL");
  *      LCD_Hd44780_SetCursor(&lcd, 1, 0);
  *      LCD_Hd44780_WriteNumber(&lcd, 1234);
  * ============================================================================== */
@@ -112,22 +112,22 @@ typedef struct
 {
     /* ---- configuration: fill these before Init ---- */
     LCD_Hd44780_BusType bus;
-    uint8_h dataPort;
-    uint8_h dataStartPin;
-    uint8_h controlPort;
-    uint8_h rsPin;
-    uint8_h rwPin;
-    uint8_h enPin;
-    uint8_h useRwPin;
-    uint8_h rows;
-    uint8_h cols;
+    uint8_t dataPort;
+    uint8_t dataStartPin;
+    uint8_t controlPort;
+    uint8_t rsPin;
+    uint8_t rwPin;
+    uint8_t enPin;
+    uint8_t useRwPin;
+    uint8_t rows;
+    uint8_t cols;
 
     /* ---- runtime: owned by the driver, do not modify ---- */
-    uint8_h initialized;      /* 1 once Init() succeeded                        */
-    uint8_h displayControl;   /* shadow of the display/cursor/blink instruction */
-    uint8_h entryMode;        /* shadow of the entry-mode instruction           */
-    uint8_h cursorRow;        /* last row given to SetCursor                    */
-    uint8_h cursorCol;        /* last column given to SetCursor                 */
+    uint8_t initialized;      /* 1 once Init() succeeded                        */
+    uint8_t displayControl;   /* shadow of the display/cursor/blink instruction */
+    uint8_t entryMode;        /* shadow of the entry-mode instruction           */
+    uint8_t cursorRow;        /* last row given to SetCursor                    */
+    uint8_t cursorCol;        /* last column given to SetCursor                 */
 } LCD_Hd44780_HandleType;
 
 /* ================================================================================
@@ -145,7 +145,7 @@ typedef struct
  * @note   In 8-bit mode 'dataStartPin' must be 0 - eight consecutive lines do
  *         not fit on a port otherwise.
  */
-STD_ReturnType LCD_Hd44780_Init(LCD_Hd44780_HandleType *handle);
+Std_ReturnType LCD_Hd44780_Init(LCD_Hd44780_HandleType *handle);
 
 /**
  * @brief  Sends a raw instruction byte (RS = 0). Use it for controller features
@@ -154,7 +154,7 @@ STD_ReturnType LCD_Hd44780_Init(LCD_Hd44780_HandleType *handle);
  * @param  command  Instruction byte, e.g. LCD_HD44780_CMD_HOME.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType LCD_Hd44780_SendCommand(LCD_Hd44780_HandleType *handle, uint8_h command);
+Std_ReturnType LCD_Hd44780_SendCommand(LCD_Hd44780_HandleType *handle, uint8_t command);
 
 /**
  * @brief  Writes one character at the current cursor position (RS = 1). The
@@ -163,7 +163,7 @@ STD_ReturnType LCD_Hd44780_SendCommand(LCD_Hd44780_HandleType *handle, uint8_h c
  * @param  character  ASCII code, or 0..7 for a custom character.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType LCD_Hd44780_WriteChar(LCD_Hd44780_HandleType *handle, uint8_h character);
+Std_ReturnType LCD_Hd44780_WriteChar(LCD_Hd44780_HandleType *handle, uint8_t character);
 
 /**
  * @brief  Writes a NUL-terminated string from the current cursor position.
@@ -174,7 +174,7 @@ STD_ReturnType LCD_Hd44780_WriteChar(LCD_Hd44780_HandleType *handle, uint8_h cha
  *         HD44780 keeps writing into off-screen DDRAM. Position yourself with
  *         LCD_Hd44780_SetCursor() instead of relying on wrapping.
  */
-STD_ReturnType LCD_Hd44780_WriteString(LCD_Hd44780_HandleType *handle, const uint8_h *pString);
+Std_ReturnType LCD_Hd44780_WriteString(LCD_Hd44780_HandleType *handle, const uint8_t *pString);
 
 /**
  * @brief  Convenience: move to (row, column) and write a string there. This is
@@ -185,9 +185,9 @@ STD_ReturnType LCD_Hd44780_WriteString(LCD_Hd44780_HandleType *handle, const uin
  * @param  pString  '\0'-terminated text; must not be NULL.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType LCD_Hd44780_WriteStringAt(LCD_Hd44780_HandleType *handle,
-                                         uint8_h row, uint8_h column,
-                                         const uint8_h *pString);
+Std_ReturnType LCD_Hd44780_WriteStringAt(LCD_Hd44780_HandleType *handle,
+                                         uint8_t row, uint8_t column,
+                                         const uint8_t *pString);
 
 /**
  * @brief  Writes a signed integer in decimal at the cursor position.
@@ -198,7 +198,7 @@ STD_ReturnType LCD_Hd44780_WriteStringAt(LCD_Hd44780_HandleType *handle,
  *         (100 -> 99) the stale digit stays on screen, so either pad the field
  *         yourself or repaint the line.
  */
-STD_ReturnType LCD_Hd44780_WriteNumber(LCD_Hd44780_HandleType *handle, sint32 number);
+Std_ReturnType LCD_Hd44780_WriteNumber(LCD_Hd44780_HandleType *handle, sint32 number);
 
 /**
  * @brief  Moves the cursor. Row/column are zero-based; the DDRAM address is
@@ -208,8 +208,8 @@ STD_ReturnType LCD_Hd44780_WriteNumber(LCD_Hd44780_HandleType *handle, sint32 nu
  * @param  column  0 .. cols-1.
  * @return E_OK/E_NOK (E_NOK if row or column is outside the geometry).
  */
-STD_ReturnType LCD_Hd44780_SetCursor(LCD_Hd44780_HandleType *handle,
-                                     uint8_h row, uint8_h column);
+Std_ReturnType LCD_Hd44780_SetCursor(LCD_Hd44780_HandleType *handle,
+                                     uint8_t row, uint8_t column);
 
 /**
  * @brief  Clears the whole screen and returns the cursor to (0,0).
@@ -219,14 +219,14 @@ STD_ReturnType LCD_Hd44780_SetCursor(LCD_Hd44780_HandleType *handle,
  *         call it every repaint or the display will visibly flicker; overwrite
  *         the changed characters instead.
  */
-STD_ReturnType LCD_Hd44780_Clear(LCD_Hd44780_HandleType *handle);
+Std_ReturnType LCD_Hd44780_Clear(LCD_Hd44780_HandleType *handle);
 
 /**
  * @brief  Returns the cursor to (0,0) without erasing the text.
  * @param  handle  Initialized display.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType LCD_Hd44780_Home(LCD_Hd44780_HandleType *handle);
+Std_ReturnType LCD_Hd44780_Home(LCD_Hd44780_HandleType *handle);
 
 /**
  * @brief  Turns the visible display on or off. The text in DDRAM survives, so
@@ -235,7 +235,7 @@ STD_ReturnType LCD_Hd44780_Home(LCD_Hd44780_HandleType *handle);
  * @param  on      1 = visible, 0 = blank.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType LCD_Hd44780_DisplayOnOff(LCD_Hd44780_HandleType *handle, uint8_h on);
+Std_ReturnType LCD_Hd44780_DisplayOnOff(LCD_Hd44780_HandleType *handle, uint8_t on);
 
 /**
  * @brief  Shows or hides the underline cursor.
@@ -243,7 +243,7 @@ STD_ReturnType LCD_Hd44780_DisplayOnOff(LCD_Hd44780_HandleType *handle, uint8_h 
  * @param  on      1 = show, 0 = hide.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType LCD_Hd44780_CursorOnOff(LCD_Hd44780_HandleType *handle, uint8_h on);
+Std_ReturnType LCD_Hd44780_CursorOnOff(LCD_Hd44780_HandleType *handle, uint8_t on);
 
 /**
  * @brief  Enables or disables the blinking block cursor. Useful to show which
@@ -252,7 +252,7 @@ STD_ReturnType LCD_Hd44780_CursorOnOff(LCD_Hd44780_HandleType *handle, uint8_h o
  * @param  on      1 = blink, 0 = steady.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType LCD_Hd44780_BlinkOnOff(LCD_Hd44780_HandleType *handle, uint8_h on);
+Std_ReturnType LCD_Hd44780_BlinkOnOff(LCD_Hd44780_HandleType *handle, uint8_t on);
 
 /**
  * @brief  Shifts the whole displayed window one character left or right without
@@ -261,7 +261,7 @@ STD_ReturnType LCD_Hd44780_BlinkOnOff(LCD_Hd44780_HandleType *handle, uint8_h on
  * @param  toRight  1 = shift right, 0 = shift left.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType LCD_Hd44780_ShiftDisplay(LCD_Hd44780_HandleType *handle, uint8_h toRight);
+Std_ReturnType LCD_Hd44780_ShiftDisplay(LCD_Hd44780_HandleType *handle, uint8_t toRight);
 
 /**
  * @brief  Stores a 5x8 glyph into one of the eight CGRAM slots. Print it later
@@ -274,7 +274,7 @@ STD_ReturnType LCD_Hd44780_ShiftDisplay(LCD_Hd44780_HandleType *handle, uint8_h 
  * @note   Writing CGRAM leaves the address counter pointing into CGRAM, so this
  *         function moves the cursor back to (0,0) before returning.
  */
-STD_ReturnType LCD_Hd44780_CreateCustomChar(LCD_Hd44780_HandleType *handle,
-                                            uint8_h location, const uint8_h *pPattern);
+Std_ReturnType LCD_Hd44780_CreateCustomChar(LCD_Hd44780_HandleType *handle,
+                                            uint8_t location, const uint8_t *pPattern);
 
 #endif /* LCD_HD44780_H */

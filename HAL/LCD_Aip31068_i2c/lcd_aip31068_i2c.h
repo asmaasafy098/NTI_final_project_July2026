@@ -52,7 +52,7 @@
  *      lcd.cols       = 16;
  *
  *      LCD_Aip31068_Init(&lcd);
- *      LCD_Aip31068_WriteStringAt(&lcd, 0, 0, (const uint8_h *)"ALARM PANEL");
+ *      LCD_Aip31068_WriteStringAt(&lcd, 0, 0, (const uint8_t *)"ALARM PANEL");
  *
  *  Note that the I2C bus itself is a shared resource this driver does NOT own:
  *  call I2C_InitMaster() yourself, and do not call these functions from an ISR
@@ -101,16 +101,16 @@
 typedef struct
 {
     /* ---- configuration: fill these before Init ---- */
-    uint8_h i2cAddress;
-    uint8_h rows;
-    uint8_h cols;
+    uint8_t i2cAddress;
+    uint8_t rows;
+    uint8_t cols;
 
     /* ---- runtime: owned by the driver, do not modify ---- */
-    uint8_h initialized;
-    uint8_h displayControl;
-    uint8_h entryMode;
-    uint8_h cursorRow;
-    uint8_h cursorCol;
+    uint8_t initialized;
+    uint8_t displayControl;
+    uint8_t entryMode;
+    uint8_t cursorRow;
+    uint8_t cursorCol;
 } LCD_Aip31068_HandleType;
 
 /* ================================================================================
@@ -129,7 +129,7 @@ typedef struct
  * @note   A returned E_NOK on a correctly wired board almost always means the
  *         address is wrong or the pull-ups are missing.
  */
-STD_ReturnType LCD_Aip31068_Init(LCD_Aip31068_HandleType *handle);
+Std_ReturnType LCD_Aip31068_Init(LCD_Aip31068_HandleType *handle);
 
 /**
  * @brief  Sends one raw instruction byte (control byte 0x00). Use it for
@@ -138,7 +138,7 @@ STD_ReturnType LCD_Aip31068_Init(LCD_Aip31068_HandleType *handle);
  * @param  command  Instruction byte, e.g. LCD_AIP31068_CMD_HOME.
  * @return E_OK/E_NOK (E_NOK if the slave did not acknowledge).
  */
-STD_ReturnType LCD_Aip31068_LCD_Aip31068_SendCommand(HandleType *handle, uint8_h command);
+Std_ReturnType LCD_Aip31068_LCD_Aip31068_SendCommand(HandleType *handle, uint8_t command);
 
 /**
  * @brief  Writes one character at the cursor position (control byte 0x40).
@@ -146,7 +146,7 @@ STD_ReturnType LCD_Aip31068_LCD_Aip31068_SendCommand(HandleType *handle, uint8_h
  * @param  character  ASCII code, or 0..7 for a custom character.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType LCD_Aip31068_WriteChar(LCD_Aip31068_HandleType *handle, uint8_h character);
+Std_ReturnType LCD_Aip31068_WriteChar(LCD_Aip31068_HandleType *handle, uint8_t character);
 
 /**
  * @brief  Writes a NUL-terminated string from the cursor position. The whole
@@ -158,7 +158,7 @@ STD_ReturnType LCD_Aip31068_WriteChar(LCD_Aip31068_HandleType *handle, uint8_h c
  * @return E_OK/E_NOK.
  * @note   Text longer than the line does not wrap - position with SetCursor.
  */
-STD_ReturnType LCD_Aip31068_WriteString(LCD_Aip31068_HandleType *handle, const uint8_h *pString);
+Std_ReturnType LCD_Aip31068_WriteString(LCD_Aip31068_HandleType *handle, const uint8_t *pString);
 
 /**
  * @brief  Convenience: move to (row, column) and write a string there.
@@ -168,9 +168,9 @@ STD_ReturnType LCD_Aip31068_WriteString(LCD_Aip31068_HandleType *handle, const u
  * @param  pString  '\0'-terminated text; must not be NULL.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType LCD_Aip31068_WriteStringAt(LCD_Aip31068_HandleType *handle,
-                                          uint8_h row, uint8_h column,
-                                          const uint8_h *pString);
+Std_ReturnType LCD_Aip31068_WriteStringAt(LCD_Aip31068_HandleType *handle,
+                                          uint8_t row, uint8_t column,
+                                          const uint8_t *pString);
 
 /**
  * @brief  Writes a signed integer in decimal at the cursor position.
@@ -180,7 +180,7 @@ STD_ReturnType LCD_Aip31068_WriteStringAt(LCD_Aip31068_HandleType *handle,
  * @note   Shrinking values leave a stale digit behind - pad the field or
  *         repaint the line.
  */
-STD_ReturnType LCD_Aip31068_WriteNumber(LCD_Aip31068_HandleType *handle, sint32 number);
+Std_ReturnType LCD_Aip31068_WriteNumber(LCD_Aip31068_HandleType *handle, sint32 number);
 
 /**
  * @brief  Moves the cursor to a zero-based (row, column) using the geometry
@@ -190,8 +190,8 @@ STD_ReturnType LCD_Aip31068_WriteNumber(LCD_Aip31068_HandleType *handle, sint32 
  * @param  column  0 .. cols-1.
  * @return E_OK/E_NOK (E_NOK if the position is off the display).
  */
-STD_ReturnType LCD_Aip31068_SetCursor(LCD_Aip31068_HandleType *handle,
-                                      uint8_h row, uint8_h column);
+Std_ReturnType LCD_Aip31068_SetCursor(LCD_Aip31068_HandleType *handle,
+                                      uint8_t row, uint8_t column);
 
 /**
  * @brief  Clears the screen and homes the cursor.
@@ -199,14 +199,14 @@ STD_ReturnType LCD_Aip31068_SetCursor(LCD_Aip31068_HandleType *handle,
  * @return E_OK/E_NOK.
  * @note   Blocks ~2 ms; do not call it on every repaint or the screen flickers.
  */
-STD_ReturnType LCD_Aip31068_Clear(LCD_Aip31068_HandleType *handle);
+Std_ReturnType LCD_Aip31068_Clear(LCD_Aip31068_HandleType *handle);
 
 /**
  * @brief  Homes the cursor without erasing the text.
  * @param  handle  Initialized display.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType LCD_Aip31068_Home(LCD_Aip31068_HandleType *handle);
+Std_ReturnType LCD_Aip31068_Home(LCD_Aip31068_HandleType *handle);
 
 /**
  * @brief  Turns the visible display on or off (the text in DDRAM survives).
@@ -214,7 +214,7 @@ STD_ReturnType LCD_Aip31068_Home(LCD_Aip31068_HandleType *handle);
  * @param  on      1 = visible, 0 = blank.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType LCD_Aip31068_DisplayOnOff(LCD_Aip31068_HandleType *handle, uint8_h on);
+Std_ReturnType LCD_Aip31068_DisplayOnOff(LCD_Aip31068_HandleType *handle, uint8_t on);
 
 /**
  * @brief  Shows or hides the underline cursor.
@@ -222,7 +222,7 @@ STD_ReturnType LCD_Aip31068_DisplayOnOff(LCD_Aip31068_HandleType *handle, uint8_
  * @param  on      1 = show, 0 = hide.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType LCD_Aip31068_CursorOnOff(LCD_Aip31068_HandleType *handle, uint8_h on);
+Std_ReturnType LCD_Aip31068_CursorOnOff(LCD_Aip31068_HandleType *handle, uint8_t on);
 
 /**
  * @brief  Enables or disables the blinking block cursor.
@@ -230,7 +230,7 @@ STD_ReturnType LCD_Aip31068_CursorOnOff(LCD_Aip31068_HandleType *handle, uint8_h
  * @param  on      1 = blink, 0 = steady.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType LCD_Aip31068_BlinkOnOff(LCD_Aip31068_HandleType *handle, uint8_h on);
+Std_ReturnType LCD_Aip31068_BlinkOnOff(LCD_Aip31068_HandleType *handle, uint8_t on);
 
 /**
  * @brief  Shifts the displayed window one character left or right without
@@ -239,7 +239,7 @@ STD_ReturnType LCD_Aip31068_BlinkOnOff(LCD_Aip31068_HandleType *handle, uint8_h 
  * @param  toRight  1 = right, 0 = left.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType LCD_Aip31068_ShiftDisplay(LCD_Aip31068_HandleType *handle, uint8_h toRight);
+Std_ReturnType LCD_Aip31068_ShiftDisplay(LCD_Aip31068_HandleType *handle, uint8_t toRight);
 
 /**
  * @brief  Stores a 5x8 glyph in CGRAM slot 0..7; print it with WriteChar(slot).
@@ -249,7 +249,7 @@ STD_ReturnType LCD_Aip31068_ShiftDisplay(LCD_Aip31068_HandleType *handle, uint8_
  * @return E_OK/E_NOK.
  * @note   Returns the cursor to (0,0) so the next write lands in DDRAM again.
  */
-STD_ReturnType LCD_Aip31068_CreateCustomChar(LCD_Aip31068_HandleType *handle,
-                                             uint8_h location, const uint8_h *pPattern);
+Std_ReturnType LCD_Aip31068_CreateCustomChar(LCD_Aip31068_HandleType *handle,
+                                             uint8_t location, const uint8_t *pPattern);
 
 #endif /* LCD_AIP31068_I2C_H */

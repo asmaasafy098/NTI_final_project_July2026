@@ -117,22 +117,22 @@ typedef enum
 typedef struct
 {
     /* ---- configuration: fill these before Init ---- */
-    uint8_h in1Port;  uint8_h in1Pin;
-    uint8_h in2Port;  uint8_h in2Pin;
-    uint8_h in3Port;  uint8_h in3Pin;
-    uint8_h in4Port;  uint8_h in4Pin;
-    uint8_h enAPort;  uint8_h enAPin;
-    uint8_h enBPort;  uint8_h enBPin;
-    uint8_h useEnablePins;
+    uint8_t in1Port;  uint8_t in1Pin;
+    uint8_t in2Port;  uint8_t in2Pin;
+    uint8_t in3Port;  uint8_t in3Pin;
+    uint8_t in4Port;  uint8_t in4Pin;
+    uint8_t enAPort;  uint8_t enAPin;
+    uint8_t enBPort;  uint8_t enBPin;
+    uint8_t useEnablePins;
 
     Stepper_L298P_ModeType stepMode;
-    uint16_h stepsPerRev;
-    uint16_h stepDelayMs;
+    uint16_t stepsPerRev;
+    uint16_t stepDelayMs;
 
     /* ---- runtime: owned by the driver, do not modify ---- */
-    uint8_h  initialized;
-    uint8_h  phaseIndex;    /* where we are in the excitation table */
-    uint8_h  energized;     /* 1 = coils currently powered          */
+    uint8_t  initialized;
+    uint8_t  phaseIndex;    /* where we are in the excitation table */
+    uint8_t  energized;     /* 1 = coils currently powered          */
     sint32   position;      /* net steps since Init / ResetPosition */
 } Stepper_L298P_HandleType;
 
@@ -149,7 +149,7 @@ typedef struct
  * @note   The motor is left released (all coils off). Call a Step function or
  *         Stepper_L298P_Hold() to energize it.
  */
-STD_ReturnType Stepper_L298P_Init(Stepper_L298P_HandleType *handle);
+Std_ReturnType Stepper_L298P_Init(Stepper_L298P_HandleType *handle);
 
 /**
  * @brief  Changes the excitation sequence at runtime, e.g. FULL for a fast move
@@ -160,7 +160,7 @@ STD_ReturnType Stepper_L298P_Init(Stepper_L298P_HandleType *handle);
  * @note   The phase index restarts at 0, so the motor may jump up to one step.
  *         Change modes while stopped, not mid-move.
  */
-STD_ReturnType Stepper_L298P_SetStepMode(Stepper_L298P_HandleType *handle,
+Std_ReturnType Stepper_L298P_SetStepMode(Stepper_L298P_HandleType *handle,
                                          Stepper_L298P_ModeType mode);
 
 /**
@@ -169,8 +169,8 @@ STD_ReturnType Stepper_L298P_SetStepMode(Stepper_L298P_HandleType *handle,
  * @param  stepDelayMs  Milliseconds between steps; forced to a minimum of 1.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType Stepper_L298P_SetStepDelay(Stepper_L298P_HandleType *handle,
-                                          uint16_h stepDelayMs);
+Std_ReturnType Stepper_L298P_SetStepDelay(Stepper_L298P_HandleType *handle,
+                                          uint16_t stepDelayMs);
 
 /**
  * @brief  Sets the speed in revolutions per minute and converts it into a step
@@ -182,7 +182,7 @@ STD_ReturnType Stepper_L298P_SetStepDelay(Stepper_L298P_HandleType *handle,
  * @note   The real ceiling is the motor's, not the driver's: ask for more torque
  *         than the coils can build at that step rate and the shaft just buzzes.
  */
-STD_ReturnType Stepper_L298P_SetSpeedRpm(Stepper_L298P_HandleType *handle, uint16_h rpm);
+Std_ReturnType Stepper_L298P_SetSpeedRpm(Stepper_L298P_HandleType *handle, uint16_t rpm);
 
 /**
  * @brief  Moves a number of steps in one direction, BLOCKING until finished.
@@ -196,8 +196,8 @@ STD_ReturnType Stepper_L298P_SetSpeedRpm(Stepper_L298P_HandleType *handle, uint1
  * @note   The coils stay energized (holding torque) when it returns. Call
  *         Stepper_L298P_Release() if the motor should not stay hot.
  */
-STD_ReturnType Stepper_L298P_Step(Stepper_L298P_HandleType *handle,
-                                  uint16_h steps, Stepper_L298P_DirType dir);
+Std_ReturnType Stepper_L298P_Step(Stepper_L298P_HandleType *handle,
+                                  uint16_t steps, Stepper_L298P_DirType dir);
 
 /**
  * @brief  Advances exactly ONE step and returns immediately - no delay inside.
@@ -212,14 +212,14 @@ STD_ReturnType Stepper_L298P_Step(Stepper_L298P_HandleType *handle,
  * @code
  *     void Task_1ms(void)
  *     {
- *         static uint16_h tick = 0;
+ *         static uint16_t tick = 0;
  *         tick++;
  *         if ((tick % 5u) == 0u) { Stepper_L298P_StepOnce(&motorX, DIR_CW);  }
  *         if ((tick % 8u) == 0u) { Stepper_L298P_StepOnce(&motorY, DIR_CCW); }
  *     }
  * @endcode
  */
-STD_ReturnType Stepper_L298P_StepOnce(Stepper_L298P_HandleType *handle,
+Std_ReturnType Stepper_L298P_StepOnce(Stepper_L298P_HandleType *handle,
                                       Stepper_L298P_DirType dir);
 
 /**
@@ -233,8 +233,8 @@ STD_ReturnType Stepper_L298P_StepOnce(Stepper_L298P_HandleType *handle,
  *         steps loses the remainder. Repeated small moves therefore drift - use
  *         Stepper_L298P_GetPosition() as the truth, not the sum of your requests.
  */
-STD_ReturnType Stepper_L298P_RotateAngle(Stepper_L298P_HandleType *handle,
-                                         uint16_h degrees, Stepper_L298P_DirType dir);
+Std_ReturnType Stepper_L298P_RotateAngle(Stepper_L298P_HandleType *handle,
+                                         uint16_t degrees, Stepper_L298P_DirType dir);
 
 /**
  * @brief  Re-energizes the current phase so the shaft resists being turned
@@ -244,7 +244,7 @@ STD_ReturnType Stepper_L298P_RotateAngle(Stepper_L298P_HandleType *handle,
  * @note   Holding draws full current and heats both motor and bridge. Hold only
  *         when something is actually pushing back on the shaft.
  */
-STD_ReturnType Stepper_L298P_Hold(Stepper_L298P_HandleType *handle);
+Std_ReturnType Stepper_L298P_Hold(Stepper_L298P_HandleType *handle);
 
 /**
  * @brief  Cuts the current to every coil: no torque, no heat, and the shaft turns
@@ -255,7 +255,7 @@ STD_ReturnType Stepper_L298P_Hold(Stepper_L298P_HandleType *handle);
  * @note   If useEnablePins is set, ENA/ENB are driven low as well, which is the
  *         only way to be sure the bridge outputs are off.
  */
-STD_ReturnType Stepper_L298P_Release(Stepper_L298P_HandleType *handle);
+Std_ReturnType Stepper_L298P_Release(Stepper_L298P_HandleType *handle);
 
 /**
  * @brief  Returns the net step count since Init() or the last ResetPosition():
@@ -264,7 +264,7 @@ STD_ReturnType Stepper_L298P_Release(Stepper_L298P_HandleType *handle);
  * @param  pPosition  Receives the position; must not be NULL.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType Stepper_L298P_GetPosition(const Stepper_L298P_HandleType *handle,
+Std_ReturnType Stepper_L298P_GetPosition(const Stepper_L298P_HandleType *handle,
                                          sint32 *pPosition);
 
 /**
@@ -273,7 +273,7 @@ STD_ReturnType Stepper_L298P_GetPosition(const Stepper_L298P_HandleType *handle,
  * @param  handle  Initialized motor.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType Stepper_L298P_ResetPosition(Stepper_L298P_HandleType *handle);
+Std_ReturnType Stepper_L298P_ResetPosition(Stepper_L298P_HandleType *handle);
 
 /**
  * @brief  Returns the number of steps in one full revolution IN THE ACTIVE MODE
@@ -283,7 +283,7 @@ STD_ReturnType Stepper_L298P_ResetPosition(Stepper_L298P_HandleType *handle);
  * @param  pStepsPerRev Receives the value; must not be NULL.
  * @return E_OK/E_NOK.
  */
-STD_ReturnType Stepper_L298P_GetStepsPerRev(const Stepper_L298P_HandleType *handle,
-                                            uint16_h *pStepsPerRev);
+Std_ReturnType Stepper_L298P_GetStepsPerRev(const Stepper_L298P_HandleType *handle,
+                                            uint16_t *pStepsPerRev);
 
 #endif /* STEPPER_L298P_H */
