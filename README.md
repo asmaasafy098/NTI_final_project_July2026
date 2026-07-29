@@ -49,7 +49,7 @@ EEPROM.
 
 ---
 
-## 3. Objectives
+## 4. Objectives
 
 1. Generate a 20 kHz PWM with Timer1 Fast PWM using `ICR1` as TOP.
 2. Measure shaft speed by counting encoder pulses over a fixed window.
@@ -1248,12 +1248,17 @@ Maximum **+20**; final score capped at 100.
 
 *Prepared by Ahmed Ellamie | ahmed.ellamiee@gmail.com*
 ================================================
+
 Summary
 
 | **Hardware Design** | Complete |
+
 | **Layer (Service)** | Pending |
+
 | **Layer (Logic)** | Pending | 
+
 | **MCL Layer** | Pending | 
+
 | **HAL Layer** | Pending |
 ================================================
 
@@ -1261,38 +1266,38 @@ Shorouk (Modules)
 
 DataTypes
 
-DataManager      Complete
+DataManager   |   Complete
 
-PIController     Complete
+PIController  |   Complete
 
-RampGenerator    TIMER            
+RampGenerator   |   TIMER            
 
 
-Protection      Pending
+Protection   |   Pending
 
-DriveFSM        Pending
+DriveFSM     |   Pending
 
-Scheduler       Pending
+Scheduler    |    Pending
 
-Console         Pending
+Console     |    Pending
 
-Telemetry       Pending
+Telemetry    |   Pending
 
 ================================================
 
 Asmaa (drivers)
 
 
-TIMER            Complete
+TIMER      |      Complete
 
-Interrupt        Pending
+Interrupt    |    Pending
 
-USART            Pending
+USART       |     Pending
 
-Tachometer       Pending
+Tachometer    |   Pending
 
-AnalogSensor     Pending
+AnalogSensor   |   Pending
 
-Buzzer           Pending
+Buzzer     |      Pending
 
-main.c           Pending
+main.c      |     Pending
