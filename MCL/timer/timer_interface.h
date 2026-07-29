@@ -13,7 +13,8 @@
  *  the runtime functions to start/stop the timer, read/write its counter, set a
  *  compare value, or register an interrupt callback.
  * ============================================================================== */
-
+#define notvalid 0 
+#define PWM_TOP 399
 /* ---------------- Timer Channels ---------------- */
 /**
  * @brief Identifies which physical timer/counter unit an API call targets.
@@ -86,8 +87,8 @@ typedef struct
     Timer_ChannelType   channel;
     Timer_ModeType      mode;
     Timer_PrescalerType prescaler;
-    uint16_h            initialValue;
-    uint16_h            compareValue;
+    uint16_t            initialValue;
+    uint16_t            compareValue;
 } Timer_ConfigType;
 
 /* ---------------- Callback Pointer Type ---------------- */
@@ -102,96 +103,83 @@ typedef void (*Timer_CallBackType)(void);
  * ============================================================================== */
 
 /**
- * @brief  Configures a timer channel (mode, prescaler, initial + compare values)
- *         without starting it. Loads TCNTx/OCRx and selects the waveform mode.
- * @param  addConfig  Pointer to a fully populated configuration structure.
- * @return STD_ReturnType  E_OK if configured, E_NOK on NULL pointer or bad channel.
- * @note   The clock is applied here; pass TIMER_CLOCK_STOPPED and call Timer_Start()
- *         later if you want to defer the actual counting.
+ * @brief  Initializes Timer0 in CTC mode with OCR0=77 and prescaler 1024,
+ *         producing a 10ms compare-match period.
+ * @param  None.
+ * @return Std_ReturnType  E_OK on success.
  */
-STD_ReturnType Timer_Init(const Timer_ConfigType *addConfig);
+Std_ReturnType Timer0_Init(void);
 
 /**
- * @brief  Stops the channel and restores its control registers to reset values.
- * @param  channel  Timer channel to de-initialize.
- * @return STD_ReturnType  E_OK/E_NOK (E_NOK on invalid channel).
+ * @brief  Enables the specified interrupt source (overflow or compare match)
+ *         for Timer0.
+ * @param  channel  Must be TIMER_CHANNEL_0.
+ * @param  intType  TIMER_INT_OVERFLOW or TIMER_INT_COMPARE_MATCH.
+ * @return Std_ReturnType  E_OK/E_NOK (E_NOK on invalid channel).
  */
-STD_ReturnType Timer_DeInit(Timer_ChannelType channel);
+Std_ReturnType Timer0_EnableInterrupt(Timer_ChannelType channel, Timer_InterruptType intType);
 
 /**
- * @brief  (Re)connects the clock source so the selected channel starts counting.
- * @param  channel    Timer channel to start.
- * @param  prescaler  Clock source / prescaler to apply.
- * @return STD_ReturnType  E_OK/E_NOK.
+ * @brief  Disables the specified interrupt source (overflow or compare match)
+ *         for Timer0.
+ * @param  channel  Must be TIMER_CHANNEL_0.
+ * @param  intType  TIMER_INT_OVERFLOW or TIMER_INT_COMPARE_MATCH.
+ * @return Std_ReturnType  E_OK/E_NOK (E_NOK on invalid channel).
  */
-STD_ReturnType Timer_Start(Timer_ChannelType channel, Timer_PrescalerType prescaler);
+Std_ReturnType Timer0_DisableInterrupt(Timer_ChannelType channel, Timer_InterruptType intType);
 
 /**
- * @brief  Disconnects the clock source so the channel stops counting (value kept).
- * @param  channel  Timer channel to stop.
- * @return STD_ReturnType  E_OK/E_NOK.
+ * @brief  Registers a callback function to be invoked from the ISR when the
+ *         specified timer channel and interrupt type fire.
+ * @param  channel   Timer channel (TIMER_CHANNEL_0, _1, _2...).
+ * @param  intType   TIMER_INT_OVERFLOW or TIMER_INT_COMPARE_MATCH.
+ * @param  callBack  Function pointer to invoke; must not be NULL.
+ * @return Std_ReturnType  E_OK/E_NOK (E_NOK on invalid channel or NULL callback).
  */
-STD_ReturnType Timer_Stop(Timer_ChannelType channel);
+Std_ReturnType Timer_SetCallBack(Timer_ChannelType channel, Timer_InterruptType intType,
+                                  Timer_CallBackType callBack);
 
 /**
- * @brief  Writes the counter register (TCNTx) of the selected channel.
- * @param  channel  Timer channel.
- * @param  value    New counter value (8-bit for Timer0/2, 16-bit for Timer1).
- * @return STD_ReturnType  E_OK/E_NOK.
+ * @brief  Initializes Timer1 in Fast PWM mode 14 (TOP = ICR1 = 399) with
+ *         non-inverting output on OC1A, producing a 20kHz PWM signal.
+ * @param  None.
+ * @return Std_ReturnType  E_OK on success.
  */
-STD_ReturnType Timer_SetCounterValue(Timer_ChannelType channel, uint16_h value);
+Std_ReturnType Timer1_Init(void);
 
 /**
- * @brief  Reads the current counter register (TCNTx) of the selected channel.
- * @param  channel     Timer channel.
- * @param  puint16Val  Pointer that receives the current counter value.
- * @return STD_ReturnType  E_OK/E_NOK (E_NOK on NULL pointer or bad channel).
+ * @brief  Sets the PWM duty cycle on OC1A as a percentage (0-100).
+ * @param  duty_percent  Desired duty cycle, 0 to 100.
+ * @return Std_ReturnType  E_OK/E_NOK (E_NOK if duty_percent > 100).
  */
-STD_ReturnType Timer_GetCounterValue(Timer_ChannelType channel, uint16_h *puint16Val);
+Std_ReturnType Timer1_SetDuty(uint16_t duty_percent);
 
 /**
- * @brief  Writes the output-compare register (OCRx) used in CTC / PWM modes.
- * @param  channel  Timer channel.
- * @param  value    Compare value (8-bit for Timer0/2, 16-bit for Timer1 channel A).
- * @return STD_ReturnType  E_OK/E_NOK.
+ * @brief  Initializes Timer2 in CTC mode with toggle-on-compare-match output
+ *         on OC2, allowing the output frequency to be set via Timer2_SetTone.
+ * @param  None.
+ * @return Std_ReturnType  E_OK on success.
  */
-STD_ReturnType Timer_SetCompareValue(Timer_ChannelType channel, uint16_h value);
+Std_ReturnType Timer2_Init(void);
 
 /**
- * @brief  Enables the given interrupt source for the channel (updates TIMSK).
- *         The user must also enable global interrupts (see Timer_EnableGlobalInterrupt).
- * @param  channel   Timer channel.
- * @param  intType   Overflow or compare-match interrupt.
- * @return STD_ReturnType  E_OK/E_NOK.
+ * @brief  Sets the compare value (OCR2) controlling the buzzer tone frequency.
+ * @param  tone  Compare value, 0 to 255.
+ * @return Std_ReturnType  E_OK/E_NOK (E_NOK if tone > 255).
  */
-STD_ReturnType Timer_EnableInterrupt(Timer_ChannelType channel, Timer_InterruptType intType);
+Std_ReturnType Timer2_SetTone(uint16_t tone);
 
 /**
- * @brief  Disables the given interrupt source for the channel (updates TIMSK).
- * @param  channel   Timer channel.
- * @param  intType   Overflow or compare-match interrupt.
- * @return STD_ReturnType  E_OK/E_NOK.
- */
-STD_ReturnType Timer_DisableInterrupt(Timer_ChannelType channel, Timer_InterruptType intType);
-
-/**
- * @brief  Registers the callback invoked from the channel's ISR for a given source.
- * @param  channel   Timer channel.
- * @param  intType   Which event the callback belongs to (overflow / compare).
- * @param  callBack  Pointer to a void(void) function; must not be NULL.
- * @return STD_ReturnType  E_OK/E_NOK.
- */
-STD_ReturnType Timer_SetCallBack(Timer_ChannelType channel,
-                                 Timer_InterruptType intType,
-                                 Timer_CallBackType callBack);
-
-/**
- * @brief  Sets the global interrupt enable bit (I-bit of SREG). Equivalent to sei().
+ * @brief  Enables global interrupts (sets the I-bit in SREG, equivalent to sei()).
+ * @param  None.
+ * @return void
  */
 void Timer_EnableGlobalInterrupt(void);
 
 /**
- * @brief  Clears the global interrupt enable bit (I-bit of SREG). Equivalent to cli().
+ * @brief  Disables global interrupts (clears the I-bit in SREG, equivalent to cli()).
+ * @param  None.
+ * @return void
  */
 void Timer_DisableGlobalInterrupt(void);
 
