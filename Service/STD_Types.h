@@ -9,11 +9,16 @@ typedef int16_t  sint16_t;
 typedef int32_t  sint32_t;
 typedef int64_t  sint64_t;
 
+typedef sint8_t  sint8;
+typedef sint16_t sint16;
+typedef sint32_t sint32;
+typedef sint64_t sint64;
+
 /* ==================== Unsigned Data Types ==================== */
-typedef uint8_t  uint8_t;
-typedef uint16_t uint16_t;
-typedef uint32_t uint32_t;
-typedef uint64_t uint64_t;
+typedef uint8_t  uint8_h;
+typedef uint16_t uint16_h;
+typedef uint32_t uint32_h;
+typedef uint64_t uint64_h;
 
 /* ==================== Floating Point Data Types ==================== */
 typedef float    float32_t;
@@ -34,6 +39,8 @@ typedef enum {
     E_INVALID,
     E_NOT_READY
 } Std_ReturnType;
+
+typedef Std_ReturnType STD_ReturnType;
 
 /* ==================== Macros ==================== */
 #define NULL    ((void *)0)
