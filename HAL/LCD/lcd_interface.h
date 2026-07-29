@@ -65,12 +65,12 @@ typedef enum
 typedef struct
 {
     LCD_ModeType mode;
-    uint8_h      dataPort;
-    uint8_h      dataStartPin;
-    uint8_h      controlPort;
-    uint8_h      rsPin;
-    uint8_h      rwPin;
-    uint8_h      enPin;
+    uint8_t      dataPort;
+    uint8_t      dataStartPin;
+    uint8_t      controlPort;
+    uint8_t      rsPin;
+    uint8_t      rwPin;
+    uint8_t      enPin;
 } LCD_ConfigType;
 
 /* ================================================================================
@@ -82,66 +82,66 @@ typedef struct
  *         waits the required power-up delay, selects 4-/8-bit function set, turns
  *         the display on, and clears it.
  * @param  addConfig  Pointer to a populated configuration structure.
- * @return STD_ReturnType  E_OK/E_NOK (E_NOK on NULL pointer or bad port).
+ * @return Std_ReturnType  E_OK/E_NOK (E_NOK on NULL pointer or bad port).
  */
-STD_ReturnType LCD_Init(const LCD_ConfigType *addConfig);
+Std_ReturnType LCD_Init(const LCD_ConfigType *addConfig);
 
 /**
  * @brief  Sends an instruction byte to the controller (RS = 0).
  * @param  addConfig  Same configuration used at init.
  * @param  command    One of the LCD_CMD_* codes (or a raw instruction).
- * @return STD_ReturnType  E_OK/E_NOK.
+ * @return Std_ReturnType  E_OK/E_NOK.
  */
-STD_ReturnType LCD_SendCommand(const LCD_ConfigType *addConfig, uint8_h command);
+Std_ReturnType LCD_SendCommand(const LCD_ConfigType *addConfig, uint8_t command);
 
 /**
  * @brief  Writes a single character to the current cursor position (RS = 1).
  * @param  addConfig  Same configuration used at init.
  * @param  character  ASCII/CGRAM code to display.
- * @return STD_ReturnType  E_OK/E_NOK.
+ * @return Std_ReturnType  E_OK/E_NOK.
  */
-STD_ReturnType LCD_WriteChar(const LCD_ConfigType *addConfig, uint8_h character);
+Std_ReturnType LCD_WriteChar(const LCD_ConfigType *addConfig, uint8_t character);
 
 /**
  * @brief  Writes a NUL-terminated string starting at the current cursor position.
  * @param  addConfig  Same configuration used at init.
  * @param  pString    Pointer to a '\0'-terminated string; must not be NULL.
- * @return STD_ReturnType  E_OK/E_NOK.
+ * @return Std_ReturnType  E_OK/E_NOK.
  */
-STD_ReturnType LCD_WriteString(const LCD_ConfigType *addConfig, const uint8_h *pString);
+Std_ReturnType LCD_WriteString(const LCD_ConfigType *addConfig, const uint8_t *pString);
 
 /**
  * @brief  Writes a signed integer as decimal text at the cursor position.
  * @param  addConfig  Same configuration used at init.
  * @param  number     Value to render.
- * @return STD_ReturnType  E_OK/E_NOK.
+ * @return Std_ReturnType  E_OK/E_NOK.
  */
-STD_ReturnType LCD_WriteNumber(const LCD_ConfigType *addConfig, sint32 number);
+Std_ReturnType LCD_WriteNumber(const LCD_ConfigType *addConfig, sint32 number);
 
 /**
  * @brief  Moves the cursor to (row, column). Row/column are zero-based.
  * @param  addConfig  Same configuration used at init.
  * @param  row        Line index (0-based).
  * @param  column     Character index within the line (0-based).
- * @return STD_ReturnType  E_OK/E_NOK.
+ * @return Std_ReturnType  E_OK/E_NOK.
  */
-STD_ReturnType LCD_SetCursor(const LCD_ConfigType *addConfig, uint8_h row, uint8_h column);
+Std_ReturnType LCD_SetCursor(const LCD_ConfigType *addConfig, uint8_t row, uint8_t column);
 
 /**
  * @brief  Clears the whole display and returns the cursor home.
  * @param  addConfig  Same configuration used at init.
- * @return STD_ReturnType  E_OK/E_NOK.
+ * @return Std_ReturnType  E_OK/E_NOK.
  */
-STD_ReturnType LCD_Clear(const LCD_ConfigType *addConfig);
+Std_ReturnType LCD_Clear(const LCD_ConfigType *addConfig);
 
 /**
  * @brief  Stores a custom 5x8 character pattern into one of CGRAM slots 0..7.
  * @param  addConfig  Same configuration used at init.
  * @param  location   CGRAM slot 0..7.
  * @param  pPattern   Pointer to 8 bytes describing the glyph rows; must not be NULL.
- * @return STD_ReturnType  E_OK/E_NOK.
+ * @return Std_ReturnType  E_OK/E_NOK.
  */
-STD_ReturnType LCD_CreateCustomChar(const LCD_ConfigType *addConfig,
-                                    uint8_h location, const uint8_h *pPattern);
+Std_ReturnType LCD_CreateCustomChar(const LCD_ConfigType *addConfig,
+                                    uint8_t location, const uint8_t *pPattern);
 
 #endif /* LCD_INTERFACE_H */

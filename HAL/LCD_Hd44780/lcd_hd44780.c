@@ -46,15 +46,15 @@ static void LCD_Hd44780_EnablePulse(const LCD_Hd44780_HandleType *handle)
  * Places the low 4 bits of 'nibble' on D4..D7 and latches them. Used both for
  * the reset sequence and for every byte in 4-bit mode.
  */
-static void LCD_Hd44780_WriteNibble(const LCD_Hd44780_HandleType *handle, uint8_h nibble)
+static void LCD_Hd44780_WriteNibble(const LCD_Hd44780_HandleType *handle, uint8_t nibble)
 {
-    uint8_h local_Bit = 0U;
+    uint8_t local_Bit = 0U;
 
     for (local_Bit = 0U; local_Bit < 4U; local_Bit++)
     {
         (void)GPIO_SetPinValue(handle->dataPort,
-                               (uint8_h)(handle->dataStartPin + local_Bit),
-                               (uint8_h)GET_BIT(nibble, local_Bit));
+                               (uint8_t)(handle->dataStartPin + local_Bit),
+                               (uint8_t)GET_BIT(nibble, local_Bit));
     }
 
     LCD_Hd44780_EnablePulse(handle);
@@ -65,25 +65,25 @@ static void LCD_Hd44780_WriteNibble(const LCD_Hd44780_HandleType *handle, uint8_
  * in 4-bit mode it is the high nibble followed by the low nibble. RS must already
  * carry the command/data selection chosen by the caller.
  */
-static void LCD_Hd44780_WriteBus(const LCD_Hd44780_HandleType *handle, uint8_h value)
+static void LCD_Hd44780_WriteBus(const LCD_Hd44780_HandleType *handle, uint8_t value)
 {
-    uint8_h local_Bit = 0U;
+    uint8_t local_Bit = 0U;
 
     if (handle->bus == LCD_HD44780_BUS_8BIT)
     {
         for (local_Bit = 0U; local_Bit < 8U; local_Bit++)
         {
             (void)GPIO_SetPinValue(handle->dataPort,
-                                   (uint8_h)(handle->dataStartPin + local_Bit),
-                                   (uint8_h)GET_BIT(value, local_Bit));
+                                   (uint8_t)(handle->dataStartPin + local_Bit),
+                                   (uint8_t)GET_BIT(value, local_Bit));
         }
 
         LCD_Hd44780_EnablePulse(handle);
     }
     else
     {
-        LCD_Hd44780_WriteNibble(handle, (uint8_h)(value >> 4));   /* high nibble first */
-        LCD_Hd44780_WriteNibble(handle, (uint8_h)(value & 0x0FU));
+        LCD_Hd44780_WriteNibble(handle, (uint8_t)(value >> 4));   /* high nibble first */
+        LCD_Hd44780_WriteNibble(handle, (uint8_t)(value & 0x0FU));
     }
 
     _delay_us(LCD_HD44780_EXEC_DELAY_US);
@@ -94,17 +94,17 @@ static void LCD_Hd44780_WriteBus(const LCD_Hd44780_HandleType *handle, uint8_h v
  * are the continuation of rows 0 and 1, offset by the line length - which is why
  * the geometry has to come from the handle.
  */
-static uint8_h LCD_Hd44780_RowBase(const LCD_Hd44780_HandleType *handle, uint8_h row)
+static uint8_t LCD_Hd44780_RowBase(const LCD_Hd44780_HandleType *handle, uint8_t row)
 {
-    uint8_h local_Base = 0x00U;
+    uint8_t local_Base = 0x00U;
 
     switch (row)
     {
-        case 0U:  local_Base = (uint8_h)0x00U;                        break;
-        case 1U:  local_Base = (uint8_h)0x40U;                        break;
-        case 2U:  local_Base = (uint8_h)(0x00U + handle->cols);       break;
-        case 3U:  local_Base = (uint8_h)(0x40U + handle->cols);       break;
-        default:  local_Base = (uint8_h)0x00U;                        break;
+        case 0U:  local_Base = (uint8_t)0x00U;                        break;
+        case 1U:  local_Base = (uint8_t)0x40U;                        break;
+        case 2U:  local_Base = (uint8_t)(0x00U + handle->cols);       break;
+        case 3U:  local_Base = (uint8_t)(0x40U + handle->cols);       break;
+        default:  local_Base = (uint8_t)0x00U;                        break;
     }
 
     return local_Base;
@@ -115,11 +115,11 @@ static uint8_h LCD_Hd44780_RowBase(const LCD_Hd44780_HandleType *handle, uint8_h
  *  PUBLIC FUNCTIONS
  * ------------------------------------------------------------------------ */
 
-STD_ReturnType LCD_Hd44780_Init(LCD_Hd44780_HandleType *handle)
+Std_ReturnType LCD_Hd44780_Init(LCD_Hd44780_HandleType *handle)
 {
-    uint8_h local_Bit         = 0U;
-    uint8_h local_DataPins    = 0U;
-    uint8_h local_FunctionSet = 0U;
+    uint8_t local_Bit         = 0U;
+    uint8_t local_DataPins    = 0U;
+    uint8_t local_FunctionSet = 0U;
 
     /*
      * STEP 1: Validate the handle: non-NULL, ports in range, sane geometry, and
@@ -152,10 +152,10 @@ STD_ReturnType LCD_Hd44780_Init(LCD_Hd44780_HandleType *handle)
     for (local_Bit = 0U; local_Bit < local_DataPins; local_Bit++)
     {
         (void)GPIO_SetPinDirection(handle->dataPort,
-                                   (uint8_h)(handle->dataStartPin + local_Bit),
+                                   (uint8_t)(handle->dataStartPin + local_Bit),
                                    GPIO_OUTPUT);
         (void)GPIO_SetPinValue(handle->dataPort,
-                               (uint8_h)(handle->dataStartPin + local_Bit), PIN_LOW);
+                               (uint8_t)(handle->dataStartPin + local_Bit), PIN_LOW);
     }
 
     (void)GPIO_SetPinDirection(handle->controlPort, handle->rsPin, GPIO_OUTPUT);
@@ -224,10 +224,10 @@ STD_ReturnType LCD_Hd44780_Init(LCD_Hd44780_HandleType *handle)
     (void)LCD_Hd44780_SendCommand(handle, LCD_HD44780_CMD_CLEAR);
     _delay_ms(LCD_HD44780_LONG_DELAY_MS);
 
-    handle->entryMode = (uint8_h)(LCD_HD44780_CMD_ENTRY_MODE | LCD_HD44780_ENTRY_INCREMENT);
+    handle->entryMode = (uint8_t)(LCD_HD44780_CMD_ENTRY_MODE | LCD_HD44780_ENTRY_INCREMENT);
     (void)LCD_Hd44780_SendCommand(handle, handle->entryMode);
 
-    handle->displayControl = (uint8_h)(LCD_HD44780_CMD_DISPLAY_CTRL | LCD_HD44780_DISPLAY_ON);
+    handle->displayControl = (uint8_t)(LCD_HD44780_CMD_DISPLAY_CTRL | LCD_HD44780_DISPLAY_ON);
     (void)LCD_Hd44780_SendCommand(handle, handle->displayControl);
 
     /* STEP 7: Mark the handle usable and return. */
@@ -239,7 +239,7 @@ STD_ReturnType LCD_Hd44780_Init(LCD_Hd44780_HandleType *handle)
 }
 
 
-STD_ReturnType LCD_Hd44780_SendCommand(LCD_Hd44780_HandleType *handle, uint8_h command)
+Std_ReturnType LCD_Hd44780_SendCommand(LCD_Hd44780_HandleType *handle, uint8_t command)
 {
     /* STEP 1: Validate the handle. */
     if (handle == NULL)
@@ -257,7 +257,7 @@ STD_ReturnType LCD_Hd44780_SendCommand(LCD_Hd44780_HandleType *handle, uint8_h c
 }
 
 
-STD_ReturnType LCD_Hd44780_WriteChar(LCD_Hd44780_HandleType *handle, uint8_h character)
+Std_ReturnType LCD_Hd44780_WriteChar(LCD_Hd44780_HandleType *handle, uint8_t character)
 {
     /* STEP 1: Validate the handle and that Init() has run. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -275,7 +275,7 @@ STD_ReturnType LCD_Hd44780_WriteChar(LCD_Hd44780_HandleType *handle, uint8_h cha
 }
 
 
-STD_ReturnType LCD_Hd44780_WriteString(LCD_Hd44780_HandleType *handle, const uint8_h *pString)
+Std_ReturnType LCD_Hd44780_WriteString(LCD_Hd44780_HandleType *handle, const uint8_t *pString)
 {
     uint16_h local_Index = 0U;
 
@@ -295,9 +295,9 @@ STD_ReturnType LCD_Hd44780_WriteString(LCD_Hd44780_HandleType *handle, const uin
 }
 
 
-STD_ReturnType LCD_Hd44780_WriteStringAt(LCD_Hd44780_HandleType *handle,
-                                         uint8_h row, uint8_h column,
-                                         const uint8_h *pString)
+Std_ReturnType LCD_Hd44780_WriteStringAt(LCD_Hd44780_HandleType *handle,
+                                         uint8_t row, uint8_t column,
+                                         const uint8_t *pString)
 {
     /* STEP 1: Move the cursor first; a bad position must fail before printing. */
     if (LCD_Hd44780_SetCursor(handle, row, column) != E_OK)
@@ -310,10 +310,10 @@ STD_ReturnType LCD_Hd44780_WriteStringAt(LCD_Hd44780_HandleType *handle,
 }
 
 
-STD_ReturnType LCD_Hd44780_WriteNumber(LCD_Hd44780_HandleType *handle, sint32 number)
+Std_ReturnType LCD_Hd44780_WriteNumber(LCD_Hd44780_HandleType *handle, sint32 number)
 {
-    uint8_h  local_Digits[10];
-    uint8_h  local_Count = 0U;
+    uint8_t  local_Digits[10];
+    uint8_t  local_Count = 0U;
     uint32_h local_Value = 0UL;
 
     /* STEP 1: Validate the handle. */
@@ -325,7 +325,7 @@ STD_ReturnType LCD_Hd44780_WriteNumber(LCD_Hd44780_HandleType *handle, sint32 nu
     /* STEP 2: Zero is the one value the digit loop below never produces. */
     if (number == 0)
     {
-        return LCD_Hd44780_WriteChar(handle, (uint8_h)'0');
+        return LCD_Hd44780_WriteChar(handle, (uint8_t)'0');
     }
 
     /*
@@ -334,7 +334,7 @@ STD_ReturnType LCD_Hd44780_WriteNumber(LCD_Hd44780_HandleType *handle, sint32 nu
      */
     if (number < 0)
     {
-        (void)LCD_Hd44780_WriteChar(handle, (uint8_h)'-');
+        (void)LCD_Hd44780_WriteChar(handle, (uint8_t)'-');
         local_Value = (uint32_h)(-(sint32)number);
     }
     else
@@ -345,7 +345,7 @@ STD_ReturnType LCD_Hd44780_WriteNumber(LCD_Hd44780_HandleType *handle, sint32 nu
     /* STEP 4: Extract digits least-significant first, so they come out reversed. */
     while ((local_Value > 0UL) && (local_Count < 10U))
     {
-        local_Digits[local_Count] = (uint8_h)('0' + (uint8_h)(local_Value % 10UL));
+        local_Digits[local_Count] = (uint8_t)('0' + (uint8_t)(local_Value % 10UL));
         local_Value /= 10UL;
         local_Count++;
     }
@@ -361,10 +361,10 @@ STD_ReturnType LCD_Hd44780_WriteNumber(LCD_Hd44780_HandleType *handle, sint32 nu
 }
 
 
-STD_ReturnType LCD_Hd44780_SetCursor(LCD_Hd44780_HandleType *handle,
-                                     uint8_h row, uint8_h column)
+Std_ReturnType LCD_Hd44780_SetCursor(LCD_Hd44780_HandleType *handle,
+                                     uint8_t row, uint8_t column)
 {
-    uint8_h local_Address = 0U;
+    uint8_t local_Address = 0U;
 
     /* STEP 1: Validate the handle and that the position exists on this module. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -378,11 +378,11 @@ STD_ReturnType LCD_Hd44780_SetCursor(LCD_Hd44780_HandleType *handle,
     }
 
     /* STEP 2: DDRAM address = row base + column. */
-    local_Address = (uint8_h)(LCD_Hd44780_RowBase(handle, row) + column);
+    local_Address = (uint8_t)(LCD_Hd44780_RowBase(handle, row) + column);
 
     /* STEP 3: Bit 7 of the instruction marks it as "set DDRAM address". */
     (void)LCD_Hd44780_SendCommand(handle,
-                                  (uint8_h)(LCD_HD44780_CMD_SET_DDRAM_ADDR | local_Address));
+                                  (uint8_t)(LCD_HD44780_CMD_SET_DDRAM_ADDR | local_Address));
 
     handle->cursorRow = row;
     handle->cursorCol = column;
@@ -391,7 +391,7 @@ STD_ReturnType LCD_Hd44780_SetCursor(LCD_Hd44780_HandleType *handle,
 }
 
 
-STD_ReturnType LCD_Hd44780_Clear(LCD_Hd44780_HandleType *handle)
+Std_ReturnType LCD_Hd44780_Clear(LCD_Hd44780_HandleType *handle)
 {
     /* STEP 1: Validate the handle. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -410,7 +410,7 @@ STD_ReturnType LCD_Hd44780_Clear(LCD_Hd44780_HandleType *handle)
 }
 
 
-STD_ReturnType LCD_Hd44780_Home(LCD_Hd44780_HandleType *handle)
+Std_ReturnType LCD_Hd44780_Home(LCD_Hd44780_HandleType *handle)
 {
     /* STEP 1: Validate the handle. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -429,7 +429,7 @@ STD_ReturnType LCD_Hd44780_Home(LCD_Hd44780_HandleType *handle)
 }
 
 
-STD_ReturnType LCD_Hd44780_DisplayOnOff(LCD_Hd44780_HandleType *handle, uint8_h on)
+Std_ReturnType LCD_Hd44780_DisplayOnOff(LCD_Hd44780_HandleType *handle, uint8_t on)
 {
     /* STEP 1: Validate the handle. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -447,7 +447,7 @@ STD_ReturnType LCD_Hd44780_DisplayOnOff(LCD_Hd44780_HandleType *handle, uint8_h 
     }
     else
     {
-        handle->displayControl &= (uint8_h)(~LCD_HD44780_DISPLAY_ON);
+        handle->displayControl &= (uint8_t)(~LCD_HD44780_DISPLAY_ON);
     }
 
     /* STEP 3: Re-send the whole group. */
@@ -455,7 +455,7 @@ STD_ReturnType LCD_Hd44780_DisplayOnOff(LCD_Hd44780_HandleType *handle, uint8_h 
 }
 
 
-STD_ReturnType LCD_Hd44780_CursorOnOff(LCD_Hd44780_HandleType *handle, uint8_h on)
+Std_ReturnType LCD_Hd44780_CursorOnOff(LCD_Hd44780_HandleType *handle, uint8_t on)
 {
     /* STEP 1: Validate the handle. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -470,7 +470,7 @@ STD_ReturnType LCD_Hd44780_CursorOnOff(LCD_Hd44780_HandleType *handle, uint8_h o
     }
     else
     {
-        handle->displayControl &= (uint8_h)(~LCD_HD44780_CURSOR_ON);
+        handle->displayControl &= (uint8_t)(~LCD_HD44780_CURSOR_ON);
     }
 
     /* STEP 3: Re-send the whole group. */
@@ -478,7 +478,7 @@ STD_ReturnType LCD_Hd44780_CursorOnOff(LCD_Hd44780_HandleType *handle, uint8_h o
 }
 
 
-STD_ReturnType LCD_Hd44780_BlinkOnOff(LCD_Hd44780_HandleType *handle, uint8_h on)
+Std_ReturnType LCD_Hd44780_BlinkOnOff(LCD_Hd44780_HandleType *handle, uint8_t on)
 {
     /* STEP 1: Validate the handle. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -493,7 +493,7 @@ STD_ReturnType LCD_Hd44780_BlinkOnOff(LCD_Hd44780_HandleType *handle, uint8_h on
     }
     else
     {
-        handle->displayControl &= (uint8_h)(~LCD_HD44780_BLINK_ON);
+        handle->displayControl &= (uint8_t)(~LCD_HD44780_BLINK_ON);
     }
 
     /* STEP 3: Re-send the whole group. */
@@ -501,9 +501,9 @@ STD_ReturnType LCD_Hd44780_BlinkOnOff(LCD_Hd44780_HandleType *handle, uint8_h on
 }
 
 
-STD_ReturnType LCD_Hd44780_ShiftDisplay(LCD_Hd44780_HandleType *handle, uint8_h toRight)
+Std_ReturnType LCD_Hd44780_ShiftDisplay(LCD_Hd44780_HandleType *handle, uint8_t toRight)
 {
-    uint8_h local_Command = 0U;
+    uint8_t local_Command = 0U;
 
     /* STEP 1: Validate the handle. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -515,7 +515,7 @@ STD_ReturnType LCD_Hd44780_ShiftDisplay(LCD_Hd44780_HandleType *handle, uint8_h 
      * STEP 2: Bit 3 (S/C) selects "shift the display" over "move the cursor";
      *         bit 2 (R/L) picks the direction.
      */
-    local_Command = (uint8_h)(LCD_HD44780_CMD_SHIFT | 0x08U);
+    local_Command = (uint8_t)(LCD_HD44780_CMD_SHIFT | 0x08U);
 
     if (toRight != 0U)
     {
@@ -527,10 +527,10 @@ STD_ReturnType LCD_Hd44780_ShiftDisplay(LCD_Hd44780_HandleType *handle, uint8_h 
 }
 
 
-STD_ReturnType LCD_Hd44780_CreateCustomChar(LCD_Hd44780_HandleType *handle,
-                                            uint8_h location, const uint8_h *pPattern)
+Std_ReturnType LCD_Hd44780_CreateCustomChar(LCD_Hd44780_HandleType *handle,
+                                            uint8_t location, const uint8_t *pPattern)
 {
-    uint8_h local_Row = 0U;
+    uint8_t local_Row = 0U;
 
     /* STEP 1: Validate the handle, the slot (0..7) and the pattern pointer. */
     if ((handle == NULL) || (handle->initialized == 0U) || (pPattern == NULL))
@@ -545,12 +545,12 @@ STD_ReturnType LCD_Hd44780_CreateCustomChar(LCD_Hd44780_HandleType *handle,
 
     /* STEP 2: Point the address counter at that slot - 8 bytes per glyph. */
     (void)LCD_Hd44780_SendCommand(handle,
-                                  (uint8_h)(LCD_HD44780_CMD_SET_CGRAM_ADDR | (uint8_h)(location << 3)));
+                                  (uint8_t)(LCD_HD44780_CMD_SET_CGRAM_ADDR | (uint8_t)(location << 3)));
 
     /* STEP 3: Write the eight pixel rows as ordinary data bytes. */
     for (local_Row = 0U; local_Row < 8U; local_Row++)
     {
-        (void)LCD_Hd44780_WriteChar(handle, (uint8_h)(pPattern[local_Row] & 0x1FU));
+        (void)LCD_Hd44780_WriteChar(handle, (uint8_t)(pPattern[local_Row] & 0x1FU));
     }
 
     /*

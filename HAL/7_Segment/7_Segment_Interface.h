@@ -81,7 +81,7 @@ typedef struct
 /**
  * @brief  Configures the segment/data pins as outputs and blanks the display.
  * @param  addConfig  Pointer to a populated configuration structure.
- * @return STD_ReturnType  E_OK/E_NOK (E_NOK on NULL pointer or bad port).
+ * @return Std_ReturnType  E_OK/E_NOK (E_NOK on NULL pointer or bad port).
  */
 Std_ReturnType SevenSeg_Init(const SevenSeg_ConfigType *addConfig);
 
@@ -92,14 +92,14 @@ Std_ReturnType SevenSeg_Init(const SevenSeg_ConfigType *addConfig);
  *         automatically from the configured display type.
  * @param  addConfig  Same configuration used at init.
  * @param  digit      Value 0..9 to display.
- * @return STD_ReturnType  E_OK/E_NOK (E_NOK if digit > 9 or NULL pointer).
+ * @return Std_ReturnType  E_OK/E_NOK (E_NOK if digit > 9 or NULL pointer).
  */
 Std_ReturnType SevenSeg_DisplayDigit(const SevenSeg_ConfigType *addConfig, uint8_t digit);
 
 /**
  * @brief  Blanks the display (turns all segments off) without changing config.
  * @param  addConfig  Same configuration used at init.
- * @return STD_ReturnType  E_OK/E_NOK.
+ * @return Std_ReturnType  E_OK/E_NOK.
  */
 Std_ReturnType SevenSeg_Clear(const SevenSeg_ConfigType *addConfig);
 
@@ -108,7 +108,7 @@ Std_ReturnType SevenSeg_Clear(const SevenSeg_ConfigType *addConfig);
  * @param  enablePort   GPIO port of the enable line.
  * @param  enablePin    Pin of the enable line.
  * @param  activeLevel  Level that enables the digit (SevenSeg_EnableLevel).
- * @return STD_ReturnType  E_OK/E_NOK.
+ * @return Std_ReturnType  E_OK/E_NOK.
  */
 Std_ReturnType SevenSeg_EnableDigit(uint8_t enablePort, uint8_t enablePin,
                                     SevenSeg_EnableLevel activeLevel);
@@ -118,7 +118,7 @@ Std_ReturnType SevenSeg_EnableDigit(uint8_t enablePort, uint8_t enablePin,
  * @param  enablePort   GPIO port of the enable line.
  * @param  enablePin    Pin of the enable line.
  * @param  activeLevel  Level that enables the digit (the OFF level is the opposite).
- * @return STD_ReturnType  E_OK/E_NOK.
+ * @return Std_ReturnType  E_OK/E_NOK.
  */
 Std_ReturnType SevenSeg_DisableDigit(uint8_t enablePort, uint8_t enablePin,
                                      SevenSeg_EnableLevel activeLevel);

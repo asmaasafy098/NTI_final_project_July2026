@@ -24,7 +24,7 @@
  * ============================================================================== */
 
 /* WAVE: one coil at a time. Cheapest on current, weakest torque. */
-static const uint8_h STEPPER_WAVE_TABLE[4] =
+static const uint8_t STEPPER_WAVE_TABLE[4] =
 {
     0x01U,   /* 0001 : IN1                */
     0x02U,   /* 0010 :      IN2           */
@@ -33,7 +33,7 @@ static const uint8_h STEPPER_WAVE_TABLE[4] =
 };
 
 /* FULL: two coils at a time. Same resolution as WAVE, roughly double the torque. */
-static const uint8_h STEPPER_FULL_TABLE[4] =
+static const uint8_t STEPPER_FULL_TABLE[4] =
 {
     0x03U,   /* 0011 : IN1 + IN2 */
     0x06U,   /* 0110 : IN2 + IN3 */
@@ -42,7 +42,7 @@ static const uint8_h STEPPER_FULL_TABLE[4] =
 };
 
 /* HALF: alternates one and two coils, so each entry is half a full step. */
-static const uint8_h STEPPER_HALF_TABLE[8] =
+static const uint8_t STEPPER_HALF_TABLE[8] =
 {
     0x01U,   /* 0001 */
     0x03U,   /* 0011 */
@@ -60,15 +60,15 @@ static const uint8_h STEPPER_HALF_TABLE[8] =
  * ------------------------------------------------------------------------ */
 
 /* Number of entries in the table used by the active mode. */
-static uint8_h Stepper_TableLength(Stepper_L298P_ModeType mode)
+static uint8_t Stepper_TableLength(Stepper_L298P_ModeType mode)
 {
     return (mode == STEPPER_L298P_MODE_HALF) ? 8U : 4U;
 }
 
 /* The excitation pattern for one index of the active mode's table. */
-static uint8_h Stepper_TableEntry(Stepper_L298P_ModeType mode, uint8_h index)
+static uint8_t Stepper_TableEntry(Stepper_L298P_ModeType mode, uint8_t index)
 {
-    uint8_h local_Pattern = 0U;
+    uint8_t local_Pattern = 0U;
 
     switch (mode)
     {
@@ -82,18 +82,18 @@ static uint8_h Stepper_TableEntry(Stepper_L298P_ModeType mode, uint8_h index)
 }
 
 /* Writes one excitation nibble to the four bridge inputs. */
-static void Stepper_ApplyPattern(Stepper_L298P_HandleType *handle, uint8_h pattern)
+static void Stepper_ApplyPattern(Stepper_L298P_HandleType *handle, uint8_t pattern)
 {
-    (void)GPIO_SetPinValue(handle->in1Port, handle->in1Pin, (uint8_h)GET_BIT(pattern, 0));
-    (void)GPIO_SetPinValue(handle->in2Port, handle->in2Pin, (uint8_h)GET_BIT(pattern, 1));
-    (void)GPIO_SetPinValue(handle->in3Port, handle->in3Pin, (uint8_h)GET_BIT(pattern, 2));
-    (void)GPIO_SetPinValue(handle->in4Port, handle->in4Pin, (uint8_h)GET_BIT(pattern, 3));
+    (void)GPIO_SetPinValue(handle->in1Port, handle->in1Pin, (uint8_t)GET_BIT(pattern, 0));
+    (void)GPIO_SetPinValue(handle->in2Port, handle->in2Pin, (uint8_t)GET_BIT(pattern, 1));
+    (void)GPIO_SetPinValue(handle->in3Port, handle->in3Pin, (uint8_t)GET_BIT(pattern, 2));
+    (void)GPIO_SetPinValue(handle->in4Port, handle->in4Pin, (uint8_t)GET_BIT(pattern, 3));
 
     handle->energized = (pattern != 0U) ? 1U : 0U;
 }
 
 /* Blocking millisecond delay built from constant-argument _delay_ms(1) chunks. */
-static void Stepper_DelayMs(uint16_h ms)
+static void Stepper_DelayMs(uint16_t ms)
 {
     while (ms > 0U)
     {
@@ -107,7 +107,7 @@ static void Stepper_DelayMs(uint16_h ms)
  *  PUBLIC FUNCTIONS
  * ------------------------------------------------------------------------ */
 
-STD_ReturnType Stepper_L298P_Init(Stepper_L298P_HandleType *handle)
+Std_ReturnType Stepper_L298P_Init(Stepper_L298P_HandleType *handle)
 {
     /* STEP 1: Validate the handle, the four ports and the motor data. */
     if (handle == NULL)
@@ -168,7 +168,7 @@ STD_ReturnType Stepper_L298P_Init(Stepper_L298P_HandleType *handle)
 }
 
 
-STD_ReturnType Stepper_L298P_SetStepMode(Stepper_L298P_HandleType *handle,
+Std_ReturnType Stepper_L298P_SetStepMode(Stepper_L298P_HandleType *handle,
                                          Stepper_L298P_ModeType mode)
 {
     /* STEP 1: Validate the handle and the mode. */
@@ -194,8 +194,8 @@ STD_ReturnType Stepper_L298P_SetStepMode(Stepper_L298P_HandleType *handle,
 }
 
 
-STD_ReturnType Stepper_L298P_SetStepDelay(Stepper_L298P_HandleType *handle,
-                                          uint16_h stepDelayMs)
+Std_ReturnType Stepper_L298P_SetStepDelay(Stepper_L298P_HandleType *handle,
+                                          uint16_t stepDelayMs)
 {
     /* STEP 1: Validate the handle. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -210,10 +210,10 @@ STD_ReturnType Stepper_L298P_SetStepDelay(Stepper_L298P_HandleType *handle,
 }
 
 
-STD_ReturnType Stepper_L298P_SetSpeedRpm(Stepper_L298P_HandleType *handle, uint16_h rpm)
+Std_ReturnType Stepper_L298P_SetSpeedRpm(Stepper_L298P_HandleType *handle, uint16_t rpm)
 {
-    uint32_h local_StepsPerRev = 0UL;
-    uint32_h local_DelayMs     = 0UL;
+    uint32_t local_StepsPerRev = 0UL;
+    uint32_t local_DelayMs     = 0UL;
 
     /* STEP 1: Validate the handle and reject a zero speed. */
     if ((handle == NULL) || (handle->initialized == 0U) || (rpm == 0U))
@@ -222,7 +222,7 @@ STD_ReturnType Stepper_L298P_SetSpeedRpm(Stepper_L298P_HandleType *handle, uint1
     }
 
     /* STEP 2: Half-stepping doubles the number of steps in one revolution. */
-    local_StepsPerRev = (uint32_h)handle->stepsPerRev;
+    local_StepsPerRev = (uint32_t)handle->stepsPerRev;
 
     if (handle->stepMode == STEPPER_L298P_MODE_HALF)
     {
@@ -234,7 +234,7 @@ STD_ReturnType Stepper_L298P_SetSpeedRpm(Stepper_L298P_HandleType *handle, uint1
      *         stepsPerRev steps:
      *             delay = 60000 / (stepsPerRev * rpm)
      */
-    local_DelayMs = 60000UL / (local_StepsPerRev * (uint32_h)rpm);
+    local_DelayMs = 60000UL / (local_StepsPerRev * (uint32_t)rpm);
 
     /*
      * STEP 4: A result of 0 ms means the requested speed is faster than this
@@ -246,16 +246,16 @@ STD_ReturnType Stepper_L298P_SetSpeedRpm(Stepper_L298P_HandleType *handle, uint1
         return E_NOK;
     }
 
-    handle->stepDelayMs = (uint16_h)local_DelayMs;
+    handle->stepDelayMs = (uint16_t)local_DelayMs;
 
     return E_OK;
 }
 
 
-STD_ReturnType Stepper_L298P_Step(Stepper_L298P_HandleType *handle,
-                                  uint16_h steps, Stepper_L298P_DirType dir)
+Std_ReturnType Stepper_L298P_Step(Stepper_L298P_HandleType *handle,
+                                  uint16_t steps, Stepper_L298P_DirType dir)
 {
-    uint16_h local_Step = 0U;
+    uint16_t local_Step = 0U;
 
     /* STEP 1: Validate the handle and the direction. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -283,10 +283,10 @@ STD_ReturnType Stepper_L298P_Step(Stepper_L298P_HandleType *handle,
 }
 
 
-STD_ReturnType Stepper_L298P_StepOnce(Stepper_L298P_HandleType *handle,
+Std_ReturnType Stepper_L298P_StepOnce(Stepper_L298P_HandleType *handle,
                                       Stepper_L298P_DirType dir)
 {
-    uint8_h local_Length = 0U;
+    uint8_t local_Length = 0U;
 
     /* STEP 1: Validate the handle and the direction. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -308,12 +308,12 @@ STD_ReturnType Stepper_L298P_StepOnce(Stepper_L298P_HandleType *handle,
      */
     if (dir == STEPPER_L298P_DIR_CW)
     {
-        handle->phaseIndex = (uint8_h)((handle->phaseIndex + 1U) % local_Length);
+        handle->phaseIndex = (uint8_t)((handle->phaseIndex + 1U) % local_Length);
         handle->position++;
     }
     else
     {
-        handle->phaseIndex = (uint8_h)((handle->phaseIndex + local_Length - 1U) % local_Length);
+        handle->phaseIndex = (uint8_t)((handle->phaseIndex + local_Length - 1U) % local_Length);
         handle->position--;
     }
 
@@ -324,11 +324,11 @@ STD_ReturnType Stepper_L298P_StepOnce(Stepper_L298P_HandleType *handle,
 }
 
 
-STD_ReturnType Stepper_L298P_RotateAngle(Stepper_L298P_HandleType *handle,
-                                         uint16_h degrees, Stepper_L298P_DirType dir)
+Std_ReturnType Stepper_L298P_RotateAngle(Stepper_L298P_HandleType *handle,
+                                         uint16_t degrees, Stepper_L298P_DirType dir)
 {
-    uint32_h local_StepsPerRev = 0UL;
-    uint32_h local_Steps       = 0UL;
+    uint32_t local_StepsPerRev = 0UL;
+    uint32_t local_Steps       = 0UL;
 
     /* STEP 1: Validate the handle. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -337,7 +337,7 @@ STD_ReturnType Stepper_L298P_RotateAngle(Stepper_L298P_HandleType *handle,
     }
 
     /* STEP 2: Half-stepping doubles the steps in one revolution. */
-    local_StepsPerRev = (uint32_h)handle->stepsPerRev;
+    local_StepsPerRev = (uint32_t)handle->stepsPerRev;
 
     if (handle->stepMode == STEPPER_L298P_MODE_HALF)
     {
@@ -348,14 +348,14 @@ STD_ReturnType Stepper_L298P_RotateAngle(Stepper_L298P_HandleType *handle,
      * STEP 3: steps = degrees * stepsPerRev / 360. The multiply happens first,
      *         in 32-bit, so the division loses as little as possible.
      */
-    local_Steps = ((uint32_h)degrees * local_StepsPerRev) / 360UL;
+    local_Steps = ((uint32_t)degrees * local_StepsPerRev) / 360UL;
 
     /* STEP 4: Hand the step count to the blocking stepper. */
-    return Stepper_L298P_Step(handle, (uint16_h)local_Steps, dir);
+    return Stepper_L298P_Step(handle, (uint16_t)local_Steps, dir);
 }
 
 
-STD_ReturnType Stepper_L298P_Hold(Stepper_L298P_HandleType *handle)
+Std_ReturnType Stepper_L298P_Hold(Stepper_L298P_HandleType *handle)
 {
     /* STEP 1: Validate the handle. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -377,7 +377,7 @@ STD_ReturnType Stepper_L298P_Hold(Stepper_L298P_HandleType *handle)
 }
 
 
-STD_ReturnType Stepper_L298P_Release(Stepper_L298P_HandleType *handle)
+Std_ReturnType Stepper_L298P_Release(Stepper_L298P_HandleType *handle)
 {
     /* STEP 1: Validate the handle. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -405,7 +405,7 @@ STD_ReturnType Stepper_L298P_Release(Stepper_L298P_HandleType *handle)
 }
 
 
-STD_ReturnType Stepper_L298P_GetPosition(const Stepper_L298P_HandleType *handle,
+Std_ReturnType Stepper_L298P_GetPosition(const Stepper_L298P_HandleType *handle,
                                          sint32 *pPosition)
 {
     /* STEP 1: Validate the handle and the output pointer. */
@@ -421,7 +421,7 @@ STD_ReturnType Stepper_L298P_GetPosition(const Stepper_L298P_HandleType *handle,
 }
 
 
-STD_ReturnType Stepper_L298P_ResetPosition(Stepper_L298P_HandleType *handle)
+Std_ReturnType Stepper_L298P_ResetPosition(Stepper_L298P_HandleType *handle)
 {
     /* STEP 1: Validate the handle. */
     if ((handle == NULL) || (handle->initialized == 0U))
@@ -437,8 +437,8 @@ STD_ReturnType Stepper_L298P_ResetPosition(Stepper_L298P_HandleType *handle)
 }
 
 
-STD_ReturnType Stepper_L298P_GetStepsPerRev(const Stepper_L298P_HandleType *handle,
-                                            uint16_h *pStepsPerRev)
+Std_ReturnType Stepper_L298P_GetStepsPerRev(const Stepper_L298P_HandleType *handle,
+                                            uint16_t *pStepsPerRev)
 {
     /* STEP 1: Validate the handle and the output pointer. */
     if ((handle == NULL) || (handle->initialized == 0U) || (pStepsPerRev == NULL))
@@ -449,7 +449,7 @@ STD_ReturnType Stepper_L298P_GetStepsPerRev(const Stepper_L298P_HandleType *hand
     /* STEP 2: Report the steps per revolution IN THE ACTIVE MODE. */
     if (handle->stepMode == STEPPER_L298P_MODE_HALF)
     {
-        *pStepsPerRev = (uint16_h)(handle->stepsPerRev * 2U);
+        *pStepsPerRev = (uint16_t)(handle->stepsPerRev * 2U);
     }
     else
     {
