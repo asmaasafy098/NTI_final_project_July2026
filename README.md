@@ -1270,12 +1270,12 @@ DataManager   |   Complete
 
 PIController  |   Complete
 
-RampGenerator   |   TIMER            
+RampGenerator   |   Complete            
 
 
-Protection   |   Pending
+Protection   |   Complete
 
-DriveFSM     |   Pending
+DriveFSM     |   Complete
 
 Scheduler    |    Pending
 
@@ -1290,9 +1290,9 @@ Asmaa (drivers)
 
 TIMER      |      Complete
 
-Interrupt    |    Pending
+Interrupt    |    Complete
 
-USART       |     Pending
+USART       |     Complete
 
 Tachometer    |   Pending
 
