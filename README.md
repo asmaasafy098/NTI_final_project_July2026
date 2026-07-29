@@ -1260,6 +1260,7 @@ Summary
 | **MCL Layer** | Pending | 
 
 | **HAL Layer** | Pending |
+
 ================================================
 
 Shorouk (Modules)
