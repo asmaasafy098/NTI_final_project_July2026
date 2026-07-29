@@ -49,14 +49,6 @@ EEPROM.
 
 ---
 
-## 3. Hardware Design
-
-![Hardware Design]("C:\Users\ALROAD LAPTOP\Desktop\NTI_2026\Final_Project_Shorouk\image.png")
-
-The block diagram above shows the core hardware architecture for the motor controller.
-The ATmega32A hosts the ADC inputs, PWM motor drive, operator panel controls, and
-communications with SPI EEPROM and UART.
-
 ## 4. Objectives
 
 1. Generate a 20 kHz PWM with Timer1 Fast PWM using `ICR1` as TOP.
