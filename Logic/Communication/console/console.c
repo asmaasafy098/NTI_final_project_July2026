@@ -4,13 +4,13 @@
  */
 
 #include "console.h"
-//#include "usart.h"
-#include "drive_fsm.h"
-#include "protection.h"
-#include "data_manager.h"
-#include "pi_controller.h"
-#include "ramp_generator.h"
-#include "util_math.h"
+#include "../../../MCL/UART/uart_interface.h"
+#include "../../Control/drive_fsm/drive_fsm.h"
+#include "../../Control/protection/protection.h"
+#include "../../Data/data_manager.h"
+#include "../../Control/pi_controller/pi_controller.h"
+#include "../../Control/ramp_generator/ramp_generator.h"
+#include "../../../Service/util_math.h"
 #include <string.h>
 #include <stdlib.h>
 
