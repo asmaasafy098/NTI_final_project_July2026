@@ -218,23 +218,35 @@ typedef sint16_t sint16;
 typedef sint32_t sint32;
 typedef sint64_t sint64;
 
+typedef int8_t s8;
+typedef int16_t s16;
+typedef int32_t s32;
+typedef int64_t s64;
 
-typedef uint8_t uint8_h;
-typedef uint16_t uint16_h;
-typedef uint32_t uint32_h;
-typedef uint64_t uint64_h;
+
+typedef uint8_t uint8;
+typedef uint16_t uint16;
+typedef uint32_t uint32;
+typedef uint64_t uint64;
+
+
+typedef uint8_t u8;
+typedef uint16_t u16;
+typedef uint32_t u32;
+typedef uint64_t u64;
 
 
 typedef float float32_t;
 typedef double float64_t;
+typedef float f32;
+typedef double f64;
 
 
 typedef enum {
     FALSE = 0,
     TRUE = 1
 } bool_t;
-
-
+# 55 "Src/../Service/STD_Types.h"
 typedef enum {
     E_OK = 0,
     E_NOK,
@@ -936,7 +948,7 @@ uint8_t TELEMETRY_IsEnabled(void);
 
 # 1 "Src/../MCL/GPIO/../../Service/STD_Types.h" 1
 # 5 "Src/../MCL/GPIO/GPIO_Interface.h" 2
-# 27 "Src/../MCL/GPIO/GPIO_Interface.h"
+# 30 "Src/../MCL/GPIO/GPIO_Interface.h"
 typedef unsigned char GPIO_pin_status;
 typedef unsigned char GPIO_port_status;
 
@@ -1325,6 +1337,66 @@ Std_ReturnType I2C_Stop(void);
 
 Std_ReturnType I2C_WriteByte(uint8_t data);
 # 30 "Src/main.c" 2
+# 1 "Src/../HAL/UserPanel/UserPanel.h" 1
+# 10 "Src/../HAL/UserPanel/UserPanel.h"
+# 1 "Src/../Service/STD_Types.h" 1
+# 11 "Src/../HAL/UserPanel/UserPanel.h" 2
+# 1 "Src/../Logic/Data/data_types.h" 1
+# 12 "Src/../HAL/UserPanel/UserPanel.h" 2
+
+
+typedef enum {
+    PNL_NONE = 0,
+    PNL_START,
+    PNL_STOP,
+    PNL_REVERSE,
+    PNL_RESET
+} Panel_Event_t;
+
+
+
+
+
+
+
+Std_ReturnType PANEL_Init(void);
+
+
+
+
+void PANEL_Poll(void);
+
+
+
+
+
+Panel_Event_t PANEL_GetEvent(void);
+
+
+
+
+
+uint8_t PANEL_IsLocalMode(void);
+
+
+
+
+
+
+void PANEL_SetRunLED(uint8_t state, uint8_t blink);
+
+
+
+
+
+void PANEL_SetFaultLED(uint8_t state);
+
+
+
+
+
+void PANEL_SetDirectionLEDs(MotorDir_t dir);
+# 31 "Src/main.c" 2
 
 
 # 1 "Src/../HAL/DC_Motor/dc_motor.h" 1
@@ -1409,14 +1481,14 @@ Std_ReturnType DC_Motor_GetState(const DC_MotorHandleType *handle, DC_MotorState
 Std_ReturnType DC_Motor_GetSpeed(const DC_MotorHandleType *handle, uint8_t *pSpeed);
 # 264 "Src/../HAL/DC_Motor/dc_motor.h"
 Std_ReturnType DC_Motor_DeInit(DC_MotorHandleType *handle);
-# 33 "Src/main.c" 2
+# 34 "Src/main.c" 2
 # 1 "Src/../HAL/Tachometer/Tachometer.h" 1
 # 10 "Src/../HAL/Tachometer/Tachometer.h"
 void TACHO_Init(void);
 void TACHO_Update(void);
 void TACHO_PulseISR(void);
 int16_t TACHO_GetRPM(void);
-# 34 "Src/main.c" 2
+# 35 "Src/main.c" 2
 # 1 "Src/../HAL/ANALOG_SENSOR/ANALOG_SENSOR.h" 1
 
 
@@ -1441,7 +1513,7 @@ uint16_t ANALOG_GetSetpoint(void);
 uint16_t ANALOG_GetCurrent(void);
 uint16_t ANALOG_GetBusVoltage(void);
 uint8_t ANALOG_GetTemperature(void);
-# 35 "Src/main.c" 2
+# 36 "Src/main.c" 2
 # 1 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h" 1
 
 
@@ -1450,7 +1522,12 @@ uint8_t ANALOG_GetTemperature(void);
 # 5 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h" 2
 # 1 "Src/../HAL/LCD_Aip31068_i2c/../../MCL/I2C/i2c_interface.h" 1
 # 6 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h" 2
-# 101 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
+# 1 "Src/../HAL/LCD_Aip31068_i2c/../../Logic/Data/data_types.h" 1
+# 7 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h" 2
+
+void LCD_Update(const DriveData_t *data);
+void LCD_ShowTrip(Trip_t trip);
+# 105 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
 typedef struct
 {
 
@@ -1465,9 +1542,9 @@ typedef struct
     uint8_t cursorRow;
     uint8_t cursorCol;
 } LCD_Aip31068_HandleType;
-# 132 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
+# 136 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
 Std_ReturnType LCD_Aip31068_Init(LCD_Aip31068_HandleType *handle);
-# 141 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
+# 145 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
 Std_ReturnType LCD_Aip31068_SendCommand(LCD_Aip31068_HandleType *handle, uint8_t command);
 
 
@@ -1477,15 +1554,15 @@ Std_ReturnType LCD_Aip31068_SendCommand(LCD_Aip31068_HandleType *handle, uint8_t
 
 
 Std_ReturnType LCD_Aip31068_WriteChar(LCD_Aip31068_HandleType *handle, uint8_t character);
-# 161 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
+# 165 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
 Std_ReturnType LCD_Aip31068_WriteString(LCD_Aip31068_HandleType *handle, const uint8_t *pString);
-# 171 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
+# 175 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
 Std_ReturnType LCD_Aip31068_WriteStringAt(LCD_Aip31068_HandleType *handle,
                                           uint8_t row, uint8_t column,
                                           const uint8_t *pString);
-# 183 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
+# 187 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
 Std_ReturnType LCD_Aip31068_WriteNumber(LCD_Aip31068_HandleType *handle, sint32 number);
-# 193 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
+# 197 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
 Std_ReturnType LCD_Aip31068_SetCursor(LCD_Aip31068_HandleType *handle,
                                       uint8_t row, uint8_t column);
 
@@ -1527,12 +1604,12 @@ Std_ReturnType LCD_Aip31068_CursorOnOff(LCD_Aip31068_HandleType *handle, uint8_t
 
 
 Std_ReturnType LCD_Aip31068_BlinkOnOff(LCD_Aip31068_HandleType *handle, uint8_t on);
-# 242 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
+# 246 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
 Std_ReturnType LCD_Aip31068_ShiftDisplay(LCD_Aip31068_HandleType *handle, uint8_t toRight);
-# 252 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
+# 256 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
 Std_ReturnType LCD_Aip31068_CreateCustomChar(LCD_Aip31068_HandleType *handle,
                                              uint8_t location, const uint8_t *pPattern);
-# 36 "Src/main.c" 2
+# 37 "Src/main.c" 2
 # 1 "Src/../HAL/BUZZER/BUZZER.h" 1
 
 
@@ -1561,7 +1638,7 @@ extern uint16_t Buzzer_TickCounter;
 Std_ReturnType BUZZER_Init(void);
 Std_ReturnType BUZZER_SetMode(Buzzer_Mode_t mode);
 void BUZZER_Update(void);
-# 37 "Src/main.c" 2
+# 38 "Src/main.c" 2
 # 1 "Src/../HAL/Stepper_L298P/Stepper_L298P.h" 1
 
 
@@ -1654,7 +1731,26 @@ Std_ReturnType Stepper_L298P_ResetPosition(Stepper_L298P_HandleType *handle);
 # 286 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
 Std_ReturnType Stepper_L298P_GetStepsPerRev(const Stepper_L298P_HandleType *handle,
                                             uint16_t *pStepsPerRev);
-# 38 "Src/main.c" 2
+# 39 "Src/main.c" 2
+# 1 "Src/../HAL/MotorBridge/MotorBridge.h" 1
+
+
+
+# 1 "Src/../HAL/MotorBridge/../../Service/STD_Types.h" 1
+# 5 "Src/../HAL/MotorBridge/MotorBridge.h" 2
+# 1 "Src/../HAL/MotorBridge/../../Logic/Data/data_types.h" 1
+# 6 "Src/../HAL/MotorBridge/MotorBridge.h" 2
+# 1 "Src/../HAL/MotorBridge/../../MCL/Timer/timer_interface.h" 1
+# 7 "Src/../HAL/MotorBridge/MotorBridge.h" 2
+
+Std_ReturnType BRIDGE_Init(void);
+Std_ReturnType BRIDGE_SetDirection(MotorDir_t dir);
+Std_ReturnType BRIDGE_SetDuty(uint16_t duty_percent);
+Std_ReturnType BRIDGE_Enable(void);
+Std_ReturnType BRIDGE_Disable(void);
+void BRIDGE_ForceStop(void);
+# 40 "Src/main.c" 2
+
 
 
 DriveData_t g_driveData;
@@ -1699,9 +1795,6 @@ int main(void)
         .parity = UART_PARITY_NONE,
         .stopBits = UART_STOP_1BIT
     };
-    I2C_MasterConfigType i2cCfg = {
-        .sclFrequency = 100000UL
-    };
 
     ADC_Init(&adcCfg);
     Timer0_Init();
@@ -1710,30 +1803,48 @@ int main(void)
     EXTI_Init(&extiCfg1);
     EXTI_Init(&extiCfg0);
     UART_Init(&uartCfg);
-    I2C_InitMaster(&i2cCfg);
+
+       I2C_Init();
+
 
 
     TACHO_Init();
     ANALOG_Init();
     PANEL_Init();
     BUZZER_Init();
-    EEPROM_Init();
-    TRIPLOG_Init();
 
 
-    if (!EEPROM_LoadConfig(&g_driveCfg)) {
 
-        EEPROM_LoadDefaults(&g_driveCfg);
-        EEPROM_SaveConfig(&g_driveCfg);
-    }
+g_driveCfg.magic = 0x4D44;
+g_driveCfg.version = 0x01;
 
+g_driveCfg.maxRpm = 3000;
+g_driveCfg.minRpm = 200;
 
-    Trip_t latchedTrip = EEPROM_LoadLatchTrip();
-    if (latchedTrip != TRIP_NONE) {
-        g_driveCfg.latchedTrip = latchedTrip;
-        g_driveData.activeTrip = latchedTrip;
-        FSM_RequestTrip(latchedTrip);
-    }
+g_driveCfg.accelRpmPerSec = 600;
+g_driveCfg.decelRpmPerSec = 900;
+
+g_driveCfg.deadTimeMs = 500;
+
+g_driveCfg.kp = 384;
+g_driveCfg.ki = 26;
+
+g_driveCfg.ratedCurrentmA = 8000;
+g_driveCfg.shortTripmA = 18000;
+
+g_driveCfg.overTempC = 110;
+g_driveCfg.underVoltmV = 20000;
+g_driveCfg.overVoltmV = 55000;
+
+g_driveCfg.stallSec = 3;
+
+g_driveCfg.totalRunSec = 0;
+g_driveCfg.startCount = 0;
+
+g_driveCfg.tripHead = 0;
+g_driveCfg.latchedTrip = TRIP_NONE;
+
+g_driveCfg.checksum = 0;
 
 
     DataManager_Init(&g_driveData, &g_driveCfg);
@@ -1763,9 +1874,9 @@ int main(void)
 
 
     
-# 145 "Src/main.c" 3
+# 163 "Src/main.c" 3
    __asm__ __volatile__ ("sei" ::: "memory")
-# 145 "Src/main.c"
+# 163 "Src/main.c"
         ;
 
 
@@ -1790,30 +1901,35 @@ int main(void)
 void Task_Panel(void)
 {
     PANEL_Poll();
-    PanelEvent_t event = PANEL_GetEvent();
+    Panel_Event_t event = PANEL_GetEvent();
 
-    switch (event) {
-        case EVENT_START_PRESSED:
-            if (!FSM_RequestStart()) {
-                CONSOLE_SendError("ERR START");
-            }
-            break;
-        case EVENT_STOP_PRESSED:
-            FSM_RequestStop();
-            break;
-        case EVENT_REVERSE_PRESSED:
-            if (!FSM_RequestReverse()) {
-                CONSOLE_SendError("ERR REV");
-            }
-            break;
-        case EVENT_RESET_PRESSED:
-            if (!FSM_RequestReset()) {
-                CONSOLE_SendError("ERR ACTIVE");
-            }
-            break;
-        default:
-            break;
-    }
+    switch (event)
+{
+    case PNL_START:
+        if (!FSM_RequestStart()) {
+            CONSOLE_SendError("ERR START");
+        }
+        break;
+
+    case PNL_STOP:
+        FSM_RequestStop();
+        break;
+
+    case PNL_REVERSE:
+        if (!FSM_RequestReverse()) {
+            CONSOLE_SendError("ERR REV");
+        }
+        break;
+
+    case PNL_RESET:
+        if (!FSM_RequestReset()) {
+            CONSOLE_SendError("ERR ACTIVE");
+        }
+        break;
+
+    default:
+        break;
+}
 
 
     DriveState_t state = FSM_GetState();
@@ -1971,55 +2087,55 @@ void Task_Telemetry(void)
 
 
 
-# 349 "Src/main.c" 3
+# 372 "Src/main.c" 3
 void __vector_1 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_1 (void)
 
-# 350 "Src/main.c"
+# 373 "Src/main.c"
 {
 
-    TACHO_OnPulse();
+    TACHO_PulseISR();
 }
-# 363 "Src/main.c"
+# 386 "Src/main.c"
 
-# 363 "Src/main.c" 3
+# 386 "Src/main.c" 3
 void __vector_2 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_2 (void)
 
-# 364 "Src/main.c"
+# 387 "Src/main.c"
 {
 
     
-# 366 "Src/main.c" 3
+# 389 "Src/main.c" 3
    (*(volatile uint16_t *)((0x2A) + 0x20)) 
-# 366 "Src/main.c"
+# 389 "Src/main.c"
          = 0;
 
 
     ((
-# 369 "Src/main.c" 3
+# 392 "Src/main.c" 3
    (*(volatile uint8_t *)((0x18) + 0x20))
-# 369 "Src/main.c"
+# 392 "Src/main.c"
    ) &= ~(1 << (
-# 369 "Src/main.c" 3
+# 392 "Src/main.c" 3
    2
-# 369 "Src/main.c"
+# 392 "Src/main.c"
    )));
     ((
-# 370 "Src/main.c" 3
+# 393 "Src/main.c" 3
    (*(volatile uint8_t *)((0x18) + 0x20))
-# 370 "Src/main.c"
+# 393 "Src/main.c"
    ) &= ~(1 << (
-# 370 "Src/main.c" 3
+# 393 "Src/main.c" 3
    1
-# 370 "Src/main.c"
+# 393 "Src/main.c"
    )));
     ((
-# 371 "Src/main.c" 3
+# 394 "Src/main.c" 3
    (*(volatile uint8_t *)((0x18) + 0x20))
-# 371 "Src/main.c"
+# 394 "Src/main.c"
    ) &= ~(1 << (
-# 371 "Src/main.c" 3
+# 394 "Src/main.c" 3
    0
-# 371 "Src/main.c"
+# 394 "Src/main.c"
    )));
 
 
@@ -2032,15 +2148,15 @@ void __vector_2 (void) __attribute__ ((signal,used, externally_visible)) ; void 
 
 
 
-# 382 "Src/main.c" 3
+# 405 "Src/main.c" 3
 void __vector_13 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_13 (void)
 
-# 383 "Src/main.c"
+# 406 "Src/main.c"
 {
     uint8_t ch = 
-# 384 "Src/main.c" 3
+# 407 "Src/main.c" 3
                 (*(volatile uint8_t *)((0x0C) + 0x20))
-# 384 "Src/main.c"
+# 407 "Src/main.c"
                    ;
     CONSOLE_ProcessChar(ch);
 }

@@ -22,16 +22,14 @@ Task_Panel:
 .L__stack_usage = 0
 	call PANEL_Poll
 	call PANEL_GetEvent
-	cpi r24,3
+	cpi r24,2
 	cpc r25,__zero_reg__
-	brne .+2
-	rjmp .L3
-	brge .L4
+	breq .L3
+	brsh .L4
 	sbiw r24,1
 	breq .L5
 .L2:
 	call FSM_GetState
-	ldi r23,0
 	ldi r22,0
 	cpi r24,3
 	cpc r25,__zero_reg__
@@ -43,35 +41,32 @@ Task_Panel:
 	brne .L13
 .L12:
 	ldi r22,lo8(1)
-	ldi r23,0
 .L25:
 	ldi r24,lo8(1)
-	ldi r25,0
 .L22:
 	call PANEL_SetRunLED
 	call FSM_IsTripped
 	tst r24
 	breq .L14
 	ldi r24,lo8(1)
-	ldi r25,0
 .L23:
 	call PANEL_SetFaultLED
 	call FSM_GetDirection
 	call PANEL_SetDirectionLEDs
 	call PANEL_IsLocalMode
-	lds r18,g_driveData+26
-	or r24,r25
+	lds r25,g_driveData+26
+	tst r24
 	breq .L16
-	andi r18,lo8(~(1<<0))
+	andi r25,lo8(~(1<<0))
 .L24:
-	sts g_driveData+26,r18
+	sts g_driveData+26,r25
 /* epilogue start */
 	ret
 .L4:
-	cpi r24,4
+	cpi r24,3
 	cpc r25,__zero_reg__
 	breq .L6
-	sbiw r24,5
+	sbiw r24,4
 	brne .L2
 	call FSM_RequestReset
 	cpse r24,__zero_reg__
@@ -99,17 +94,14 @@ Task_Panel:
 	ldi r25,hi8(.LC3)
 	rjmp .L21
 .L13:
-	ldi r23,0
 	ldi r22,0
-	ldi r25,0
 	ldi r24,0
 	rjmp .L22
 .L14:
-	ldi r25,0
 	ldi r24,0
 	rjmp .L23
 .L16:
-	ori r18,lo8(1<<0)
+	ori r25,lo8(1<<0)
 	rjmp .L24
 	.size	Task_Panel, .-Task_Panel
 .global	Task_SlowSensors
@@ -334,35 +326,36 @@ main:
 	push r29
 	in r28,__SP_L__
 	in r29,__SP_H__
-	sbiw r28,24
+	sbiw r28,20
 	in __tmp_reg__,__SREG__
 	cli
 	out __SP_H__,r29
 	out __SREG__,__tmp_reg__
 	out __SP_L__,r28
 /* prologue: function */
-/* frame size = 24 */
-/* stack size = 26 */
-.L__stack_usage = 26
+/* frame size = 20 */
+/* stack size = 22 */
+.L__stack_usage = 22
 	call BRIDGE_Init
-	ldi r24,lo8(1)
-	std Y+23,r24
+	clr r15
+	inc r15
+	std Y+19,r15
 	ldi r24,lo8(7)
-	std Y+24,r24
+	std Y+20,r24
 	lds r24,.LC0
 	lds r25,.LC0+1
 	lds r26,.LC0+2
 	lds r27,.LC0+3
-	std Y+19,r24
-	std Y+20,r25
-	std Y+21,r26
-	std Y+22,r27
-	std Y+16,__zero_reg__
-	std Y+15,__zero_reg__
-	ldi r24,lo8(3)
-	ldi r25,0
-	std Y+18,r25
-	std Y+17,r24
+	std Y+15,r24
+	std Y+16,r25
+	std Y+17,r26
+	std Y+18,r27
+	std Y+12,__zero_reg__
+	std Y+11,__zero_reg__
+	ldi r16,lo8(3)
+	ldi r17,0
+	std Y+14,r17
+	std Y+13,r16
 	ldi r24,lo8(10)
 	ldi r30,lo8(.LC1)
 	ldi r31,hi8(.LC1)
@@ -373,59 +366,89 @@ main:
 	st X+,r0
 	dec r24
 	brne 0b
-	ldi r24,lo8(-96)
-	ldi r25,lo8(-122)
-	ldi r26,lo8(1)
-	ldi r27,0
-	std Y+11,r24
-	std Y+12,r25
-	std Y+13,r26
-	std Y+14,r27
 	movw r24,r28
-	adiw r24,23
+	adiw r24,19
 	call ADC_Init
 	call Timer0_Init
 	call Timer1_Init
 	call Timer2_Init
 	movw r24,r28
-	adiw r24,19
+	adiw r24,15
 	call EXTI_Init
 	movw r24,r28
-	adiw r24,15
+	adiw r24,11
 	call EXTI_Init
 	movw r24,r28
 	adiw r24,1
 	call UART_Init
-	movw r24,r28
-	adiw r24,11
-	call I2C_InitMaster
+	call I2C_Init
 	call TACHO_Init
 	call ANALOG_Init
 	call PANEL_Init
 	call BUZZER_Init
-	call EEPROM_Init
-	call TRIPLOG_Init
-	ldi r24,lo8(g_driveCfg)
-	ldi r25,hi8(g_driveCfg)
-	call EEPROM_LoadConfig
-	or r24,r25
-	brne .L43
-	ldi r24,lo8(g_driveCfg)
-	ldi r25,hi8(g_driveCfg)
-	call EEPROM_LoadDefaults
-	ldi r24,lo8(g_driveCfg)
-	ldi r25,hi8(g_driveCfg)
-	call EEPROM_SaveConfig
-.L43:
-	call EEPROM_LoadLatchTrip
-	sbiw r24,0
-	breq .L44
-	sts g_driveCfg+35+1,r25
-	sts g_driveCfg+35,r24
-	sts g_driveData+24+1,r25
-	sts g_driveData+24,r24
-	call FSM_RequestTrip
-.L44:
+	ldi r24,lo8(68)
+	ldi r25,lo8(77)
+	sts g_driveCfg+1,r25
+	sts g_driveCfg,r24
+	sts g_driveCfg+2,r15
+	ldi r24,lo8(-72)
+	ldi r25,lo8(11)
+	sts g_driveCfg+3+1,r25
+	sts g_driveCfg+3,r24
+	ldi r24,lo8(-56)
+	ldi r25,0
+	sts g_driveCfg+5+1,r25
+	sts g_driveCfg+5,r24
+	ldi r24,lo8(88)
+	ldi r25,lo8(2)
+	sts g_driveCfg+7+1,r25
+	sts g_driveCfg+7,r24
+	ldi r24,lo8(-124)
+	ldi r25,lo8(3)
+	sts g_driveCfg+9+1,r25
+	sts g_driveCfg+9,r24
+	ldi r24,lo8(-12)
+	ldi r25,lo8(1)
+	sts g_driveCfg+11+1,r25
+	sts g_driveCfg+11,r24
+	ldi r24,lo8(-128)
+	ldi r25,lo8(1)
+	sts g_driveCfg+13+1,r25
+	sts g_driveCfg+13,r24
+	ldi r24,lo8(26)
+	ldi r25,0
+	sts g_driveCfg+15+1,r25
+	sts g_driveCfg+15,r24
+	ldi r24,lo8(64)
+	ldi r25,lo8(31)
+	sts g_driveCfg+17+1,r25
+	sts g_driveCfg+17,r24
+	ldi r24,lo8(80)
+	ldi r25,lo8(70)
+	sts g_driveCfg+19+1,r25
+	sts g_driveCfg+19,r24
+	ldi r24,lo8(110)
+	sts g_driveCfg+21,r24
+	ldi r24,lo8(32)
+	ldi r25,lo8(78)
+	sts g_driveCfg+22+1,r25
+	sts g_driveCfg+22,r24
+	ldi r24,lo8(-40)
+	ldi r25,lo8(-42)
+	sts g_driveCfg+24+1,r25
+	sts g_driveCfg+24,r24
+	sts g_driveCfg+26+1,r17
+	sts g_driveCfg+26,r16
+	sts g_driveCfg+28,__zero_reg__
+	sts g_driveCfg+28+1,__zero_reg__
+	sts g_driveCfg+28+2,__zero_reg__
+	sts g_driveCfg+28+3,__zero_reg__
+	sts g_driveCfg+32+1,__zero_reg__
+	sts g_driveCfg+32,__zero_reg__
+	sts g_driveCfg+34,__zero_reg__
+	sts g_driveCfg+35+1,__zero_reg__
+	sts g_driveCfg+35,__zero_reg__
+	sts g_driveCfg+37,__zero_reg__
 	ldi r22,lo8(g_driveCfg)
 	ldi r23,hi8(g_driveCfg)
 	ldi r24,lo8(g_driveData)
@@ -527,17 +550,17 @@ main:
 	ldi r25,hi8(gs(Task_Telemetry))
 	call SCHED_AddTask
 /* #APP */
- ;  145 "Src/main.c" 1
+ ;  163 "Src/main.c" 1
 	sei
  ;  0 "" 2
 /* #NOAPP */
-.L45:
+.L43:
 	call SCHED_Run
 	call CONSOLE_IsCommandReady
 	tst r24
-	breq .L45
+	breq .L43
 	call CONSOLE_ExecuteCommand
-	rjmp .L45
+	rjmp .L43
 	.size	main, .-main
 	.text
 .global	__vector_1
@@ -564,7 +587,7 @@ __vector_1:
 /* frame size = 0 */
 /* stack size = 15 */
 .L__stack_usage = 15
-	call TACHO_OnPulse
+	call TACHO_PulseISR
 /* epilogue start */
 	pop r31
 	pop r30

@@ -3,7 +3,7 @@
 #include <avr/interrupt.h>
 #include "timer_registers.h"
 #include "timer_interface.h"
-#include "../GPIO/GPIO_Interface.h"
+#include "../GPIO/GPIO_interface.h"
 
 /* ==================================================================================================== */
 /* ====================== GLOBAL CALLBACK POINTER ===================================================== */

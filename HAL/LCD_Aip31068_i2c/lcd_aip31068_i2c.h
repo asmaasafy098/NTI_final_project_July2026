@@ -3,6 +3,10 @@
 
 #include "../../Service/STD_Types.h"
 #include "../../MCL/I2C/i2c_interface.h"
+#include "../../Logic/Data/data_types.h"
+
+void LCD_Update(const DriveData_t *data);
+void LCD_ShowTrip(Trip_t trip);
 
 /* ================================================================================
  *  AiP31068 CHARACTER LCD DRIVER - PUBLIC INTERFACE (HAL, native I2C)
