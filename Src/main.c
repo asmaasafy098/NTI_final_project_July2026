@@ -7,7 +7,6 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
-
 #include "../Service/STD_Types.h"
 #include "../Service/Bit_Math.h"
 #include "../Logic/Data/data_types.h"
@@ -38,10 +37,6 @@
 #include "../HAL/Stepper_L298P/Stepper_L298P.h" 
 #include "../HAL/MotorBridge/MotorBridge.h"
 #include "../HAL/UserPanel/UserPanel.h"
-<<<<<<< HEAD
-=======
-
->>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 /* ==================== Global Variables ==================== */
 DriveData_t g_driveData;
 DriveCfg_t g_driveCfg;
@@ -85,6 +80,7 @@ int main(void)
         .parity = UART_PARITY_NONE,
         .stopBits = UART_STOP_1BIT
     };
+    I2C_MasterConfigType i2cCfg = { I2C_SCL_100KHZ };  /* per lcd_aip31068_i2c.h usage example */
 
     ADC_Init(&adcCfg);
     Timer0_Init();
@@ -93,13 +89,9 @@ int main(void)
     EXTI_Init(&extiCfg1);
     EXTI_Init(&extiCfg0);
     UART_Init(&uartCfg);
-    //I2C_InitMaster(&i2cCfg);  /* For LCD */
-    //LCD_InitDefault();  
+    I2C_InitMaster(&i2cCfg);  /* For LCD */
+    LCD_InitDefault();  
     PANEL_Init();
-
-  while (1) {
-    PANEL_SetRunLED(1, 0);   /* أشعل الـ LED يدويًا بالقوة */
-  }      
     /* ===== STEP 3: Initialize HAL ===== */
     TACHO_Init();   /* Tacho measurement */
     ANALOG_Init();  /* 4 ADC channels */
@@ -368,7 +360,6 @@ void Task_Telemetry(void)
     /* Send telemetry */
     TELEMETRY_Update(&g_driveData);
 }
-<<<<<<< HEAD
 
 /* ==================== Interrupt Service Routines ==================== */
 
@@ -414,5 +405,3 @@ ISR(USART_RXC_vect)
     uint8_t ch = UDR;
     CONSOLE_ProcessChar(ch);
 }
-=======
->>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f

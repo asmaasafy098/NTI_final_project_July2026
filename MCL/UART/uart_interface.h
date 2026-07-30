@@ -41,7 +41,7 @@
  *  them with a -D build flag or a #define before including this header.
  * ------------------------------------------------------------------------- */
 #ifndef UART_TX_BUF_SIZE
-  #define UART_TX_BUF_SIZE   64U
+  #define UART_TX_BUF_SIZE   128U
 #endif
 #ifndef UART_RX_BUF_SIZE
   #define UART_RX_BUF_SIZE   64U

@@ -1,10 +1,13 @@
+#include <stdio.h>
 #include "../../Service/STD_Types.h"
 #include "../../Logic/Data/data_types.h"
-#include "lcd_aip31068_i2c.h" 
-static LCD_Aip31068_HandleType g_lcdHandle;   
+#include "lcd_aip31068_i2c.h"
 
-/* في lcd_aip31068_i2c.c */
+/* g_driveData is the single global drive-state struct owned by main.c;
+ * LCD_ShowTrip() needs it to redraw the normal dashboard between blinks. */
+extern DriveData_t g_driveData;
 
+static LCD_Aip31068_HandleType g_lcdHandle;
 
 /* ================================================================================
  *  LOW-LEVEL DRIVER (talks to the AIP31068 controller directly over I2C)
@@ -27,7 +30,6 @@ Std_ReturnType LCD_Aip31068_SendCommand(LCD_Aip31068_HandleType *handle, uint8_t
     return E_OK;
 }
 
-<<<<<<< HEAD
 
 Std_ReturnType LCD_Aip31068_WriteChar(LCD_Aip31068_HandleType *handle, uint8_t character)
 {
@@ -52,37 +54,9 @@ Std_ReturnType LCD_Aip31068_WriteString(LCD_Aip31068_HandleType *handle, const u
         if (I2C_WriteData(*pString) != E_OK) { I2C_Stop(); return E_NOK; }
         pString++;
     }
-=======
-    if (I2C_Start() != E_OK)
-    return E_NOK;
->>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 
-/* Send Slave Address + Write bit */
-if (I2C_WriteByte((handle->i2cAddress << 1) | 0) != E_OK)
-{
     I2C_Stop();
-    return E_NOK;
-}
-
-/* Send Control Byte */
-if (I2C_WriteByte(controlByte) != E_OK)
-{
-    I2C_Stop();
-    return E_NOK;
-}
-
-/* Send Data */
-for (uint8_t i = 0; i < length; i++)
-{
-    if (I2C_WriteByte(pData[i]) != E_OK)
-    {
-        I2C_Stop();
-        return E_NOK;
-    }
-}
-
-I2C_Stop();
-return E_OK;
+    return E_OK;
 }
 
 
@@ -148,13 +122,15 @@ Std_ReturnType LCD_Aip31068_Init(LCD_Aip31068_HandleType *handle)
 
     return E_OK;
 }
+
 Std_ReturnType LCD_InitDefault(void)
 {
-    g_lcdHandle.i2cAddress =  0x3E;   
+    g_lcdHandle.i2cAddress = 0x3E;
     g_lcdHandle.rows = 2;
     g_lcdHandle.cols = 16;
     return LCD_Aip31068_Init(&g_lcdHandle);
 }
+
 Std_ReturnType LCD_Update(const DriveData_t *pData)
 {
     char dirChar;
@@ -165,12 +141,11 @@ Std_ReturnType LCD_Update(const DriveData_t *pData)
         return E_NOK;
     }
 
-<<<<<<< HEAD
     switch (pData->direction)
     {
         case DIR_FORWARD: dirChar = 'F'; break;
         case DIR_REVERSE: dirChar = 'R'; break;
-        default:dirChar = '-'; break;
+        default: dirChar = '-'; break;
     }
 
     sprintf(line1, "SET%-4d ACT%-4d%c",
@@ -195,7 +170,7 @@ Std_ReturnType LCD_ShowTrip(Trip_t tripCode)
     static uint8_t  blinkState = 0;
 
     blinkCounter++;
-    if (blinkCounter >= 15)   /* 15 x 250ms LCD task period ≈ 1.5s toggle */
+    if (blinkCounter >= 15)   /* 15 x 250ms LCD task period ~= 1.5s toggle */
     {
         blinkCounter = 0;
         blinkState = !blinkState;
@@ -206,7 +181,7 @@ Std_ReturnType LCD_ShowTrip(Trip_t tripCode)
     if (blinkState)
     {
         char buf[17];
-       sprintf(buf, "!TRIP CODE=%d", tripCode);
+        sprintf(buf, "!TRIP CODE=%d", tripCode);
         LCD_Aip31068_WriteStringAt(&g_lcdHandle, 1, 0, (const uint8_t *)buf);
     }
     else
@@ -215,75 +190,4 @@ Std_ReturnType LCD_ShowTrip(Trip_t tripCode)
     }
 
     return E_OK;
-=======
-    return LCD_Aip31068_SetCursor(handle, 0, 0);
-}
-
-static LCD_Aip31068_HandleType lcd =
-{
-    .i2cAddress = LCD_AIP31068_DEFAULT_ADDRESS,
-    .rows = 2,
-    .cols = 16
-};
-
-void LCD_Update(const DriveData_t *data)
-{
-    LCD_Aip31068_Clear(&lcd);
-
-    LCD_Aip31068_WriteStringAt(&lcd,0,0,(uint8_t*)"RPM:");
-    LCD_Aip31068_WriteNumber(&lcd,data->measuredRpm);
-
-    LCD_Aip31068_WriteStringAt(&lcd,1,0,(uint8_t*)"SET:");
-    LCD_Aip31068_WriteNumber(&lcd,data->setpointRpm);
-}
-
-void LCD_ShowTrip(Trip_t trip)
-{
-    LCD_Aip31068_Clear(&lcd);
-
-    LCD_Aip31068_WriteStringAt(&lcd, 0, 0, (const uint8_t *)"FAULT");
-
-    switch (trip)
-    {
-        case TRIP_ESTOP:
-            LCD_Aip31068_WriteStringAt(&lcd, 1, 0, (const uint8_t *)"E-STOP");
-            break;
-
-        case TRIP_SHORT:
-            LCD_Aip31068_WriteStringAt(&lcd, 1, 0, (const uint8_t *)"SHORT");
-            break;
-
-        case TRIP_OVERLOAD:
-            LCD_Aip31068_WriteStringAt(&lcd, 1, 0, (const uint8_t *)"OVERLOAD");
-            break;
-
-        case TRIP_OVERTEMP:
-            LCD_Aip31068_WriteStringAt(&lcd, 1, 0, (const uint8_t *)"OVERTEMP");
-            break;
-
-        case TRIP_UNDERVOLT:
-            LCD_Aip31068_WriteStringAt(&lcd, 1, 0, (const uint8_t *)"UNDERVOLT");
-            break;
-
-        case TRIP_OVERVOLT:
-            LCD_Aip31068_WriteStringAt(&lcd, 1, 0, (const uint8_t *)"OVERVOLT");
-            break;
-
-        case TRIP_STALL:
-            LCD_Aip31068_WriteStringAt(&lcd, 1, 0, (const uint8_t *)"STALL");
-            break;
-
-        case TRIP_OVERSPEED:
-            LCD_Aip31068_WriteStringAt(&lcd, 1, 0, (const uint8_t *)"OVERSPEED");
-            break;
-
-        case TRIP_NOFEEDBACK:
-            LCD_Aip31068_WriteStringAt(&lcd, 1, 0, (const uint8_t *)"NO FEEDBACK");
-            break;
-
-        default:
-            LCD_Aip31068_WriteStringAt(&lcd, 1, 0, (const uint8_t *)"UNKNOWN");
-            break;
-    }
->>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 }
