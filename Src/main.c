@@ -1,395 +1,783 @@
-/*
- * main.c
- * Project 06 - Industrial Motor Controller
- * Team: Asmaa Safy & Shorouk Anwar
- * Date: July 29, 2026
- */
+#define F_CPU 16000000UL
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include "../Service/STD_Types.h"
-#include "../Service/Bit_Math.h"
-#include "../Logic/Data/data_types.h"
-#include "../Logic/Data/data_manager.h"
-#include "../Logic/Control/drive_fsm/drive_fsm.h"
-#include "../Logic/Control/pi_controller/pi_controller.h"
-#include "../Logic/Control/ramp_generator/ramp_generator.h"
-#include "../Logic/Control/protection/protection.h"
-#include "../Logic/Scheduler/scheduler.h"
-#include "../Logic/Communication/console/console.h"
-#include "../Logic/Communication/telemetry/telemetry.h"
-#include "../Logic/Data/eeprom_stub.h"
+#include <util/delay.h>
+#include <stdio.h>
+#include <stdint.h>
 
-/* ==================== MCAL Includes ==================== */
-#include "../MCL/GPIO/GPIO_Interface.h"
-#include "../MCL/ADC/ADC_Interfaces.h"
-#include "../MCL/Timer/timer_interface.h"
-#include "../MCL/Interrupt/interrupt_interface.h"
-#include "../MCL/UART/uart_interface.h"
-#include "../MCL/I2C/i2c_interface.h"
+/* =========================================================
+   PIN DEFINITIONS
+   ========================================================= */
 
-/* ==================== HAL Includes ==================== */
-#include "../HAL/UserPanel/UserPanel.h"
-#include "../HAL/DC_Motor/dc_motor.h"
-#include "../HAL/Tachometer/Tachometer.h"
-#include "../HAL/ANALOG_SENSOR/ANALOG_SENSOR.h"
-#include "../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
-#include "../HAL/BUZZER/BUZZER.h"
-#include "../HAL/Stepper_L298P/Stepper_L298P.h"
-#include "../HAL/MotorBridge/MotorBridge.h"
+/* L298 */
+#define IN1     PB0
+#define IN2     PB1
+#define ENA     PB2
 
-/* ==================== Global Variables ==================== */
-DriveData_t g_driveData;
-DriveCfg_t g_driveCfg;
-PI_Handle_t g_pi;
-Ramp_t g_ramp;
+/* Emergency Stop */
+#define EMERGENCY PB4
 
-/* ==================== E-Stop Flag ==================== */
-volatile uint8_t g_estopFlag = 0;
+/* Buttons */
+#define START_BTN   PC5
+#define STOP_BTN    PC6
+#define REVERSE_BTN PC7
 
-/* ==================== Function Prototypes ==================== */
-void Task_Panel(void);
-void Task_Current(void);
-void Task_Control(void);
-void Task_LCD(void);
-void Task_SlowSensors(void);
-void Task_Telemetry(void);
-void Task_StepperTick(void);  /* For non-blocking stepper moves */
+/* Tachometer */
+#define TACH PD2
 
-/* ==================== Main Function ==================== */
-int main(void)
+
+/* =========================================================
+   GLOBAL VARIABLES
+   ========================================================= */
+
+volatile uint16_t tach_pulses = 0;
+volatile uint8_t emergency_active = 0;
+
+volatile uint8_t pwm_value = 0;
+volatile uint8_t pwm_counter = 0;
+
+uint16_t motor_rpm = 0;
+uint16_t speed_setpoint = 0;
+
+
+/* =========================================================
+   I2C / TWI
+   ========================================================= */
+
+#define LCD_ADDR 0x27
+
+void TWI_Init(void)
 {
-    /* ===== STEP 1: Disable Global Interrupts ===== */
+    /* 100 kHz I2C */
+    TWSR = 0x00;
+    TWBR = 72;
+
+    TWCR = (1 << TWEN);
+}
+
+void TWI_Start(void)
+{
+    TWCR = (1 << TWINT) |
+           (1 << TWSTA) |
+           (1 << TWEN);
+
+    while (!(TWCR & (1 << TWINT)));
+}
+
+void TWI_Stop(void)
+{
+    TWCR = (1 << TWINT) |
+           (1 << TWSTO) |
+           (1 << TWEN);
+
+    _delay_us(10);
+}
+
+void TWI_Write(uint8_t data)
+{
+    TWDR = data;
+
+    TWCR = (1 << TWINT) |
+           (1 << TWEN);
+
+    while (!(TWCR & (1 << TWINT)));
+}
+
+
+/* =========================================================
+   LCD
+   ========================================================= */
+
+#define LCD_BACKLIGHT 0x08
+#define LCD_ENABLE    0x04
+#define LCD_RS        0x01
+
+void LCD_Send(uint8_t data)
+{
+    TWI_Start();
+
+    TWI_Write((LCD_ADDR << 1));
+
+    TWI_Write(data | LCD_BACKLIGHT);
+
+    TWI_Write(data |
+              LCD_BACKLIGHT |
+              LCD_ENABLE);
+
+    _delay_us(1);
+
+    TWI_Write(data |
+              LCD_BACKLIGHT);
+
+    TWI_Stop();
+
+    _delay_us(50);
+}
+
+
+void LCD_Send4Bit(uint8_t data)
+{
+    LCD_Send(data);
+}
+
+
+void LCD_Command(uint8_t cmd)
+{
+    LCD_Send4Bit(cmd & 0xF0);
+
+    LCD_Send4Bit((cmd << 4) & 0xF0);
+
+    if (cmd == 0x01 || cmd == 0x02)
+        _delay_ms(2);
+}
+
+
+void LCD_Data(uint8_t data)
+{
+    LCD_Send4Bit((data & 0xF0) | LCD_RS);
+
+    LCD_Send4Bit(((data << 4) & 0xF0) | LCD_RS);
+}
+
+
+void LCD_Init(void)
+{
+    _delay_ms(50);
+
+    LCD_Send4Bit(0x30);
+    _delay_ms(5);
+
+    LCD_Send4Bit(0x30);
+    _delay_us(150);
+
+    LCD_Send4Bit(0x30);
+
+    LCD_Send4Bit(0x20);
+
+    LCD_Command(0x28);   // 4-bit, 2 lines
+    LCD_Command(0x0C);   // Display ON
+    LCD_Command(0x06);   // Entry mode
+    LCD_Command(0x01);   // Clear
+
+    _delay_ms(2);
+}
+
+
+void LCD_Goto(uint8_t row, uint8_t col)
+{
+    uint8_t address;
+
+    if (row == 0)
+        address = 0x80 + col;
+    else
+        address = 0xC0 + col;
+
+    LCD_Command(address);
+}
+
+
+void LCD_Print(const char *str)
+{
+    while (*str)
+    {
+        LCD_Data(*str++);
+    }
+}
+
+
+void LCD_Clear(void)
+{
+    LCD_Command(0x01);
+    _delay_ms(2);
+}
+
+
+/* =========================================================
+   ADC
+   ========================================================= */
+
+void ADC_Init(void)
+{
+    ADMUX = (1 << REFS0);
+
+    ADCSRA =
+        (1 << ADEN)  |
+        (1 << ADPS2) |
+        (1 << ADPS1) |
+        (1 << ADPS0);
+}
+
+
+uint16_t ADC_Read(uint8_t channel)
+{
+    channel &= 0x07;
+
+    ADMUX = (1 << REFS0) | channel;
+
+    ADCSRA |= (1 << ADSC);
+
+    while (ADCSRA & (1 << ADSC));
+
+    return ADC;
+}
+
+
+/* =========================================================
+   MOTOR CONTROL
+   ========================================================= */
+
+void Motor_Stop(void)
+{
+    PORTB &= ~((1 << IN1) | (1 << IN2));
+
+    pwm_value = 0;
+}
+
+
+void Motor_Forward(void)
+{
+    PORTB |= (1 << IN1);
+    PORTB &= ~(1 << IN2);
+}
+
+
+void Motor_Reverse(void)
+{
+    PORTB &= ~(1 << IN1);
+    PORTB |= (1 << IN2);
+}
+
+
+/* =========================================================
+   SOFTWARE PWM
+   ========================================================= */
+
+/*
+   Timer1 generates an interrupt every 100 us.
+
+   PWM frequency:
+       10 kHz / 100 = 100 Hz
+*/
+
+void PWM_Init(void)
+{
+    TCCR1A = 0;
+
+    TCCR1B =
+        (1 << WGM12) |
+        (1 << CS11);
+
+    OCR1A = 199;
+
+    TIMSK |= (1 << OCIE1A);
+}
+
+
+ISR(TIMER1_COMPA_vect)
+{
+    pwm_counter++;
+
+    if (pwm_counter >= 100)
+        pwm_counter = 0;
+
+    if (pwm_counter < pwm_value)
+        PORTB |= (1 << ENA);
+    else
+        PORTB &= ~(1 << ENA);
+}
+
+
+/* =========================================================
+   TACHOMETER
+   ========================================================= */
+
+ISR(INT0_vect)
+{
+    tach_pulses++;
+}
+
+
+void Tach_Init(void)
+{
+    /* PD2 input */
+    DDRD &= ~(1 << TACH);
+
+    /* Internal pull-up */
+    PORTD |= (1 << TACH);
+
+    /*
+       INT0 on rising edge
+    */
+    MCUCR |=
+        (1 << ISC01) |
+        (1 << ISC00);
+
+    GICR |= (1 << INT0);
+}
+
+
+/* =========================================================
+   RPM CALCULATION
+   ========================================================= */
+
+/*
+   Assumption:
+   Tachometer generates 1 pulse / revolution.
+
+   If your tachometer generates more pulses/revolution,
+   change PULSES_PER_REV.
+*/
+
+#define PULSES_PER_REV 1
+
+uint16_t Calculate_RPM(void)
+{
+    uint16_t pulses;
+
     cli();
 
-    /* ===== STEP 2: Initialize Core System & UART ===== */
-    UART_ConfigType uartCfg = {
-        .baudRate = UART_BAUD_9600,
-        .dataSize = UART_DATA_8BITS,
-        .parity = UART_PARITY_NONE,
-        .stopBits = UART_STOP_1BIT
-    };
-    UART_Init(&uartCfg);
-    UART_SendString("\r\n--- SYSTEM STARTING ---\r\n");
-    UART_SendString("BOOT1: UART OK\r\n");
+    pulses = tach_pulses;
+    tach_pulses = 0;
 
-    /* ===== STEP 3: Initialize Hardware (MCAL) ===== */
-    /* I2C for LCD */
-    I2C_MasterConfigType i2cCfg = { I2C_SCL_100KHZ };
-    I2C_InitMaster(&i2cCfg);
-    
-    /* ADC */
-    ADC_ConfigType adcCfg = {
-        .uint8ReferenceVoltage = ADC_REF_AVCC,
-        .uint8Prescaler = ADC_PRESCALER_128
-    };
-    ADC_Init(&adcCfg);
-
-    /* Timer0 for system tick (1ms) */
-    Timer0_Init();
-    
-    /* Timer2 for buzzer */
-    Timer2_Init();
-
-    /* External Interrupts */
-    EXTI_ConfigType extiCfg1 = { .line = EXTI_INT1, .sense = EXTI_SENSE_RISING };
-    EXTI_ConfigType extiCfg0 = { .line = EXTI_INT0, .sense = EXTI_SENSE_RISING };
-    EXTI_Init(&extiCfg1);
-    EXTI_Init(&extiCfg0);
-    
-    /* NOTE: Timer1 is initialized inside BRIDGE_Init() for PWM */
-    
-    UART_SendString("BOOT2: MCAL OK\r\n");
-
-    /* ===== STEP 4: Initialize HAL ===== */
-    LCD_InitDefault();
-    TACHO_Init();
-    ANALOG_Init();
-    PANEL_Init();
-    BUZZER_Init();
-    BRIDGE_Init();  /* This sets up Timer1 PWM */
-    UART_SendString("BOOT3: HAL OK\r\n");
-
-    /* ===== STEP 5: Default Configuration & APP ===== */
-    g_driveCfg.magic            = 0x4D44;
-    g_driveCfg.version          = 0x01;
-    g_driveCfg.maxRpm           = 3000;
-    g_driveCfg.minRpm           = 200;
-    g_driveCfg.accelRpmPerSec   = 600;
-    g_driveCfg.decelRpmPerSec   = 900;
-    g_driveCfg.deadTimeMs       = 500;
-    g_driveCfg.kp               = 384;
-    g_driveCfg.ki               = 26;
-    g_driveCfg.ratedCurrentmA   = 8000;
-    g_driveCfg.shortTripmA      = 18000;
-    g_driveCfg.overTempC        = 110;
-    g_driveCfg.underVoltmV      = 20000;
-    g_driveCfg.overVoltmV       = 55000;
-    g_driveCfg.stallSec         = 3;
-    g_driveCfg.totalRunSec      = 0;
-    g_driveCfg.startCount       = 0;
-    g_driveCfg.tripHead         = 0;
-    g_driveCfg.latchedTrip      = TRIP_NONE;
-    g_driveCfg.checksum         = 0;
-
-    DataManager_Init(&g_driveData, &g_driveCfg);
-    PI_Init(&g_pi, g_driveCfg.kp, g_driveCfg.ki);
-    PI_InitLimits(&g_pi, PWM_MIN_RUN, PWM_TOP);
-    
-    RAMP_Init(&g_ramp);
-    RAMP_SetLimits(&g_ramp, g_driveCfg.minRpm, g_driveCfg.maxRpm);
-    RAMP_SetRates(&g_ramp, g_driveCfg.accelRpmPerSec, g_driveCfg.decelRpmPerSec);
-    
-    PROTECT_Init();
-    FSM_Init();
-    FSM_SetDeadTime(g_driveCfg.deadTimeMs);
-    CONSOLE_Init();
-    TELEMETRY_Init();
-    
-    /* ===== STEP 6: Initialize Scheduler ===== */
-    SCHED_Init();
-    SCHED_AddTask(Task_Panel, "Panel", 10, 0);
-    SCHED_AddTask(Task_Current, "Current", 50, 1);
-    SCHED_AddTask(Task_Control, "Control", 100, 2);
-    SCHED_AddTask(Task_LCD, "LCD", 250, 4);
-    SCHED_AddTask(Task_SlowSensors, "SlowSensors", 500, 3);
-    SCHED_AddTask(Task_Telemetry, "Telemetry", 1000, 5);
-    SCHED_AddTask(Task_StepperTick, "Stepper", 1, 0);  /* 1ms tick for stepper */
-
-    UART_SendString("BOOT4: SCHEDULER READY, ENABLING INTERRUPTS...\r\n");
-
-    /* ===== STEP 7: Enable Interrupts & Run ===== */
     sei();
-    
-    while (1) {
-        SCHED_Run();
-        if (CONSOLE_IsCommandReady()) {
-            CONSOLE_ExecuteCommand();
-        }
-    }
-    
+
+    /*
+       We call this every 1 second.
+
+       RPM = pulses * 60
+    */
+
+    return (pulses * 60) / PULSES_PER_REV;
+}
+
+
+/* =========================================================
+   BUTTON INITIALIZATION
+   ========================================================= */
+
+void Buttons_Init(void)
+{
+    /*
+       PC5 = START
+       PC6 = STOP
+       PC7 = REVERSE
+    */
+
+    DDRC &= ~(
+        (1 << START_BTN) |
+        (1 << STOP_BTN) |
+        (1 << REVERSE_BTN)
+    );
+
+    PORTC |=
+        (1 << START_BTN) |
+        (1 << STOP_BTN) |
+        (1 << REVERSE_BTN);
+}
+
+
+/* =========================================================
+   EMERGENCY STOP
+   ========================================================= */
+
+void Emergency_Init(void)
+{
+    /*
+       PB4 = Emergency Stop
+
+       Switch:
+           PB4 ---- switch ---- GND
+
+       Internal pull-up enabled.
+    */
+
+    DDRB &= ~(1 << EMERGENCY);
+
+    PORTB |= (1 << EMERGENCY);
+}
+
+
+uint8_t Emergency_Active(void)
+{
+    /*
+       Active LOW
+    */
+
+    if (!(PINB & (1 << EMERGENCY)))
+        return 1;
+
     return 0;
 }
 
-/* ==================== Task Functions ==================== */
 
-/**
- * @brief Task_Panel - Called every 10ms
- * Polls buttons and updates LEDs
- */
-void Task_Panel(void)
+/* =========================================================
+   LCD STATUS
+   ========================================================= */
+
+void LCD_Show_RPM(uint16_t rpm)
 {
-    PANEL_Poll();
-    Panel_Event_t event = PANEL_GetEvent();
-    
-    switch (event) {
-        case PNL_START:
-            if (!FSM_RequestStart()) {
-                CONSOLE_SendError("ERR START");
-            }
-            break;
+    char buffer[17];
 
-        case PNL_STOP:
-            FSM_RequestStop();
-            break;
+    LCD_Goto(0, 0);
 
-        case PNL_REVERSE:
-            if (!FSM_RequestReverse()) {
-                CONSOLE_SendError("ERR REV");
-            }
-            break;
+    sprintf(buffer, "RPM: %5u", rpm);
 
-        case PNL_RESET:
-            if (!FSM_RequestReset()) {
-                CONSOLE_SendError("ERR ACTIVE");
-            }
-            break;
+    LCD_Print(buffer);
 
-        default:
-            break;
+    LCD_Goto(1, 0);
+
+    if (rpm == 0)
+    {
+        LCD_Print("Motor: STOPPED ");
     }
-    
-    /* Update status LEDs based on FSM state */
-    DriveState_t state = FSM_GetState();
-    if (state == DS_RUNNING) {
-        PANEL_SetRunLED(1, 0);  /* Steady ON */
-    } else if (state == DS_STARTING || state == DS_RAMP_DOWN) {
-        PANEL_SetRunLED(1, 1);  /* Blink */
-    } else {
-        PANEL_SetRunLED(0, 0);  /* OFF */
-    }
-    
-    /* Fault LED */
-    if (FSM_IsTripped()) {
-        PANEL_SetFaultLED(1);
-    } else {
-        PANEL_SetFaultLED(0);
-    }
-    
-    /* Direction LEDs */
-    MotorDir_t dir = FSM_GetDirection();
-    PANEL_SetDirectionLEDs(dir);
-    
-    /* Update Local/Remote mode */
-    if (PANEL_IsLocalMode()) {
-        g_driveData.remote = 0;
-    } else {
-        g_driveData.remote = 1;
+    else
+    {
+        LCD_Print("Motor: RUNNING ");
     }
 }
 
-/**
- * @brief Task_Current - Called every 50ms
- * Reads current and checks short-circuit
- */
-void Task_Current(void)
-{
-    /* Read current from ADC */
-    uint16_t current = ANALOG_GetCurrent();
-    g_driveData.currentmA = current;
-    
-    /* Update I2T accumulator */
-    PROTECT_UpdateI2T(current, g_driveCfg.ratedCurrentmA);
-    
-    /* Short-circuit check (FR-10) */
-    if (current >= g_driveCfg.shortTripmA) {
-        FSM_RequestTrip(TRIP_SHORT);
-        TELEMETRY_SendTripEvent(TRIP_SHORT, &g_driveData);
-    }
-}
 
-/**
- * @brief Task_Control - Called every 100ms
- * Main control loop: Tacho -> Ramp -> Protect -> PI -> Bridge
- */
-void Task_Control(void)
-{
-    /* ===== 1. Update FSM First ===== */
-    FSM_Run();
+/* =========================================================
+   MAIN
+   ========================================================= */
 
-    /* ===== 2. Update Tacho ===== */
-    TACHO_Update();
-    g_driveData.measuredRpm = TACHO_GetRPM();
-    
-    /* ===== 3. Update Setpoint ===== */
-    int16_t setpoint;
-    if (g_driveData.remote) {
-        /* Remote mode: setpoint from console */
-        setpoint = g_driveData.setpointRpm;
-    } else {
-        /* Local mode: setpoint from potentiometer */
-        setpoint = ANALOG_GetSetpoint();
-        g_driveData.setpointRpm = setpoint;
-    }
-    
-    /* ===== 4. Update Ramp ===== */
-    RAMP_SetTarget(&g_ramp, setpoint);
-    g_driveData.rampedRpm = RAMP_Step(&g_ramp);
-    
-    /* ===== 5. Update Error ===== */
-    g_driveData.errorRpm = g_driveData.rampedRpm - g_driveData.measuredRpm;
-    
-    /* ===== 6. Evaluate Protection (Before PI!) ===== */
-    Trip_t trip = PROTECT_Evaluate(&g_driveData, &g_driveCfg);
-    if (trip != TRIP_NONE) {
-        /* Trip detected - stop the motor */
-        FSM_RequestTrip(trip);
-        BRIDGE_ForceStop();
-        TELEMETRY_SendTripEvent(trip, &g_driveData);
-        return;  /* Exit early - don't apply PI output */
-    }
-    
-    /* ===== 7. PI Controller ===== */
-    int16_t duty;
-    if (FSM_IsRunning()) {
-        /* Running: apply PI control */
-        duty = PI_Step(&g_pi, g_driveData.rampedRpm, g_driveData.measuredRpm);
-    } else {
-        /* Stopped: force duty to 0 */
-        duty = 0;
-        PI_Reset(&g_pi);
-    }
-    
-    /* ===== 8. Apply to Bridge ===== */
-    DataManager_UpdateDuty(duty);
-    BRIDGE_SetDuty(duty);
-    BRIDGE_SetDirection(g_driveData.direction);
-    
-    /* ===== 9. Update data manager ===== */
-    DataManager_UpdateError();
-}
-
-/**
- * @brief Task_LCD - Called every 250ms
- */
-void Task_LCD(void)
+int main(void)
 {
-    static uint8_t lastTrip = 0;
-    Trip_t currentTrip = PROTECT_GetActiveTrip();
-    
-    if (FSM_IsTripped()) {
-        if (currentTrip != lastTrip) {
-            lastTrip = currentTrip;
-            LCD_ShowTrip(currentTrip);
+    uint16_t adc_speed;
+
+    uint16_t adc_current;
+    uint16_t adc_voltage;
+    uint16_t adc_temperature;
+
+    uint8_t motor_running = 0;
+    uint8_t direction = 0;
+
+    uint16_t counter = 0;
+
+
+    /* -----------------------------------------------------
+       PORT INITIALIZATION
+       ----------------------------------------------------- */
+
+    /*
+       PB0 = IN1
+       PB1 = IN2
+       PB2 = ENA
+    */
+
+    DDRB |=
+        (1 << IN1) |
+        (1 << IN2) |
+        (1 << ENA);
+
+    Motor_Stop();
+
+
+    /* Initialize peripherals */
+
+    ADC_Init();
+
+    TWI_Init();
+
+    LCD_Init();
+
+    Buttons_Init();
+
+    Emergency_Init();
+
+    Tach_Init();
+
+    PWM_Init();
+
+
+    /* Enable interrupts */
+
+    sei();
+
+
+    /* -----------------------------------------------------
+       START MESSAGE
+       ----------------------------------------------------- */
+
+    LCD_Clear();
+
+    LCD_Goto(0, 0);
+    LCD_Print("DC MOTOR CONTROL");
+
+    LCD_Goto(1, 0);
+    LCD_Print("System Ready");
+
+    _delay_ms(1500);
+
+
+    /* -----------------------------------------------------
+       MAIN LOOP
+       ----------------------------------------------------- */
+
+    while (1)
+    {
+
+        /* ================================================
+           EMERGENCY STOP
+           ================================================ */
+
+        if (Emergency_Active())
+        {
+            emergency_active = 1;
+
+            motor_running = 0;
+
+            Motor_Stop();
+
+            LCD_Clear();
+
+            LCD_Goto(0, 0);
+            LCD_Print("!!! EMERGENCY !!!");
+
+            LCD_Goto(1, 0);
+            LCD_Print("Motor STOPPED");
+
+            /*
+               Wait until emergency switch is released
+            */
+
+            while (Emergency_Active())
+            {
+                Motor_Stop();
+
+                _delay_ms(50);
+            }
+
+            emergency_active = 0;
+
+            LCD_Clear();
+
+            LCD_Goto(0, 0);
+            LCD_Print("Emergency Clear");
+
+            LCD_Goto(1, 0);
+            LCD_Print("Press START");
+
+            _delay_ms(500);
         }
-    } else {
-        lastTrip = 0;
-        LCD_Update(&g_driveData);
+
+
+        /* ================================================
+           READ POTENTIOMETERS
+           ================================================ */
+
+        adc_speed =
+            ADC_Read(0);
+
+        adc_current =
+            ADC_Read(1);
+
+        adc_voltage =
+            ADC_Read(2);
+
+        adc_temperature =
+            ADC_Read(3);
+
+
+        /*
+           Speed potentiometer:
+
+           ADC = 0 ... 1023
+
+           PWM = 0 ... 100
+        */
+
+        pwm_value =
+            (uint8_t)((adc_speed * 100UL) / 1023UL);
+
+
+        /*
+           Speed setpoint in RPM.
+
+           Maximum = 3000 RPM
+        */
+
+        speed_setpoint =
+            (uint16_t)((adc_speed * 3000UL) / 1023UL);
+
+
+        /* ================================================
+           START BUTTON
+           ================================================ */
+
+        if (!(PINC & (1 << START_BTN)))
+        {
+            _delay_ms(30);
+
+            if (!(PINC & (1 << START_BTN)))
+            {
+                motor_running = 1;
+
+                if (direction == 0)
+                    Motor_Forward();
+                else
+                    Motor_Reverse();
+
+                while (!(PINC & (1 << START_BTN)));
+            }
+        }
+
+
+        /* ================================================
+           STOP BUTTON
+           ================================================ */
+
+        if (!(PINC & (1 << STOP_BTN)))
+        {
+            _delay_ms(30);
+
+            if (!(PINC & (1 << STOP_BTN)))
+            {
+                motor_running = 0;
+
+                Motor_Stop();
+
+                while (!(PINC & (1 << STOP_BTN)));
+            }
+        }
+
+
+        /* ================================================
+           REVERSE BUTTON
+           ================================================ */
+
+        if (!(PINC & (1 << REVERSE_BTN)))
+        {
+            _delay_ms(30);
+
+            if (!(PINC & (1 << REVERSE_BTN)))
+            {
+                /*
+                   Stop before reversing
+                */
+
+                Motor_Stop();
+
+                motor_running = 0;
+
+                direction ^= 1;
+
+                while (!(PINC & (1 << REVERSE_BTN)));
+
+                _delay_ms(300);
+            }
+        }
+
+
+        /* ================================================
+           MOTOR CONTROL
+           ================================================ */
+
+        if (motor_running)
+        {
+            if (direction == 0)
+                Motor_Forward();
+            else
+                Motor_Reverse();
+
+            /*
+               PWM already controlled by Timer1
+            */
+        }
+        else
+        {
+            Motor_Stop();
+        }
+
+
+        /* ================================================
+           RPM UPDATE
+           ================================================ */
+
+        counter++;
+
+        /*
+           Approximately every 1 second
+
+           Main loop is not exactly 1 ms, therefore
+           use delay below.
+        */
+
+        if (counter >= 20)
+        {
+            counter = 0;
+
+            motor_rpm = Calculate_RPM();
+
+
+            /* ============================================
+               LCD
+               ============================================ */
+
+            LCD_Clear();
+
+            if (emergency_active)
+            {
+                LCD_Goto(0, 0);
+                LCD_Print("EMERGENCY STOP");
+
+                LCD_Goto(1, 0);
+                LCD_Print("RPM: 0");
+            }
+            else if (!motor_running)
+            {
+                LCD_Goto(0, 0);
+
+                LCD_Print("Motor STOPPED");
+
+                LCD_Goto(1, 0);
+
+                LCD_Print("RPM: 0");
+            }
+            else
+            {
+                LCD_Goto(0, 0);
+
+                char line1[17];
+
+                sprintf(
+                    line1,
+                    "RPM:%5u",
+                    motor_rpm
+                );
+
+                LCD_Print(line1);
+
+
+                LCD_Goto(1, 0);
+
+                char line2[17];
+
+                sprintf(
+                    line2,
+                    "SET:%4u",
+                    speed_setpoint
+                );
+
+                LCD_Print(line2);
+            }
+
+
+            /*
+               Delay between RPM measurements
+            */
+
+            _delay_ms(50);
+        }
+
+
+        /*
+           Small delay for button debounce
+        */
+
+        _delay_ms(10);
     }
-}
 
-/**
- * @brief Task_SlowSensors - Called every 500ms
- */
-void Task_SlowSensors(void)
-{
-    g_driveData.busmV = ANALOG_GetBusVoltage();
-    g_driveData.tempC = ANALOG_GetTemperature();
+    return 0;
 }
-
-/**
- * @brief Task_Telemetry - Called every 1s
- */
-void Task_Telemetry(void)
-{
-    /* Update run hours if running */
-    if (FSM_IsRunning() && g_driveData.measuredRpm >= g_driveCfg.minRpm) {
-        DataManager_IncrementRunSeconds();
-    }
-    
-    /* Send telemetry */
-    TELEMETRY_Update(&g_driveData);
-}
-
-/**
- * @brief Task_StepperTick - Called every 1ms
- * Updates non-blocking stepper motor moves
- */
-void Task_StepperTick(void)
-{
-    Stepper_L298P_Tick();
-}
-
-/* ==================== Interrupt Service Routines ==================== */
-
-/**
- * @brief INT1 ISR - Emergency Stop
- */
-ISR(INT1_vect)
-{
-    /* 1. Force stop the bridge - clears PWM, direction pins, and enable */
-    BRIDGE_ForceStop();
-    
-    /* 2. Set flag for FSM */
-    g_estopFlag = 1;
-}
-
-/**
- * @brief USART RX ISR - Console input
- */
-ISR(USART_RXC_vect)
-{
-    uint8_t ch = UDR;
-    CONSOLE_ProcessChar(ch);
-}
-/*  */
