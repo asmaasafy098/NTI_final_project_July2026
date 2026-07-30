@@ -12,13 +12,45 @@ DEPFLAGS = -MMD -MP
 LDFLAGS = -mmcu=atmega32
 
 # Discover sources from this project's actual layout
-C_SOURCES := $(wildcard Src/*.c) $(wildcard MCL/GPIO/*.c) $(wildcard MCL/ADC/*.c)
+C_SOURCES := $(wildcard Src/*.c) \
+             $(wildcard MCL/GPIO/*.c) \
+             $(wildcard MCL/ADC/*.c) \
+             $(wildcard MCL/timer/*.c) \
+             $(wildcard MCL/Interrupt/*.c) \
+             $(wildcard MCL/UART/*.c) \
+             $(wildcard MCL/I2C/*.c) \
+             $(wildcard HAL/ANALOG_SENSOR/*.c) \
+             $(wildcard HAL/BUZZER/*.c) \
+             $(wildcard HAL/DC_Motor/*.c) \
+             $(wildcard HAL/LCD_Aip31068_i2c/*.c) \
+             $(wildcard HAL/MotorBridge/*.c) \
+             $(wildcard HAL/Stepper_L298P/*.c) \
+             $(wildcard HAL/Tachometer/*.c) \
+             $(wildcard HAL/UserPanel/*.c) \
+             $(wildcard Logic/Communication/console/*.c) \
+             $(wildcard Logic/Communication/telemetry/*.c) \
+             $(wildcard Logic/Control/drive_fsm/*.c) \
+             $(wildcard Logic/Control/pi_controller/*.c) \
+             $(wildcard Logic/Control/protection/*.c) \
+             $(wildcard Logic/Control/ramp_generator/*.c) \
+             $(wildcard Logic/Data/*.c) \
+             $(wildcard Logic/Scheduler/*.c)
+
 OBJS      := $(patsubst %.c,build/%.o,$(C_SOURCES))
 DEPS      := $(patsubst %.c,build/%.d,$(C_SOURCES))
 TARGET    := build/firmware
 
 # Include paths for the current project
-INCLUDE_DIRS := . Src GPIO MCL/ADC Service Logic/Data
+INCLUDE_DIRS := . Src \
+                MCL/GPIO MCL/ADC MCL/timer MCL/Interrupt MCL/UART MCL/I2C \
+                HAL/ANALOG_SENSOR HAL/BUZZER HAL/DC_Motor HAL/LCD_Aip31068_i2c \
+                HAL/MotorBridge HAL/Stepper_L298P HAL/Tachometer HAL/UserPanel \
+                Logic/Communication/console Logic/Communication/telemetry \
+                Logic/Control/drive_fsm Logic/Control/pi_controller \
+                Logic/Control/protection Logic/Control/ramp_generator \
+                Logic/Data Logic/Scheduler \
+                Service
+
 CFLAGS += $(addprefix -I,$(INCLUDE_DIRS)) $(DEPFLAGS)
 
 -include $(DEPS)
@@ -33,21 +65,21 @@ $(TARGET).hex: $(TARGET).elf
 
 # Build pipeline: Src/main.c -> build/Src/main.i/.s/.o
 build/%.i: %.c
-	@if not exist "$(subst /,\,$(dir $@))" mkdir "$(subst /,\,$(dir $@))"
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -MMD -MP -MF $(patsubst %.i,%.d,$@) -E $< -o $@
 
 build/%.s: build/%.i
-	@if not exist "$(subst /,\,$(dir $@))" mkdir "$(subst /,\,$(dir $@))"
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -S $< -o $@
 
 build/%.o: build/%.s
-	@if not exist "$(subst /,\,$(dir $@))" mkdir "$(subst /,\,$(dir $@))"
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 .SECONDARY:
 
 clean:
-	@if exist build rmdir /s /q build
+	@rm -rf build
 
 flash: $(TARGET).hex
 	$(AVRDUDE) -c usbasp -p $(MCU) -U flash:w:$<:i

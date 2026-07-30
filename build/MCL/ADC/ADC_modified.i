@@ -6,12 +6,12 @@
 
 
 
-# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 1 3 4
-# 9 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 3 4
-# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 1 3 4
-# 125 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 1 3 4
+# 9 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 3 4
+# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 1 3 4
+# 125 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
 
-# 125 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+# 125 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
 typedef signed int int8_t __attribute__((__mode__(__QI__)));
 typedef unsigned int uint8_t __attribute__((__mode__(__QI__)));
 typedef signed int int16_t __attribute__ ((__mode__ (__HI__)));
@@ -21,14 +21,14 @@ typedef unsigned int uint32_t __attribute__ ((__mode__ (__SI__)));
 
 typedef signed int int64_t __attribute__((__mode__(__DI__)));
 typedef unsigned int uint64_t __attribute__((__mode__(__DI__)));
-# 146 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+# 146 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
 typedef int16_t intptr_t;
 
 
 
 
 typedef uint16_t uintptr_t;
-# 163 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+# 163 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
 typedef int8_t int_least8_t;
 
 
@@ -70,7 +70,7 @@ typedef int64_t int_least64_t;
 
 
 typedef uint64_t uint_least64_t;
-# 217 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+# 217 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
 typedef int8_t int_fast8_t;
 
 
@@ -112,14 +112,14 @@ typedef int64_t int_fast64_t;
 
 
 typedef uint64_t uint_fast64_t;
-# 277 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+# 277 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
 typedef int64_t intmax_t;
 
 
 
 
 typedef uint64_t uintmax_t;
-# 10 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 2 3 4
+# 10 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 2 3 4
 # 5 "MCL/ADC/../../Service/STD_Types.h" 2
 
 
@@ -135,23 +135,35 @@ typedef sint16_t sint16;
 typedef sint32_t sint32;
 typedef sint64_t sint64;
 
+typedef int8_t s8;
+typedef int16_t s16;
+typedef int32_t s32;
+typedef int64_t s64;
 
-typedef uint8_t uint8_h;
-typedef uint16_t uint16_h;
-typedef uint32_t uint32_h;
-typedef uint64_t uint64_h;
+
+typedef uint8_t uint8;
+typedef uint16_t uint16;
+typedef uint32_t uint32;
+typedef uint64_t uint64;
+
+
+typedef uint8_t u8;
+typedef uint16_t u16;
+typedef uint32_t u32;
+typedef uint64_t u64;
 
 
 typedef float float32_t;
 typedef double float64_t;
+typedef float f32;
+typedef double f64;
 
 
 typedef enum {
     FALSE = 0,
     TRUE = 1
 } bool_t;
-
-
+# 55 "MCL/ADC/../../Service/STD_Types.h"
 typedef enum {
     E_OK = 0,
     E_NOK,
@@ -217,12 +229,12 @@ Std_ReturnType ADC_ReadChannelBlocking(uint8_t uint8Channel, uint16_t *puint16Re
 Std_ReturnType ADC_Init(const ADC_ConfigType *addConfig)
 {
 
-    Std_ReturnType local_Status = E_OK;
+    Std_ReturnType local_Status = ((Std_ReturnType)0x00);
 
 
     if (addConfig == ((void *)0))
     {
-        local_Status = E_NOK;
+        local_Status = ((Std_ReturnType)0x01);
     }
     else
     {
@@ -255,12 +267,12 @@ Std_ReturnType ADC_Init(const ADC_ConfigType *addConfig)
 Std_ReturnType ADC_StartConversion(uint8_t uint8Channel)
 {
 
-    Std_ReturnType local_Status = E_OK;
+    Std_ReturnType local_Status = ((Std_ReturnType)0x00);
 
 
     if (uint8Channel >= 8)
     {
-        local_Status = E_NOK;
+        local_Status = ((Std_ReturnType)0x01);
     }
     else
     {
@@ -301,7 +313,7 @@ Std_ReturnType ADC_ReadResult(uint16_t *puint16Result)
 
     if (puint16Result == ((void *)0))
     {
-        return E_NOK;
+        return ((Std_ReturnType)0x01);
     }
 
 
@@ -314,7 +326,7 @@ Std_ReturnType ADC_ReadResult(uint16_t *puint16Result)
     *puint16Result = (uint16_t)((local_u8HighByte << 8) | local_u8LowByte);
 
 
-    return E_OK;
+    return ((Std_ReturnType)0x00);
 }
 uint8_t ADC_IsConversionComplete(void)
 {
@@ -334,7 +346,7 @@ Std_ReturnType ADC_ReadChannelBlocking(uint8_t uint8Channel, uint16_t *puint16Re
     Std_ReturnType local_Status = ADC_StartConversion(uint8Channel);
 
 
-    if (local_Status == E_OK)
+    if (local_Status == ((Std_ReturnType)0x00))
     {
         while (ADC_IsConversionComplete() == 0)
         {
@@ -354,5 +366,5 @@ Std_ReturnType ADC_DeInit(void)
     (((*(volatile uint8_t *)0x26)) &= ~(1 << (7)));
 
 
-    return E_OK;
+    return ((Std_ReturnType)0x00);
 }

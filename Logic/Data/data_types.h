@@ -30,7 +30,6 @@ typedef enum {
     DIR_FORWARD = 1,
     DIR_REVERSE = 2
 } MotorDir_t;
-
 /* Trip Types */
 typedef enum {
     TRIP_NONE = 0,

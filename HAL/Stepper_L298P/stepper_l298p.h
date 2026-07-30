@@ -2,7 +2,7 @@
 #define STEPPER_L298P_H
 
 #include "../../Service/STD_Types.h"
-#include "../../MCL/GPIO/gpio_interface.h"
+#include "../../MCL/GPIO/GPIO_Interface.h"
 
 /* ================================================================================
  *  STEPPER MOTOR DRIVER - PUBLIC INTERFACE (HAL, L298P / L298N H-bridge)

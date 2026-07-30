@@ -154,3 +154,19 @@ void Timer_DisableGlobalInterrupt(void)
 {
     CLR_BIT(TIMER_SREG_REG, TIMER_GLOBAL_INT_BIT);   
 }
+
+static volatile uint32_t g_tickCount = 0;
+
+void Timer0_TickISR(void)   /* call this from your existing Timer0 callback/ISR */
+{
+    g_tickCount++;
+}
+
+uint32_t TIMER_GetTick(void)
+{
+    uint32_t local_tick;
+    Timer_DisableGlobalInterrupt();
+    local_tick = g_tickCount;
+    Timer_EnableGlobalInterrupt();
+    return local_tick;
+}

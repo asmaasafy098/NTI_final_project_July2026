@@ -19,7 +19,7 @@
 #include "../Logic/Scheduler/scheduler.h"
 #include "../Logic/Communication/console/console.h"
 #include "../Logic/Communication/telemetry/telemetry.h"
-
+#include "../Logic/Data/eeprom_stub.h"
 /* ==================== MCAL Includes ==================== */
 #include "../MCL/GPIO/GPIO_Interface.h"
 #include "../MCL/ADC/ADC_Interfaces.h"
@@ -35,7 +35,8 @@
 #include "../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"  /* LCD_* functions */
 #include "../HAL/BUZZER/BUZZER.h"                      /* BUZZER_* functions */
 #include "../HAL/Stepper_L298P/Stepper_L298P.h" 
-
+#include "../HAL/MotorBridge/MotorBridge.h"
+#include "../HAL/UserPanel/UserPanel.h"
 /* ==================== Global Variables ==================== */
 DriveData_t g_driveData;
 DriveCfg_t g_driveCfg;
@@ -90,8 +91,13 @@ int main(void)
     EXTI_Init(&extiCfg1);  /* arm E-stop first */
     EXTI_Init(&extiCfg0);
     UART_Init(&uartCfg);
-    I2C_InitMaster(&i2cCfg);  /* For LCD */
-    
+    //I2C_InitMaster(&i2cCfg);  /* For LCD */
+    //LCD_InitDefault();  
+    PANEL_Init();
+
+  while (1) {
+    PANEL_SetRunLED(1, 0);   /* أشعل الـ LED يدويًا بالقوة */
+  }      
     /* ===== STEP 3: Initialize HAL ===== */
     TACHO_Init();   /* Tacho measurement */
     ANALOG_Init();  /* 4 ADC channels */
@@ -349,7 +355,7 @@ void Task_Telemetry(void)
 ISR(INT0_vect)
 {
     /* Increment pulse counter - handled by TACHO_OnPulse() */
-    TACHO_OnPulse();
+     TACHO_PulseISR();
 }
 
 /**

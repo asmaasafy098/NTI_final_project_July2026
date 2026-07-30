@@ -43,15 +43,6 @@ typedef enum
     I2C_ACK  = 1
 } I2C_AckType;
 
-/* ---------------- Master Configuration Structure ---------------- */
-/**
- * @brief Parameters consumed by I2C_InitMaster().
- * @var I2C_MasterConfigType::sclFrequency  Target SCL clock in Hz (e.g. I2C_SCL_100KHZ).
- */
-typedef struct
-{
-    uint32_t sclFrequency;
-} I2C_MasterConfigType;
 
 /* ---------------- Slave Configuration Structure ---------------- */
 /**
@@ -65,6 +56,9 @@ typedef struct
     uint8_t enableGeneralCall;
 } I2C_SlaveConfigType;
 
+typedef struct {
+    uint32_t sclFrequency;   /* pass I2C_SCL_100KHZ or I2C_SCL_400KHZ */
+} I2C_MasterConfigType;
 /* ================================================================================
  *  FUNCTION PROTOTYPES
  * ============================================================================== */
@@ -75,5 +69,19 @@ Std_ReturnType I2C_Start(void);
 Std_ReturnType I2C_Stop(void);
 
 Std_ReturnType I2C_WriteByte(uint8_t data);
+/**
+ * @brief  Sends a START condition followed by the slave address + R/W bit.
+ * @param  address  7-bit slave address (unshifted).
+ * @param  rw_bit   0 = write, 1 = read.
+ * @return Std_ReturnType  E_OK/E_NOK.
+ */
+Std_ReturnType I2C_WriteAddress(uint8_t address, uint8_t rw_bit);
 
+/**
+ * @brief  Sends one data byte on the bus (must be called after I2C_WriteAddress).
+ * @param  data  Byte to send.
+ * @return Std_ReturnType  E_OK/E_NOK.
+ */
+Std_ReturnType I2C_WriteData(uint8_t data);
+Std_ReturnType I2C_InitMaster(const I2C_MasterConfigType *config);
 #endif /* I2C_INTERFACE_H */

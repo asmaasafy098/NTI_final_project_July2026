@@ -218,32 +218,3 @@ void EXTI_DisableGlobalInterrupt(void)
 {
     CLR_BIT(EXTI_SREG_REG, EXTI_GLOBAL_INT_BIT);
 }
-
-
-/* ================================================================================
- *  ISRs
- * ============================================================================== */
-
-ISR(INT0_vect)
-{
-    if (EXTI_CallBacks[EXTI_INT0] != NULL)
-    {
-        EXTI_CallBacks[EXTI_INT0]();
-    }
-}
-
-ISR(INT1_vect)
-{
-    if (EXTI_CallBacks[EXTI_INT1] != NULL)
-    {
-        EXTI_CallBacks[EXTI_INT1]();
-    }
-}
-
-ISR(INT2_vect)
-{
-    if (EXTI_CallBacks[EXTI_INT2] != NULL)
-    {
-        EXTI_CallBacks[EXTI_INT2]();
-    }
-}

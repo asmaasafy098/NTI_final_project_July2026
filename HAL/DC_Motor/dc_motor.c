@@ -1,8 +1,12 @@
 #include "../../Service/STD_Types.h"
 #include "../../Service/Bit_Math.h"
-#include "../../MCL/GPIO/gpio_interface.h"
+#include "../../MCL/GPIO/GPIO_Interface.h"
 #include "../../MCL/Timer/timer_registers.h"
 #include "dc_motor.h"
+
+#ifndef GPIO_NUMBER_OF_PORTS
+#define GPIO_NUMBER_OF_PORTS    4U
+#endif
 
 /* ================================================================================
  *  BRUSHED DC MOTOR DRIVER - IMPLEMENTATION (HAL, H-bridge)
@@ -150,7 +154,7 @@ static void DC_Motor_ApplySpeed(const DC_MotorHandleType *handle)
     if (handle->pwmChannel == DC_MOTOR_PWM_NONE)
     {
         /* No PWM: the enable is either on or off. */
-        (void)GPIO_SetPinValue(handle->enPort, handle->enPin,
+        (void)GPIO_set_pin_value(handle->enPort, handle->enPin,
                                (handle->speedPercent > 0U) ? GPIO_HIGH : GPIO_LOW);
         return;
     }
@@ -160,7 +164,7 @@ static void DC_Motor_ApplySpeed(const DC_MotorHandleType *handle)
     if (handle->speedPercent == 0U)
     {
         DC_Motor_PwmConnect(handle->pwmChannel, 0U);
-        (void)GPIO_SetPinValue(local_Port, local_Pin, GPIO_LOW);
+        (void)GPIO_set_pin_value(local_Port, local_Pin, GPIO_LOW);
         return;
     }
 
@@ -198,8 +202,8 @@ static void DC_Motor_ApplyState(DC_MotorHandleType *handle, DC_MotorStateType st
         local_In2 = local_Swap;
     }
 
-    (void)GPIO_SetPinValue(handle->in1Port, handle->in1Pin, local_In1);
-    (void)GPIO_SetPinValue(handle->in2Port, handle->in2Pin, local_In2);
+    (void)GPIO_set_pin_value(handle->in1Port, handle->in1Pin, local_In1);
+    (void)GPIO_set_pin_value(handle->in2Port, handle->in2Pin, local_In2);
 
     handle->state = state;
 }
@@ -231,10 +235,10 @@ Std_ReturnType DC_Motor_Init(DC_MotorHandleType *handle)
     }
 
     /* STEP 2: Both bridge inputs are outputs, both low - the motor stays still. */
-    (void)GPIO_SetPinDirection(handle->in1Port, handle->in1Pin, GPIO_OUTPUT);
-    (void)GPIO_SetPinDirection(handle->in2Port, handle->in2Pin, GPIO_OUTPUT);
-    (void)GPIO_SetPinValue(handle->in1Port, handle->in1Pin, GPIO_LOW);
-    (void)GPIO_SetPinValue(handle->in2Port, handle->in2Pin, GPIO_LOW);
+    (void)GPIO_set_pin_Direction(handle->in1Port, handle->in1Pin, GPIO_OUTPUT);
+    (void)GPIO_set_pin_Direction(handle->in2Port, handle->in2Pin, GPIO_OUTPUT);
+    (void)GPIO_set_pin_value(handle->in1Port, handle->in1Pin, GPIO_LOW);
+    (void)GPIO_set_pin_value(handle->in2Port, handle->in2Pin, GPIO_LOW);
 
     /* STEP 3: Set up whichever enable this motor uses. */
     if (handle->pwmChannel == DC_MOTOR_PWM_NONE)
@@ -245,8 +249,8 @@ Std_ReturnType DC_Motor_Init(DC_MotorHandleType *handle)
             return E_NOK;
         }
 
-        (void)GPIO_SetPinDirection(handle->enPort, handle->enPin, GPIO_OUTPUT);
-        (void)GPIO_SetPinValue(handle->enPort, handle->enPin, GPIO_LOW);
+        (void)GPIO_set_pin_Direction(handle->enPort, handle->enPin, GPIO_OUTPUT);
+        (void)GPIO_set_pin_value(handle->enPort, handle->enPin, GPIO_LOW);
     }
     else
     {
@@ -255,8 +259,8 @@ Std_ReturnType DC_Motor_Init(DC_MotorHandleType *handle)
          *     the waveform once its data-direction bit is set to output.
          */
         DC_Motor_PwmPin(handle->pwmChannel, &local_Port, &local_Pin);
-        (void)GPIO_SetPinDirection(local_Port, local_Pin, GPIO_OUTPUT);
-        (void)GPIO_SetPinValue(local_Port, local_Pin, GPIO_LOW);
+        (void)GPIO_set_pin_Direction(local_Port, local_Pin, GPIO_OUTPUT);
+        (void)GPIO_set_pin_value(local_Port, local_Pin, GPIO_LOW);
 
         DC_Motor_PwmTimerSetup(handle->pwmChannel);
         DC_Motor_PwmConnect(handle->pwmChannel, 0U);   /* stays disconnected until a speed is set */
@@ -369,13 +373,13 @@ Std_ReturnType DC_Motor_Stop(DC_MotorHandleType *handle)
      */
     if (handle->pwmChannel == DC_MOTOR_PWM_NONE)
     {
-        (void)GPIO_SetPinValue(handle->enPort, handle->enPin, GPIO_LOW);
+        (void)GPIO_set_pin_value(handle->enPort, handle->enPin, GPIO_LOW);
     }
     else
     {
         DC_Motor_PwmPin(handle->pwmChannel, &local_Port, &local_Pin);
         DC_Motor_PwmConnect(handle->pwmChannel, 0U);
-        (void)GPIO_SetPinValue(local_Port, local_Pin, GPIO_LOW);
+        (void)GPIO_set_pin_value(local_Port, local_Pin, GPIO_LOW);
     }
 
     return E_OK;
@@ -402,7 +406,7 @@ Std_ReturnType DC_Motor_Brake(DC_MotorHandleType *handle)
      */
     if (handle->pwmChannel == DC_MOTOR_PWM_NONE)
     {
-        (void)GPIO_SetPinValue(handle->enPort, handle->enPin, GPIO_HIGH);
+        (void)GPIO_set_pin_value(handle->enPort, handle->enPin, GPIO_HIGH);
     }
     else
     {
@@ -468,7 +472,7 @@ Std_ReturnType DC_Motor_DeInit(DC_MotorHandleType *handle)
         DC_Motor_PwmPin(handle->pwmChannel, &local_Port, &local_Pin);
         DC_Motor_PwmConnect(handle->pwmChannel, 0U);
         DC_Motor_PwmSetDuty(handle->pwmChannel, 0U);
-        (void)GPIO_SetPinValue(local_Port, local_Pin, GPIO_LOW);
+        (void)GPIO_set_pin_value(local_Port, local_Pin, GPIO_LOW);
     }
 
     /* STEP 4: The handle is unusable until Init() runs again. */

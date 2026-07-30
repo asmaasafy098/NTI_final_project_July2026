@@ -17,6 +17,15 @@ Std_ReturnType I2C_Init(void)
 }
 
 
+Std_ReturnType I2C_InitMaster(const I2C_MasterConfigType *config)
+{
+    /* Frequency is currently fixed at 100kHz inside I2C_Init(); the config
+       is accepted for interface compatibility with main.c's call site. */
+    (void)config;
+    return I2C_Init();
+}
+
+
 Std_ReturnType I2C_Start(void)
 {
     I2C_TWCR_REG = (1 << I2C_TWINT_BIT) | (1 << I2C_TWSTA_BIT) | (1 << I2C_TWEN_BIT);
@@ -49,4 +58,26 @@ Std_ReturnType I2C_WriteByte(uint8_t data)
         return E_NOK;   /* not ACKed */
     }
     return E_OK;
+}
+
+
+Std_ReturnType I2C_WriteAddress(uint8_t address, uint8_t rw_bit)
+{
+    Std_ReturnType local_Status;
+
+    local_Status = I2C_Start();
+    if (local_Status != E_OK)
+    {
+        return local_Status;
+    }
+
+    /* address byte = 7-bit address shifted left + R/W bit (0=write, 1=read) */
+    local_Status = I2C_WriteByte((uint8_t)((address << 1) | (rw_bit & 0x01U)));
+    return local_Status;
+}
+
+
+Std_ReturnType I2C_WriteData(uint8_t data)
+{
+    return I2C_WriteByte(data);
 }

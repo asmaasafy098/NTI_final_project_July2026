@@ -183,4 +183,6 @@ void Timer_EnableGlobalInterrupt(void);
  */
 void Timer_DisableGlobalInterrupt(void);
 
+
+uint32_t TIMER_GetTick(void);
 #endif /* TIMER_INTERFACE_H */

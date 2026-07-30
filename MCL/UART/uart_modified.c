@@ -310,53 +310,12 @@ Std_ReturnType UART_TxBusy(void)
     return (UART_TxHead != UART_TxTail) ? E_BUSY : E_OK;
 }
 
-
-/* ================================================================================
- *  INTERRUPT SERVICE ROUTINES
- * ============================================================================== */
-
-/*
- * RX complete: reading UDR clears the RXC flag. Push into the RX ring
- * buffer (dropping the byte if the buffer is full -- a full RX buffer means
- * Task_Console is not draining fast enough, which is a task-scheduling bug,
- * not something to fix by blocking inside an ISR), then dispatch the
- * optional callback. Kept short per NFR-10.
- */
-ISR(USART_RXC_vect)
+void USART_TransmitByte(uint8_t byte)
 {
-    uint8_t  local_Data;
-    uint16_t local_NextHead;
-
-    local_Data = UART_UDR_REG;
-
-    local_NextHead = (uint16_t)((UART_RxHead + 1U) & UART_RX_BUF_MASK);
-    if (local_NextHead != UART_RxTail)
-    {
-        UART_RxBuf[UART_RxHead] = local_Data;
-        UART_RxHead = local_NextHead;
-    }
-    /* else: RX buffer full, byte dropped */
-
-    if (UART_RxCallBack != NULL)
-    {
-        UART_RxCallBack(local_Data);
-    }
+    UART_SendByte(byte);
 }
 
-/*
- * Data register empty: fire once per byte while UDRIE is enabled. Pops one
- * byte from the TX ring buffer into UDR; once the buffer is drained, UDRIE
- * is turned off so the ISR stops firing until the next UART_SendByte().
- */
-ISR(USART_UDRE_vect)
+void USART_TransmitString(const char *str)
 {
-    if (UART_TxHead != UART_TxTail)
-    {
-        UART_UDR_REG = UART_TxBuf[UART_TxTail];
-        UART_TxTail  = (uint16_t)((UART_TxTail + 1U) & UART_TX_BUF_MASK);
-    }
-    else
-    {
-        CLR_BIT(UART_UCSRB_REG, UART_UDRIE_BIT);
-    }
+    UART_SendString(str);
 }

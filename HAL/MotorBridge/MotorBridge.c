@@ -1,8 +1,8 @@
 #include "MotorBridge.h"
 #include "../../Service/STD_Types.h"
 #include "../../MCL/GPIO/GPIO_interface.h"
-typedef enum { DIR_STOP, DIR_FWD, DIR_REV } Dir_t;
-
+#include "../../MCL/timer/timer_interface.h"
+#include "../../Logic/Data/data_types.h"
 Std_ReturnType BRIDGE_Init(void)
 {
     GPIO_set_pin_Direction(GPIO_PORTB, GPIO_PIN0, GPIO_OUTPUT); /* IN1 */
@@ -12,16 +12,15 @@ Std_ReturnType BRIDGE_Init(void)
 }
 
 
-
-Std_ReturnType BRIDGE_SetDirection(Dir_t dir)
+Std_ReturnType BRIDGE_SetDirection(MotorDir_t dir)
 {
     switch (dir)
     {
-        case DIR_FWD:
+        case DIR_FORWARD:
             GPIO_set_pin_value(GPIO_PORTB, GPIO_PIN0, GPIO_HIGH);
             GPIO_set_pin_value(GPIO_PORTB, GPIO_PIN1, GPIO_LOW);
             break;
-        case DIR_REV:
+        case DIR_REVERSE:
             GPIO_set_pin_value(GPIO_PORTB, GPIO_PIN0, GPIO_LOW);
             GPIO_set_pin_value(GPIO_PORTB, GPIO_PIN1, GPIO_HIGH);
             break;

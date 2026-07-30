@@ -1,5 +1,5 @@
-#ifndef GPIO_REGISTERS_H
-#define GPIO_REGISTERS_H
+#ifndef GPIO_Registers_H
+#define GPIO_Registers_H
 
 #include "../../Service/STD_Types.h"
 

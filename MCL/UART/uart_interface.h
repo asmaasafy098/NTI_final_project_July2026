@@ -191,5 +191,7 @@ Std_ReturnType UART_SetRxCallBack(UART_RxCallBackType callBack);
  *                          buffer is empty.
  */
 Std_ReturnType UART_TxBusy(void);
+void USART_TransmitByte(uint8_t byte);
+void USART_TransmitString(const char *str);
 
 #endif /* UART_INTERFACE_H */
