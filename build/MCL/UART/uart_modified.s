@@ -140,6 +140,8 @@ UART_DeInit:
 	cbi 0xa,7
 	cbi 0xa,6
 	cbi 0xa,5
+	sts UART_RxCallBack+1,__zero_reg__
+	sts UART_RxCallBack,__zero_reg__
 	ldi r25,0
 	ldi r24,0
 /* epilogue start */
@@ -351,8 +353,10 @@ UART_SetRxCallBack:
 /* frame size = 0 */
 /* stack size = 0 */
 .L__stack_usage = 0
-	or r24,r25
+	sbiw r24,0
 	breq .L38
+	sts UART_RxCallBack+1,r25
+	sts UART_RxCallBack,r24
 	sbi 0xa,7
 	ldi r25,0
 	ldi r24,0
@@ -404,6 +408,132 @@ USART_TransmitString:
 .L__stack_usage = 0
 	jmp UART_SendString
 	.size	USART_TransmitString, .-USART_TransmitString
+.global	__vector_13
+	.type	__vector_13, @function
+__vector_13:
+	push r1
+	push r0
+	in r0,__SREG__
+	push r0
+	clr __zero_reg__
+	push r18
+	push r19
+	push r20
+	push r21
+	push r22
+	push r23
+	push r24
+	push r25
+	push r26
+	push r27
+	push r30
+	push r31
+/* prologue: Signal */
+/* frame size = 0 */
+/* stack size = 15 */
+.L__stack_usage = 15
+	in r24,0xc
+	lds r18,UART_RxHead
+	lds r19,UART_RxHead+1
+	subi r18,-1
+	sbci r19,-1
+	andi r18,63
+	clr r19
+	lds r20,UART_RxTail
+	lds r21,UART_RxTail+1
+	cp r20,r18
+	cpc r21,r19
+	breq .L45
+	lds r30,UART_RxHead
+	lds r31,UART_RxHead+1
+	subi r30,lo8(-(UART_RxBuf))
+	sbci r31,hi8(-(UART_RxBuf))
+	st Z,r24
+	sts UART_RxHead+1,r19
+	sts UART_RxHead,r18
+.L45:
+	lds r30,UART_RxCallBack
+	lds r31,UART_RxCallBack+1
+	sbiw r30,0
+	breq .L44
+	icall
+.L44:
+/* epilogue start */
+	pop r31
+	pop r30
+	pop r27
+	pop r26
+	pop r25
+	pop r24
+	pop r23
+	pop r22
+	pop r21
+	pop r20
+	pop r19
+	pop r18
+	pop r0
+	out __SREG__,r0
+	pop r0
+	pop r1
+	reti
+	.size	__vector_13, .-__vector_13
+.global	__vector_14
+	.type	__vector_14, @function
+__vector_14:
+	push r1
+	push r0
+	in r0,__SREG__
+	push r0
+	clr __zero_reg__
+	push r18
+	push r19
+	push r24
+	push r25
+	push r30
+	push r31
+/* prologue: Signal */
+/* frame size = 0 */
+/* stack size = 9 */
+.L__stack_usage = 9
+	lds r18,UART_TxHead
+	lds r19,UART_TxHead+1
+	lds r24,UART_TxTail
+	lds r25,UART_TxTail+1
+	cp r18,r24
+	cpc r19,r25
+	breq .L51
+	lds r30,UART_TxTail
+	lds r31,UART_TxTail+1
+	subi r30,lo8(-(UART_TxBuf))
+	sbci r31,hi8(-(UART_TxBuf))
+	ld r18,Z
+	lds r24,UART_TxTail
+	lds r25,UART_TxTail+1
+	adiw r24,1
+	andi r24,127
+	clr r25
+	sts UART_TxTail+1,r25
+	sts UART_TxTail,r24
+	out 0xc,r18
+.L50:
+/* epilogue start */
+	pop r31
+	pop r30
+	pop r25
+	pop r24
+	pop r19
+	pop r18
+	pop r0
+	out __SREG__,r0
+	pop r0
+	pop r1
+	reti
+.L51:
+	cbi 0xa,5
+	rjmp .L50
+	.size	__vector_14, .-__vector_14
+	.local	UART_RxCallBack
+	.comm	UART_RxCallBack,2,1
 	.local	UART_RxTail
 	.comm	UART_RxTail,2,1
 	.local	UART_RxHead

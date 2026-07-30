@@ -256,9 +256,9 @@ typedef struct
 # 1 "MCL/UART/uart_registers.h" 1
 # 5 "MCL/UART/uart_modified.c" 2
 # 1 "MCL/UART/uart_interface.h" 1
-# 64 "MCL/UART/uart_interface.h"
+# 47 "MCL/UART/uart_interface.h"
 
-# 64 "MCL/UART/uart_interface.h"
+# 47 "MCL/UART/uart_interface.h"
 typedef enum
 {
     UART_DATA_5BITS = 0,
@@ -268,10 +268,6 @@ typedef enum
     UART_DATA_9BITS = 7
 } UART_DataSizeType;
 
-
-
-
-
 typedef enum
 {
     UART_PARITY_NONE = 0,
@@ -279,16 +275,12 @@ typedef enum
     UART_PARITY_ODD = 3
 } UART_ParityType;
 
-
-
-
-
 typedef enum
 {
     UART_STOP_1BIT = 0,
     UART_STOP_2BIT = 1
 } UART_StopBitType;
-# 102 "MCL/UART/uart_interface.h"
+
 typedef struct
 {
     uint32_t baudRate;
@@ -297,57 +289,26 @@ typedef struct
     UART_StopBitType stopBits;
 } UART_ConfigType;
 
-
-
-
-
-
 typedef void (*UART_RxCallBackType)(uint8_t receivedByte);
-# 128 "MCL/UART/uart_interface.h"
+
+
+
+
+
 Std_ReturnType UART_Init(const UART_ConfigType *addConfig);
-
-
-
-
-
 Std_ReturnType UART_DeInit(void);
-# 143 "MCL/UART/uart_interface.h"
 Std_ReturnType UART_SendByte(uint8_t uint8Data);
-# 152 "MCL/UART/uart_interface.h"
 Std_ReturnType UART_ReceiveByte(uint8_t *puint8Data);
-
-
-
-
-
-
-
 Std_ReturnType UART_ReceiveByteNonBlocking(uint8_t *puint8Data);
 
 
+Std_ReturnType UART_SendString(const char *pString);
 
-
-
-
-
-Std_ReturnType UART_SendString(const uint8_t *pString);
-# 178 "MCL/UART/uart_interface.h"
 Std_ReturnType UART_ReceiveString(uint8_t *buffer, uint16_t maxLength, uint8_t terminator);
-
-
-
-
-
-
-
 Std_ReturnType UART_SetRxCallBack(UART_RxCallBackType callBack);
-
-
-
-
-
-
 Std_ReturnType UART_TxBusy(void);
+
+
 void USART_TransmitByte(uint8_t byte);
 void USART_TransmitString(const char *str);
 # 6 "MCL/UART/uart_modified.c" 2
@@ -534,7 +495,11 @@ Std_ReturnType UART_ReceiveByteNonBlocking(uint8_t *puint8Data)
 }
 
 
-Std_ReturnType UART_SendString(const uint8_t *pString)
+
+
+
+
+Std_ReturnType UART_SendString(const char *pString)
 {
     uint16_t local_Index = 0U;
 
@@ -551,7 +516,7 @@ Std_ReturnType UART_SendString(const uint8_t *pString)
 
     for (local_Index = 0U; pString[local_Index] != '\0'; local_Index++)
     {
-        (void)UART_SendByte(pString[local_Index]);
+        (void)UART_SendByte((uint8_t)pString[local_Index]);
     }
 
 
@@ -569,7 +534,7 @@ Std_ReturnType UART_ReceiveString(uint8_t *buffer, uint16_t maxLength, uint8_t t
     {
         return ((Std_ReturnType)0x01);
     }
-# 256 "MCL/UART/uart_modified.c"
+# 260 "MCL/UART/uart_modified.c"
     while (local_Index < (uint16_t)(maxLength - 1U))
     {
         if (UART_ReceiveByte(&local_Received) != ((Std_ReturnType)0x00))
@@ -627,12 +592,73 @@ Std_ReturnType UART_TxBusy(void)
     return (UART_TxHead != UART_TxTail) ? E_BUSY : ((Std_ReturnType)0x00);
 }
 
+
 void USART_TransmitByte(uint8_t byte)
 {
     UART_SendByte(byte);
 }
 
+
 void USART_TransmitString(const char *str)
 {
     UART_SendString(str);
+}
+
+
+
+
+
+
+# 333 "MCL/UART/uart_modified.c" 3
+void __vector_13 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_13 (void)
+
+# 334 "MCL/UART/uart_modified.c"
+{
+    uint8_t receivedByte = (*(volatile u8 *)0x2C);
+    uint16_t local_NextHead;
+
+
+    local_NextHead = (uint16_t)((UART_RxHead + 1U) & (64U - 1U));
+
+    if (local_NextHead != UART_RxTail)
+    {
+        UART_RxBuf[UART_RxHead] = receivedByte;
+        UART_RxHead = local_NextHead;
+    }
+
+
+
+    if (UART_RxCallBack != ((void *)0))
+    {
+        UART_RxCallBack(receivedByte);
+    }
+}
+
+
+
+
+
+
+# 359 "MCL/UART/uart_modified.c" 3
+void __vector_14 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_14 (void)
+
+# 360 "MCL/UART/uart_modified.c"
+{
+    uint8_t txByte;
+
+
+    if (UART_TxHead != UART_TxTail)
+    {
+
+        txByte = UART_TxBuf[UART_TxTail];
+        UART_TxTail = (uint16_t)((UART_TxTail + 1U) & (128U - 1U));
+
+
+        (*(volatile u8 *)0x2C) = txByte;
+    }
+    else
+    {
+
+        (((*(volatile u8 *)0x2A)) &= ~(1 << (5)));
+    }
 }

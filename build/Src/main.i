@@ -954,6 +954,7 @@ Std_ReturnType EEPROM_SaveConfig(DriveCfg_t *cfg);
 Trip_t EEPROM_LoadLatchTrip(void);
 # 22 "Src/main.c" 2
 
+
 # 1 "Src/../MCL/GPIO/GPIO_Interface.h" 1
 
 
@@ -971,7 +972,7 @@ Std_ReturnType GPIO_set_pin_value(uint8_t port, uint8_t pin, uint8_t value);
 Std_ReturnType GPIO_write_pin(uint8_t port, uint8_t pin, uint8_t value);
 GPIO_pin_status GPIO_read_pin(uint8_t port, uint8_t pin);
 Std_ReturnType GPIO_toggle_pin(uint8_t port, uint8_t pin);
-# 24 "Src/main.c" 2
+# 25 "Src/main.c" 2
 # 1 "Src/../MCL/ADC/ADC_Interfaces.h" 1
 
 
@@ -1024,7 +1025,7 @@ uint8_t ADC_IsConversionComplete(void);
 Std_ReturnType ADC_ReadResult(uint16_t *puint16Result);
 # 87 "Src/../MCL/ADC/ADC_Interfaces.h"
 Std_ReturnType ADC_ReadChannelBlocking(uint8_t uint8Channel, uint16_t *puint16Result);
-# 25 "Src/main.c" 2
+# 26 "Src/main.c" 2
 # 1 "Src/../MCL/Timer/timer_interface.h" 1
 
 
@@ -1149,7 +1150,7 @@ void Timer_DisableGlobalInterrupt(void);
 
 
 uint32_t TIMER_GetTick(void);
-# 26 "Src/main.c" 2
+# 27 "Src/main.c" 2
 # 1 "Src/../MCL/Interrupt/interrupt_interface.h" 1
 # 13 "Src/../MCL/Interrupt/interrupt_interface.h"
 # 1 "Src/../MCL/Interrupt/../../Service/STD_Types.h" 1
@@ -1200,7 +1201,7 @@ Std_ReturnType EXTI_SetSenseControl(EXTI_LineType line, EXTI_SenseType sense);
 Std_ReturnType EXTI_SetCallBack(EXTI_LineType line, EXTI_CallBackType callBack);
 void EXTI_EnableGlobalInterrupt(void);
 void EXTI_DisableGlobalInterrupt(void);
-# 27 "Src/main.c" 2
+# 28 "Src/main.c" 2
 # 1 "Src/../MCL/UART/uart_interface.h" 1
 
 
@@ -1209,7 +1210,7 @@ void EXTI_DisableGlobalInterrupt(void);
 # 5 "Src/../MCL/UART/uart_interface.h" 2
 # 1 "Src/../MCL/UART/uart_registers.h" 1
 # 6 "Src/../MCL/UART/uart_interface.h" 2
-# 64 "Src/../MCL/UART/uart_interface.h"
+# 47 "Src/../MCL/UART/uart_interface.h"
 typedef enum
 {
     UART_DATA_5BITS = 0,
@@ -1219,10 +1220,6 @@ typedef enum
     UART_DATA_9BITS = 7
 } UART_DataSizeType;
 
-
-
-
-
 typedef enum
 {
     UART_PARITY_NONE = 0,
@@ -1230,16 +1227,12 @@ typedef enum
     UART_PARITY_ODD = 3
 } UART_ParityType;
 
-
-
-
-
 typedef enum
 {
     UART_STOP_1BIT = 0,
     UART_STOP_2BIT = 1
 } UART_StopBitType;
-# 102 "Src/../MCL/UART/uart_interface.h"
+
 typedef struct
 {
     uint32_t baudRate;
@@ -1248,60 +1241,29 @@ typedef struct
     UART_StopBitType stopBits;
 } UART_ConfigType;
 
-
-
-
-
-
 typedef void (*UART_RxCallBackType)(uint8_t receivedByte);
-# 128 "Src/../MCL/UART/uart_interface.h"
+
+
+
+
+
 Std_ReturnType UART_Init(const UART_ConfigType *addConfig);
-
-
-
-
-
 Std_ReturnType UART_DeInit(void);
-# 143 "Src/../MCL/UART/uart_interface.h"
 Std_ReturnType UART_SendByte(uint8_t uint8Data);
-# 152 "Src/../MCL/UART/uart_interface.h"
 Std_ReturnType UART_ReceiveByte(uint8_t *puint8Data);
-
-
-
-
-
-
-
 Std_ReturnType UART_ReceiveByteNonBlocking(uint8_t *puint8Data);
 
 
+Std_ReturnType UART_SendString(const char *pString);
 
-
-
-
-
-Std_ReturnType UART_SendString(const uint8_t *pString);
-# 178 "Src/../MCL/UART/uart_interface.h"
 Std_ReturnType UART_ReceiveString(uint8_t *buffer, uint16_t maxLength, uint8_t terminator);
-
-
-
-
-
-
-
 Std_ReturnType UART_SetRxCallBack(UART_RxCallBackType callBack);
-
-
-
-
-
-
 Std_ReturnType UART_TxBusy(void);
+
+
 void USART_TransmitByte(uint8_t byte);
 void USART_TransmitString(const char *str);
-# 28 "Src/main.c" 2
+# 29 "Src/main.c" 2
 # 1 "Src/../MCL/I2C/i2c_interface.h" 1
 
 
@@ -1351,7 +1313,9 @@ Std_ReturnType I2C_WriteAddress(uint8_t address, uint8_t rw_bit);
 
 Std_ReturnType I2C_WriteData(uint8_t data);
 Std_ReturnType I2C_InitMaster(const I2C_MasterConfigType *config);
-# 29 "Src/main.c" 2
+# 30 "Src/main.c" 2
+
+
 # 1 "Src/../HAL/UserPanel/UserPanel.h" 1
 # 10 "Src/../HAL/UserPanel/UserPanel.h"
 # 1 "Src/../Service/STD_Types.h" 1
@@ -1411,9 +1375,7 @@ void PANEL_SetFaultLED(uint8_t state);
 
 
 void PANEL_SetDirectionLEDs(MotorDir_t dir);
-# 30 "Src/main.c" 2
-
-
+# 33 "Src/main.c" 2
 # 1 "Src/../HAL/DC_Motor/dc_motor.h" 1
 
 
@@ -1496,14 +1458,14 @@ Std_ReturnType DC_Motor_GetState(const DC_MotorHandleType *handle, DC_MotorState
 Std_ReturnType DC_Motor_GetSpeed(const DC_MotorHandleType *handle, uint8_t *pSpeed);
 # 264 "Src/../HAL/DC_Motor/dc_motor.h"
 Std_ReturnType DC_Motor_DeInit(DC_MotorHandleType *handle);
-# 33 "Src/main.c" 2
+# 34 "Src/main.c" 2
 # 1 "Src/../HAL/Tachometer/Tachometer.h" 1
 # 10 "Src/../HAL/Tachometer/Tachometer.h"
 void TACHO_Init(void);
 void TACHO_Update(void);
 void TACHO_PulseISR(void);
 int16_t TACHO_GetRPM(void);
-# 34 "Src/main.c" 2
+# 35 "Src/main.c" 2
 # 1 "Src/../HAL/ANALOG_SENSOR/ANALOG_SENSOR.h" 1
 
 
@@ -1528,7 +1490,7 @@ uint16_t ANALOG_GetSetpoint(void);
 uint16_t ANALOG_GetCurrent(void);
 uint16_t ANALOG_GetBusVoltage(void);
 uint8_t ANALOG_GetTemperature(void);
-# 35 "Src/main.c" 2
+# 36 "Src/main.c" 2
 # 1 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h" 1
 
 
@@ -1597,7 +1559,7 @@ Std_ReturnType LCD_Aip31068_ShiftDisplay(LCD_Aip31068_HandleType *handle, uint8_
 
 Std_ReturnType LCD_Aip31068_CreateCustomChar(LCD_Aip31068_HandleType *handle,
                                              uint8_t location, const uint8_t *pPattern);
-# 36 "Src/main.c" 2
+# 37 "Src/main.c" 2
 # 1 "Src/../HAL/BUZZER/BUZZER.h" 1
 
 
@@ -1626,7 +1588,7 @@ extern uint16_t Buzzer_TickCounter;
 Std_ReturnType BUZZER_Init(void);
 Std_ReturnType BUZZER_SetMode(Buzzer_Mode_t mode);
 void BUZZER_Update(void);
-# 37 "Src/main.c" 2
+# 38 "Src/main.c" 2
 # 1 "Src/../HAL/Stepper_L298P/Stepper_L298P.h" 1
 
 
@@ -1635,28 +1597,21 @@ void BUZZER_Update(void);
 # 5 "Src/../HAL/Stepper_L298P/Stepper_L298P.h" 2
 # 1 "Src/../HAL/Stepper_L298P/../../MCL/GPIO/GPIO_Interface.h" 1
 # 6 "Src/../HAL/Stepper_L298P/Stepper_L298P.h" 2
-# 73 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
-typedef enum
-{
+
+
+typedef enum {
     STEPPER_L298P_MODE_WAVE = 0,
     STEPPER_L298P_MODE_FULL = 1,
     STEPPER_L298P_MODE_HALF = 2
 } Stepper_L298P_ModeType;
 
-
-
-
-
-
-
-typedef enum
-{
+typedef enum {
     STEPPER_L298P_DIR_CW = 0,
     STEPPER_L298P_DIR_CCW = 1
 } Stepper_L298P_DirType;
-# 117 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
-typedef struct
-{
+
+
+typedef struct {
 
     uint8_t in1Port; uint8_t in1Pin;
     uint8_t in2Port; uint8_t in2Pin;
@@ -1676,66 +1631,59 @@ typedef struct
     uint8_t energized;
     sint32 position;
 } Stepper_L298P_HandleType;
-# 152 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
+
+
+
 Std_ReturnType Stepper_L298P_Init(Stepper_L298P_HandleType *handle);
-# 163 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
 Std_ReturnType Stepper_L298P_SetStepMode(Stepper_L298P_HandleType *handle,
                                          Stepper_L298P_ModeType mode);
-
-
-
-
-
-
-
 Std_ReturnType Stepper_L298P_SetStepDelay(Stepper_L298P_HandleType *handle,
                                           uint16_t stepDelayMs);
-# 185 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
 Std_ReturnType Stepper_L298P_SetSpeedRpm(Stepper_L298P_HandleType *handle, uint16_t rpm);
-# 199 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
+
+
 Std_ReturnType Stepper_L298P_Step(Stepper_L298P_HandleType *handle,
                                   uint16_t steps, Stepper_L298P_DirType dir);
-# 222 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
-Std_ReturnType Stepper_L298P_StepOnce(Stepper_L298P_HandleType *handle,
-                                      Stepper_L298P_DirType dir);
-# 236 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
 Std_ReturnType Stepper_L298P_RotateAngle(Stepper_L298P_HandleType *handle,
                                          uint16_t degrees, Stepper_L298P_DirType dir);
-# 247 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
+
+
+Std_ReturnType Stepper_L298P_StepOnce(Stepper_L298P_HandleType *handle,
+                                      Stepper_L298P_DirType dir);
+Std_ReturnType Stepper_L298P_StepNonBlocking(Stepper_L298P_HandleType *handle,
+                                              uint16_t steps, Stepper_L298P_DirType dir);
+void Stepper_L298P_Tick(void);
+
+
 Std_ReturnType Stepper_L298P_Hold(Stepper_L298P_HandleType *handle);
-# 258 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
 Std_ReturnType Stepper_L298P_Release(Stepper_L298P_HandleType *handle);
-# 267 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
+
+
 Std_ReturnType Stepper_L298P_GetPosition(const Stepper_L298P_HandleType *handle,
                                          sint32 *pPosition);
-
-
-
-
-
-
-
 Std_ReturnType Stepper_L298P_ResetPosition(Stepper_L298P_HandleType *handle);
-# 286 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
 Std_ReturnType Stepper_L298P_GetStepsPerRev(const Stepper_L298P_HandleType *handle,
                                             uint16_t *pStepsPerRev);
-# 38 "Src/main.c" 2
+# 39 "Src/main.c" 2
 # 1 "Src/../HAL/MotorBridge/MotorBridge.h" 1
 
 
+
 # 1 "Src/../HAL/MotorBridge/../../Service/STD_Types.h" 1
-# 4 "Src/../HAL/MotorBridge/MotorBridge.h" 2
-# 1 "Src/../HAL/MotorBridge/../../MCL/timer/timer_interface.h" 1
 # 5 "Src/../HAL/MotorBridge/MotorBridge.h" 2
-# 1 "Src/../HAL/MotorBridge/../../Logic/Data/data_types.h" 1
+# 1 "Src/../HAL/MotorBridge/../../MCL/timer/timer_interface.h" 1
 # 6 "Src/../HAL/MotorBridge/MotorBridge.h" 2
+# 1 "Src/../HAL/MotorBridge/../../Logic/Data/data_types.h" 1
+# 7 "Src/../HAL/MotorBridge/MotorBridge.h" 2
+# 18 "Src/../HAL/MotorBridge/MotorBridge.h"
 Std_ReturnType BRIDGE_Init(void);
 Std_ReturnType BRIDGE_SetDirection(MotorDir_t dir);
 Std_ReturnType BRIDGE_SetDuty(uint16_t duty_percent);
 Std_ReturnType BRIDGE_Enable(void);
 Std_ReturnType BRIDGE_Disable(void);
 void BRIDGE_ForceStop(void);
-# 39 "Src/main.c" 2
+uint8_t BRIDGE_IsEnabled(void);
+# 40 "Src/main.c" 2
 
 
 DriveData_t g_driveData;
@@ -1753,16 +1701,16 @@ void Task_Control(void);
 void Task_LCD(void);
 void Task_SlowSensors(void);
 void Task_Telemetry(void);
-
+void Task_StepperTick(void);
 
 
 int main(void)
 {
 
     
-# 62 "Src/main.c" 3
+# 63 "Src/main.c" 3
    __asm__ __volatile__ ("cli" ::: "memory")
-# 62 "Src/main.c"
+# 63 "Src/main.c"
         ;
 
 
@@ -1777,7 +1725,10 @@ int main(void)
     UART_SendString("BOOT1: UART OK\r\n");
 
 
-    BRIDGE_Init();
+
+    I2C_MasterConfigType i2cCfg = { 100000UL };
+    I2C_InitMaster(&i2cCfg);
+
 
     ADC_ConfigType adcCfg = {
         .uint8ReferenceVoltage = 1,
@@ -1785,26 +1736,29 @@ int main(void)
     };
     ADC_Init(&adcCfg);
 
+
     Timer0_Init();
-    Timer1_Init();
+
+
     Timer2_Init();
+
 
     EXTI_ConfigType extiCfg1 = { .line = EXTI_INT1, .sense = EXTI_SENSE_RISING };
     EXTI_ConfigType extiCfg0 = { .line = EXTI_INT0, .sense = EXTI_SENSE_RISING };
     EXTI_Init(&extiCfg1);
     EXTI_Init(&extiCfg0);
 
-    I2C_MasterConfigType i2cCfg = { 100000UL };
-    I2C_InitMaster(&i2cCfg);
+
+
     UART_SendString("BOOT2: MCAL OK\r\n");
 
 
-
-     LCD_InitDefault();
+    LCD_InitDefault();
     TACHO_Init();
     ANALOG_Init();
     PANEL_Init();
     BUZZER_Init();
+    BRIDGE_Init();
     UART_SendString("BOOT3: HAL OK\r\n");
 
 
@@ -1851,14 +1805,15 @@ int main(void)
     SCHED_AddTask(Task_LCD, "LCD", 250, 4);
     SCHED_AddTask(Task_SlowSensors, "SlowSensors", 500, 3);
     SCHED_AddTask(Task_Telemetry, "Telemetry", 1000, 5);
+    SCHED_AddTask(Task_StepperTick, "Stepper", 1, 0);
 
     UART_SendString("BOOT4: SCHEDULER READY, ENABLING INTERRUPTS...\r\n");
 
 
     
-# 154 "Src/main.c" 3
+# 162 "Src/main.c" 3
    __asm__ __volatile__ ("sei" ::: "memory")
-# 154 "Src/main.c"
+# 162 "Src/main.c"
         ;
 
     while (1) {
@@ -1873,16 +1828,12 @@ int main(void)
 
 
 
-
-
-
 void Task_Panel(void)
 {
     PANEL_Poll();
     Panel_Event_t event = PANEL_GetEvent();
 
-    switch (event)
-    {
+    switch (event) {
         case PNL_START:
             if (!FSM_RequestStart()) {
                 CONSOLE_SendError("ERR START");
@@ -1909,7 +1860,6 @@ void Task_Panel(void)
             break;
     }
 
-
     DriveState_t state = FSM_GetState();
     if (state == DS_RUNNING) {
         PANEL_SetRunLED(1, 0);
@@ -1919,17 +1869,14 @@ void Task_Panel(void)
         PANEL_SetRunLED(0, 0);
     }
 
-
     if (FSM_IsTripped()) {
         PANEL_SetFaultLED(1);
     } else {
         PANEL_SetFaultLED(0);
     }
 
-
     MotorDir_t dir = FSM_GetDirection();
     PANEL_SetDirectionLEDs(dir);
-
 
     if (PANEL_IsLocalMode()) {
         g_driveData.remote = 0;
@@ -1938,19 +1885,11 @@ void Task_Panel(void)
     }
 }
 
-
-
-
-
 void Task_Current(void)
 {
-
     uint16_t current = ANALOG_GetCurrent();
     g_driveData.currentmA = current;
-
-
     PROTECT_UpdateI2T(current, g_driveCfg.ratedCurrentmA);
-
 
     if (current >= g_driveCfg.shortTripmA) {
         FSM_RequestTrip(TRIP_SHORT);
@@ -1958,81 +1897,61 @@ void Task_Current(void)
     }
 }
 
-
-
-
-
 void Task_Control(void)
 {
-
     FSM_Run();
-
-
     TACHO_Update();
     g_driveData.measuredRpm = TACHO_GetRPM();
 
-
     int16_t setpoint;
     if (g_driveData.remote) {
-
         setpoint = g_driveData.setpointRpm;
     } else {
-
         setpoint = ANALOG_GetSetpoint();
         g_driveData.setpointRpm = setpoint;
     }
 
-
     RAMP_SetTarget(&g_ramp, setpoint);
     g_driveData.rampedRpm = RAMP_Step(&g_ramp);
-
-
     g_driveData.errorRpm = g_driveData.rampedRpm - g_driveData.measuredRpm;
-
 
     Trip_t trip = PROTECT_Evaluate(&g_driveData, &g_driveCfg);
     if (trip != TRIP_NONE) {
-
         FSM_RequestTrip(trip);
         BRIDGE_ForceStop();
         TELEMETRY_SendTripEvent(trip, &g_driveData);
         return;
     }
 
-
     int16_t duty;
     if (FSM_IsRunning()) {
-
         duty = PI_Step(&g_pi, g_driveData.rampedRpm, g_driveData.measuredRpm);
     } else {
-
         duty = 0;
         PI_Reset(&g_pi);
     }
 
-
     DataManager_UpdateDuty(duty);
     BRIDGE_SetDuty(duty);
     BRIDGE_SetDirection(g_driveData.direction);
-
-
     DataManager_UpdateError();
 }
 
-
-
-
 void Task_LCD(void)
 {
+    static uint8_t lastTrip = 0;
+    Trip_t currentTrip = PROTECT_GetActiveTrip();
+
     if (FSM_IsTripped()) {
-        LCD_ShowTrip(g_driveData.activeTrip);
+        if (currentTrip != lastTrip) {
+            lastTrip = currentTrip;
+            LCD_ShowTrip(currentTrip);
+        }
     } else {
+        lastTrip = 0;
         LCD_Update(&g_driveData);
     }
 }
-
-
-
 
 void Task_SlowSensors(void)
 {
@@ -2040,79 +1959,43 @@ void Task_SlowSensors(void)
     g_driveData.tempC = ANALOG_GetTemperature();
 }
 
-
-
-
 void Task_Telemetry(void)
 {
-
     if (FSM_IsRunning() && g_driveData.measuredRpm >= g_driveCfg.minRpm) {
         DataManager_IncrementRunSeconds();
     }
-
-
     TELEMETRY_Update(&g_driveData);
 }
-# 359 "Src/main.c"
 
-# 359 "Src/main.c" 3
+
+void Task_StepperTick(void)
+{
+    Stepper_L298P_Tick();
+}
+
+
+
+
+# 323 "Src/main.c" 3
 void __vector_2 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_2 (void)
 
-# 360 "Src/main.c"
+# 324 "Src/main.c"
 {
 
-    
-# 362 "Src/main.c" 3
-   (*(volatile uint16_t *)((0x2A) + 0x20)) 
-# 362 "Src/main.c"
-         = 0;
-
-
-    ((
-# 365 "Src/main.c" 3
-   (*(volatile uint8_t *)((0x18) + 0x20))
-# 365 "Src/main.c"
-   ) &= ~(1 << (
-# 365 "Src/main.c" 3
-   2
-# 365 "Src/main.c"
-   )));
-    ((
-# 366 "Src/main.c" 3
-   (*(volatile uint8_t *)((0x18) + 0x20))
-# 366 "Src/main.c"
-   ) &= ~(1 << (
-# 366 "Src/main.c" 3
-   1
-# 366 "Src/main.c"
-   )));
-    ((
-# 367 "Src/main.c" 3
-   (*(volatile uint8_t *)((0x18) + 0x20))
-# 367 "Src/main.c"
-   ) &= ~(1 << (
-# 367 "Src/main.c" 3
-   0
-# 367 "Src/main.c"
-   )));
-
-
+    BRIDGE_ForceStop();
     g_estopFlag = 1;
 }
 
 
-
-
-
-# 376 "Src/main.c" 3
+# 330 "Src/main.c" 3
 void __vector_13 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_13 (void)
 
-# 377 "Src/main.c"
+# 331 "Src/main.c"
 {
     uint8_t ch = 
-# 378 "Src/main.c" 3
+# 332 "Src/main.c" 3
                 (*(volatile uint8_t *)((0x0C) + 0x20))
-# 378 "Src/main.c"
+# 332 "Src/main.c"
                    ;
     CONSOLE_ProcessChar(ch);
 }

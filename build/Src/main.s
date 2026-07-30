@@ -148,6 +148,15 @@ Task_Telemetry:
 	ldi r25,hi8(g_driveData)
 	jmp TELEMETRY_Update
 	.size	Task_Telemetry, .-Task_Telemetry
+.global	Task_StepperTick
+	.type	Task_StepperTick, @function
+Task_StepperTick:
+/* prologue: function */
+/* frame size = 0 */
+/* stack size = 0 */
+.L__stack_usage = 0
+	jmp Stepper_L298P_Tick
+	.size	Task_StepperTick, .-Task_StepperTick
 .global	Task_Current
 	.type	Task_Current, @function
 Task_Current:
@@ -168,7 +177,7 @@ Task_Current:
 	lds r25,g_driveCfg+19+1
 	cp r28,r24
 	cpc r29,r25
-	brlo .L32
+	brlo .L33
 	ldi r24,lo8(2)
 	ldi r25,0
 	call FSM_RequestTrip
@@ -180,7 +189,7 @@ Task_Current:
 	pop r29
 	pop r28
 	jmp TELEMETRY_SendTripEvent
-.L32:
+.L33:
 /* epilogue start */
 	pop r29
 	pop r28
@@ -202,10 +211,10 @@ Task_Control:
 	sts g_driveData+4,r24
 	lds r24,g_driveData+26
 	sbrs r24,0
-	rjmp .L35
+	rjmp .L36
 	lds r24,g_driveData
 	lds r25,g_driveData+1
-.L36:
+.L37:
 	movw r22,r24
 	ldi r24,lo8(g_ramp)
 	ldi r25,hi8(g_ramp)
@@ -228,7 +237,7 @@ Task_Control:
 	call PROTECT_Evaluate
 	movw r28,r24
 	sbiw r24,0
-	breq .L37
+	breq .L38
 	call FSM_RequestTrip
 	call BRIDGE_ForceStop
 	ldi r22,lo8(g_driveData)
@@ -238,15 +247,15 @@ Task_Control:
 	pop r29
 	pop r28
 	jmp TELEMETRY_SendTripEvent
-.L35:
+.L36:
 	call ANALOG_GetSetpoint
 	sts g_driveData+1,r25
 	sts g_driveData,r24
-	rjmp .L36
-.L37:
+	rjmp .L37
+.L38:
 	call FSM_IsRunning
 	tst r24
-	breq .L38
+	breq .L39
 	lds r20,g_driveData+4
 	lds r21,g_driveData+4+1
 	lds r22,g_driveData+2
@@ -255,7 +264,7 @@ Task_Control:
 	ldi r25,hi8(g_pi)
 	call PI_Step
 	movw r28,r24
-.L39:
+.L40:
 	movw r24,r28
 	call DataManager_UpdateDuty
 	movw r24,r28
@@ -267,31 +276,51 @@ Task_Control:
 	pop r29
 	pop r28
 	jmp DataManager_UpdateError
-.L38:
+.L39:
 	ldi r24,lo8(g_pi)
 	ldi r25,hi8(g_pi)
 	call PI_Reset
 	ldi r29,0
 	ldi r28,0
-	rjmp .L39
+	rjmp .L40
 	.size	Task_Control, .-Task_Control
 .global	Task_LCD
 	.type	Task_LCD, @function
 Task_LCD:
+	push r28
+	push r29
 /* prologue: function */
 /* frame size = 0 */
-/* stack size = 0 */
-.L__stack_usage = 0
+/* stack size = 2 */
+.L__stack_usage = 2
+	call PROTECT_GetActiveTrip
+	movw r28,r24
 	call FSM_IsTripped
 	tst r24
+	breq .L42
+	lds r24,lastTrip.2281
+	cp r24,r28
+	cpc __zero_reg__,r29
 	breq .L41
-	lds r24,g_driveData+24
-	lds r25,g_driveData+24+1
+	sts lastTrip.2281,r28
+	movw r24,r28
+/* epilogue start */
+	pop r29
+	pop r28
 	jmp LCD_ShowTrip
-.L41:
+.L42:
+	sts lastTrip.2281,__zero_reg__
 	ldi r24,lo8(g_driveData)
 	ldi r25,hi8(g_driveData)
+/* epilogue start */
+	pop r29
+	pop r28
 	jmp LCD_Update
+.L41:
+/* epilogue start */
+	pop r29
+	pop r28
+	ret
 	.size	Task_LCD, .-Task_LCD
 	.section	.rodata.str1.1
 .LC5:
@@ -315,6 +344,8 @@ Task_LCD:
 .LC14:
 	.string	"Telemetry"
 .LC15:
+	.string	"Stepper"
+.LC16:
 	.string	"BOOT4: SCHEDULER READY, ENABLING INTERRUPTS...\r\n"
 	.section	.rodata
 .LC0:
@@ -347,7 +378,7 @@ main:
 /* stack size = 26 */
 .L__stack_usage = 26
 /* #APP */
- ;  62 "Src/main.c" 1
+ ;  63 "Src/main.c" 1
 	cli
  ;  0 "" 2
 /* #NOAPP */
@@ -370,7 +401,17 @@ main:
 	ldi r24,lo8(.LC6)
 	ldi r25,hi8(.LC6)
 	call UART_SendString
-	call BRIDGE_Init
+	ldi r24,lo8(-96)
+	ldi r25,lo8(-122)
+	ldi r26,lo8(1)
+	ldi r27,0
+	std Y+19,r24
+	std Y+20,r25
+	std Y+21,r26
+	std Y+22,r27
+	movw r24,r28
+	adiw r24,19
+	call I2C_InitMaster
 	clr r15
 	inc r15
 	std Y+23,r15
@@ -380,39 +421,27 @@ main:
 	adiw r24,23
 	call ADC_Init
 	call Timer0_Init
-	call Timer1_Init
 	call Timer2_Init
 	lds r24,.LC1
 	lds r25,.LC1+1
 	lds r26,.LC1+2
 	lds r27,.LC1+3
-	std Y+19,r24
-	std Y+20,r25
-	std Y+21,r26
-	std Y+22,r27
-	std Y+16,__zero_reg__
-	std Y+15,__zero_reg__
+	std Y+15,r24
+	std Y+16,r25
+	std Y+17,r26
+	std Y+18,r27
+	std Y+12,__zero_reg__
+	std Y+11,__zero_reg__
 	ldi r16,lo8(3)
 	ldi r17,0
-	std Y+18,r17
-	std Y+17,r16
-	movw r24,r28
-	adiw r24,19
-	call EXTI_Init
+	std Y+14,r17
+	std Y+13,r16
 	movw r24,r28
 	adiw r24,15
 	call EXTI_Init
-	ldi r24,lo8(-96)
-	ldi r25,lo8(-122)
-	ldi r26,lo8(1)
-	ldi r27,0
-	std Y+11,r24
-	std Y+12,r25
-	std Y+13,r26
-	std Y+14,r27
 	movw r24,r28
 	adiw r24,11
-	call I2C_InitMaster
+	call EXTI_Init
 	ldi r24,lo8(.LC7)
 	ldi r25,hi8(.LC7)
 	call UART_SendString
@@ -421,6 +450,7 @@ main:
 	call ANALOG_Init
 	call PANEL_Init
 	call BUZZER_Init
+	call BRIDGE_Init
 	ldi r24,lo8(.LC8)
 	ldi r25,hi8(.LC8)
 	call UART_SendString
@@ -587,21 +617,30 @@ main:
 	ldi r24,lo8(gs(Task_Telemetry))
 	ldi r25,hi8(gs(Task_Telemetry))
 	call SCHED_AddTask
-	ldi r24,lo8(.LC15)
-	ldi r25,hi8(.LC15)
+	ldi r19,0
+	ldi r18,0
+	ldi r20,lo8(1)
+	ldi r21,0
+	ldi r22,lo8(.LC15)
+	ldi r23,hi8(.LC15)
+	ldi r24,lo8(gs(Task_StepperTick))
+	ldi r25,hi8(gs(Task_StepperTick))
+	call SCHED_AddTask
+	ldi r24,lo8(.LC16)
+	ldi r25,hi8(.LC16)
 	call UART_SendString
 /* #APP */
- ;  154 "Src/main.c" 1
+ ;  162 "Src/main.c" 1
 	sei
  ;  0 "" 2
 /* #NOAPP */
-.L43:
+.L45:
 	call SCHED_Run
 	call CONSOLE_IsCommandReady
 	tst r24
-	breq .L43
+	breq .L45
 	call CONSOLE_ExecuteCommand
-	rjmp .L43
+	rjmp .L45
 	.size	main, .-main
 	.text
 .global	__vector_2
@@ -612,20 +651,38 @@ __vector_2:
 	in r0,__SREG__
 	push r0
 	clr __zero_reg__
+	push r18
+	push r19
+	push r20
+	push r21
+	push r22
+	push r23
 	push r24
+	push r25
+	push r26
+	push r27
+	push r30
+	push r31
 /* prologue: Signal */
 /* frame size = 0 */
-/* stack size = 4 */
-.L__stack_usage = 4
-	out 0x2a+1,__zero_reg__
-	out 0x2a,__zero_reg__
-	cbi 0x18,2
-	cbi 0x18,1
-	cbi 0x18,0
+/* stack size = 15 */
+.L__stack_usage = 15
+	call BRIDGE_ForceStop
 	ldi r24,lo8(1)
 	sts g_estopFlag,r24
 /* epilogue start */
+	pop r31
+	pop r30
+	pop r27
+	pop r26
+	pop r25
 	pop r24
+	pop r23
+	pop r22
+	pop r21
+	pop r20
+	pop r19
+	pop r18
 	pop r0
 	out __SREG__,r0
 	pop r0
@@ -677,6 +734,8 @@ __vector_13:
 	pop r1
 	reti
 	.size	__vector_13, .-__vector_13
+	.local	lastTrip.2281
+	.comm	lastTrip.2281,1,1
 .global	g_estopFlag
 	.section .bss
 	.type	g_estopFlag, @object

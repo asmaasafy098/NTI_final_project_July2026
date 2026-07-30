@@ -1,6 +1,7 @@
-main.o: Src/main.c Src/../Service/STD_Types.h Src/../Service/Bit_Math.h \
- Src/../Logic/Data/data_types.h Service/STD_Types.h \
- Src/../Logic/Data/data_manager.h Src/../Logic/Data/data_types.h \
+build/Src/main.o: Src/main.c Src/../Service/STD_Types.h \
+ Src/../Service/Bit_Math.h Src/../Logic/Data/data_types.h \
+ Service/STD_Types.h Src/../Logic/Data/data_manager.h \
+ Src/../Logic/Data/data_types.h \
  Src/../Logic/Control/drive_fsm/drive_fsm.h Logic/Data/data_types.h \
  Src/../Logic/Control/pi_controller/pi_controller.h \
  Src/../Logic/Control/ramp_generator/ramp_generator.h \

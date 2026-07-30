@@ -2,10 +2,10 @@
 # 1 "<built-in>"
 # 1 "<command-line>"
 # 1 "HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.c"
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdio.h" 1 3
-# 44 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdio.h" 3
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 1 3
-# 37 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 3
+# 1 "HAL/LCD_Aip31068_i2c/../../Service/STD_Types.h" 1
+
+
+
 # 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 1 3 4
 # 9 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 3 4
 # 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 1 3 4
@@ -120,295 +120,7 @@ typedef int64_t intmax_t;
 
 typedef uint64_t uintmax_t;
 # 10 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 2 3 4
-# 38 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 2 3
-# 77 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 3
-typedef int32_t int_farptr_t;
-
-
-
-typedef uint32_t uint_farptr_t;
-# 45 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdio.h" 2 3
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdarg.h" 1 3 4
-# 40 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdarg.h" 3 4
-typedef __builtin_va_list __gnuc_va_list;
-# 99 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdarg.h" 3 4
-typedef __gnuc_va_list va_list;
-# 46 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdio.h" 2 3
-
-
-
-
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stddef.h" 1 3 4
-# 216 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stddef.h" 3 4
-typedef unsigned int size_t;
-# 51 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdio.h" 2 3
-# 244 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdio.h" 3
-struct __file {
- char *buf;
- unsigned char unget;
- uint8_t flags;
-# 263 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdio.h" 3
- int size;
- int len;
- int (*put)(char, struct __file *);
- int (*get)(struct __file *);
- void *udata;
-};
-# 277 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdio.h" 3
-typedef struct __file FILE;
-# 407 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdio.h" 3
-extern struct __file *__iob[];
-# 419 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdio.h" 3
-extern FILE *fdevopen(int (*__put)(char, FILE*), int (*__get)(FILE*));
-# 436 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdio.h" 3
-extern int fclose(FILE *__stream);
-# 610 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdio.h" 3
-extern int vfprintf(FILE *__stream, const char *__fmt, va_list __ap);
-
-
-
-
-
-extern int vfprintf_P(FILE *__stream, const char *__fmt, va_list __ap);
-
-
-
-
-
-
-extern int fputc(int __c, FILE *__stream);
-
-
-
-
-extern int putc(int __c, FILE *__stream);
-
-
-extern int putchar(int __c);
-# 651 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdio.h" 3
-extern int printf(const char *__fmt, ...);
-
-
-
-
-
-extern int printf_P(const char *__fmt, ...);
-
-
-
-
-
-
-
-extern int vprintf(const char *__fmt, va_list __ap);
-
-
-
-
-
-extern int sprintf(char *__s, const char *__fmt, ...);
-
-
-
-
-
-extern int sprintf_P(char *__s, const char *__fmt, ...);
-# 687 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdio.h" 3
-extern int snprintf(char *__s, size_t __n, const char *__fmt, ...);
-
-
-
-
-
-extern int snprintf_P(char *__s, size_t __n, const char *__fmt, ...);
-
-
-
-
-
-extern int vsprintf(char *__s, const char *__fmt, va_list ap);
-
-
-
-
-
-extern int vsprintf_P(char *__s, const char *__fmt, va_list ap);
-# 715 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdio.h" 3
-extern int vsnprintf(char *__s, size_t __n, const char *__fmt, va_list ap);
-
-
-
-
-
-extern int vsnprintf_P(char *__s, size_t __n, const char *__fmt, va_list ap);
-
-
-
-
-extern int fprintf(FILE *__stream, const char *__fmt, ...);
-
-
-
-
-
-extern int fprintf_P(FILE *__stream, const char *__fmt, ...);
-
-
-
-
-
-
-extern int fputs(const char *__str, FILE *__stream);
-
-
-
-
-extern int fputs_P(const char *__str, FILE *__stream);
-
-
-
-
-
-extern int puts(const char *__str);
-
-
-
-
-extern int puts_P(const char *__str);
-# 764 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdio.h" 3
-extern size_t fwrite(const void *__ptr, size_t __size, size_t __nmemb,
-         FILE *__stream);
-
-
-
-
-
-
-
-extern int fgetc(FILE *__stream);
-
-
-
-
-extern int getc(FILE *__stream);
-
-
-extern int getchar(void);
-# 812 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdio.h" 3
-extern int ungetc(int __c, FILE *__stream);
-# 824 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdio.h" 3
-extern char *fgets(char *__str, int __size, FILE *__stream);
-
-
-
-
-
-
-extern char *gets(char *__str);
-# 842 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdio.h" 3
-extern size_t fread(void *__ptr, size_t __size, size_t __nmemb,
-        FILE *__stream);
-
-
-
-
-extern void clearerr(FILE *__stream);
-# 859 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdio.h" 3
-extern int feof(FILE *__stream);
-# 870 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdio.h" 3
-extern int ferror(FILE *__stream);
-
-
-
-
-
-
-extern int vfscanf(FILE *__stream, const char *__fmt, va_list __ap);
-
-
-
-
-extern int vfscanf_P(FILE *__stream, const char *__fmt, va_list __ap);
-
-
-
-
-
-
-
-extern int fscanf(FILE *__stream, const char *__fmt, ...);
-
-
-
-
-extern int fscanf_P(FILE *__stream, const char *__fmt, ...);
-
-
-
-
-
-
-extern int scanf(const char *__fmt, ...);
-
-
-
-
-extern int scanf_P(const char *__fmt, ...);
-
-
-
-
-
-
-
-extern int vscanf(const char *__fmt, va_list __ap);
-
-
-
-
-
-
-
-extern int sscanf(const char *__buf, const char *__fmt, ...);
-
-
-
-
-extern int sscanf_P(const char *__buf, const char *__fmt, ...);
-# 940 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdio.h" 3
-static __inline__ int fflush(FILE *stream __attribute__((unused)))
-{
- return 0;
-}
-
-
-
-
-
-
-__extension__ typedef long long fpos_t;
-extern int fgetpos(FILE *stream, fpos_t *pos);
-extern FILE *fopen(const char *path, const char *mode);
-extern FILE *freopen(const char *path, const char *mode, FILE *stream);
-extern FILE *fdopen(int, const char *);
-extern int fseek(FILE *stream, long offset, int whence);
-extern int fsetpos(FILE *stream, fpos_t *pos);
-extern long ftell(FILE *stream);
-extern int fileno(FILE *);
-extern void perror(const char *s);
-extern int remove(const char *pathname);
-extern int rename(const char *oldpath, const char *newpath);
-extern void rewind(FILE *stream);
-extern void setbuf(FILE *stream, char *buf);
-extern int setvbuf(FILE *stream, char *buf, int mode, size_t size);
-extern FILE *tmpfile(void);
-extern char *tmpnam (char *s);
-# 2 "HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.c" 2
-# 1 "HAL/LCD_Aip31068_i2c/../../Service/STD_Types.h" 1
-
-
-
-
+# 5 "HAL/LCD_Aip31068_i2c/../../Service/STD_Types.h" 2
 
 
 
@@ -462,6 +174,30 @@ typedef enum {
 } Std_ReturnType;
 
 typedef Std_ReturnType STD_ReturnType;
+# 2 "HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.c" 2
+# 1 "HAL/LCD_Aip31068_i2c/../../Service/string_utils.h" 1
+# 9 "HAL/LCD_Aip31068_i2c/../../Service/string_utils.h"
+# 1 "HAL/LCD_Aip31068_i2c/../../Service/STD_Types.h" 1
+# 10 "HAL/LCD_Aip31068_i2c/../../Service/string_utils.h" 2
+# 20 "HAL/LCD_Aip31068_i2c/../../Service/string_utils.h"
+uint8_t UTL_IntToStr(int16_t value, char* buffer, uint8_t width);
+# 29 "HAL/LCD_Aip31068_i2c/../../Service/string_utils.h"
+uint8_t UTL_UIntToStr(uint16_t value, char* buffer, uint8_t width);
+
+
+
+
+
+
+void UTL_PadRight(char* buffer, uint8_t length);
+
+
+
+
+
+
+
+uint8_t UTL_IntToStr1Dec(uint16_t value, char* buffer);
 # 3 "HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.c" 2
 # 1 "HAL/LCD_Aip31068_i2c/../../Logic/Data/data_types.h" 1
 # 9 "HAL/LCD_Aip31068_i2c/../../Logic/Data/data_types.h"
@@ -710,22 +446,19 @@ Std_ReturnType LCD_Aip31068_CreateCustomChar(LCD_Aip31068_HandleType *handle,
                                              uint8_t location, const uint8_t *pPattern);
 # 5 "HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.c" 2
 
-
-
 extern DriveData_t g_driveData;
-
 static LCD_Aip31068_HandleType g_lcdHandle;
-# 20 "HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.c"
+
+
+
+
 static uint8_t g_displayControl = 0x0C;
+
 
 
 Std_ReturnType LCD_Aip31068_SendCommand(LCD_Aip31068_HandleType *handle, uint8_t command)
 {
-    if (handle == 
-# 25 "HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.c" 3 4
-                 ((void *)0)
-# 25 "HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.c"
-                     ) return ((Std_ReturnType)0x01);
+    if (handle == ((void *)0)) return ((Std_ReturnType)0x01);
     if (I2C_WriteAddress(handle->i2cAddress, 0) != ((Std_ReturnType)0x00)) return ((Std_ReturnType)0x01);
     if (I2C_WriteData(0x00U) != ((Std_ReturnType)0x00)) { I2C_Stop(); return ((Std_ReturnType)0x01); }
     if (I2C_WriteData(command) != ((Std_ReturnType)0x00)) { I2C_Stop(); return ((Std_ReturnType)0x01); }
@@ -733,14 +466,9 @@ Std_ReturnType LCD_Aip31068_SendCommand(LCD_Aip31068_HandleType *handle, uint8_t
     return ((Std_ReturnType)0x00);
 }
 
-
 Std_ReturnType LCD_Aip31068_WriteChar(LCD_Aip31068_HandleType *handle, uint8_t character)
 {
-    if (handle == 
-# 36 "HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.c" 3 4
-                 ((void *)0)
-# 36 "HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.c"
-                     ) return ((Std_ReturnType)0x01);
+    if (handle == ((void *)0)) return ((Std_ReturnType)0x01);
     if (I2C_WriteAddress(handle->i2cAddress, 0) != ((Std_ReturnType)0x00)) return ((Std_ReturnType)0x01);
     if (I2C_WriteData(0x40U) != ((Std_ReturnType)0x00)) { I2C_Stop(); return ((Std_ReturnType)0x01); }
     if (I2C_WriteData(character) != ((Std_ReturnType)0x00)) { I2C_Stop(); return ((Std_ReturnType)0x01); }
@@ -748,24 +476,14 @@ Std_ReturnType LCD_Aip31068_WriteChar(LCD_Aip31068_HandleType *handle, uint8_t c
     return ((Std_ReturnType)0x00);
 }
 
-
 Std_ReturnType LCD_Aip31068_WriteString(LCD_Aip31068_HandleType *handle, const uint8_t *pString)
 {
-    if ((handle == 
-# 47 "HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.c" 3 4
-                  ((void *)0)
-# 47 "HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.c"
-                      ) || (pString == 
-# 47 "HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.c" 3 4
-                                       ((void *)0)
-# 47 "HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.c"
-                                           )) return ((Std_ReturnType)0x01);
+    if ((handle == ((void *)0)) || (pString == ((void *)0))) return ((Std_ReturnType)0x01);
 
     if (I2C_WriteAddress(handle->i2cAddress, 0) != ((Std_ReturnType)0x00)) return ((Std_ReturnType)0x01);
     if (I2C_WriteData(0x40U) != ((Std_ReturnType)0x00)) { I2C_Stop(); return ((Std_ReturnType)0x01); }
 
-    while (*pString != '\0')
-    {
+    while (*pString != '\0') {
         if (I2C_WriteData(*pString) != ((Std_ReturnType)0x00)) { I2C_Stop(); return ((Std_ReturnType)0x01); }
         pString++;
     }
@@ -774,23 +492,17 @@ Std_ReturnType LCD_Aip31068_WriteString(LCD_Aip31068_HandleType *handle, const u
     return ((Std_ReturnType)0x00);
 }
 
-
 Std_ReturnType LCD_Aip31068_SetCursor(LCD_Aip31068_HandleType *handle, uint8_t row, uint8_t column)
 {
     uint8_t rowOffsets[2] = { 0x00U, 0x40U };
     uint8_t address;
 
-    if (handle == 
-# 68 "HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.c" 3 4
-                 ((void *)0)
-# 68 "HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.c"
-                     ) return ((Std_ReturnType)0x01);
+    if (handle == ((void *)0)) return ((Std_ReturnType)0x01);
     if ((row >= handle->rows) || (column >= handle->cols)) return ((Std_ReturnType)0x01);
 
     address = (uint8_t)(rowOffsets[row] + column);
     return LCD_Aip31068_SendCommand(handle, (uint8_t)(0x80U | address));
 }
-
 
 Std_ReturnType LCD_Aip31068_WriteStringAt(LCD_Aip31068_HandleType *handle,
                                           uint8_t row, uint8_t column,
@@ -800,51 +512,43 @@ Std_ReturnType LCD_Aip31068_WriteStringAt(LCD_Aip31068_HandleType *handle,
     return LCD_Aip31068_WriteString(handle, pString);
 }
 
-
 Std_ReturnType LCD_Aip31068_Clear(LCD_Aip31068_HandleType *handle)
 {
     Std_ReturnType status = LCD_Aip31068_SendCommand(handle, 0x01U);
 
+    for (volatile uint32_t i = 0; i < 2000; i++);
     return status;
 }
-
 
 Std_ReturnType LCD_Aip31068_Home(LCD_Aip31068_HandleType *handle)
 {
     return LCD_Aip31068_SendCommand(handle, 0x02U);
 }
 
-
 Std_ReturnType LCD_Aip31068_DisplayOnOff(LCD_Aip31068_HandleType *handle, uint8_t on)
 {
-    if (on) { g_displayControl |= 0x04U; } else { g_displayControl &= (uint8_t)~0x04U; }
+    if (on) { g_displayControl |= 0x04U; }
+    else { g_displayControl &= (uint8_t)~0x04U; }
     return LCD_Aip31068_SendCommand(handle, (uint8_t)(0x08U | g_displayControl));
 }
 
-
 Std_ReturnType LCD_Aip31068_Init(LCD_Aip31068_HandleType *handle)
 {
-    if (handle == 
-# 108 "HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.c" 3 4
-                 ((void *)0)
-# 108 "HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.c"
-                     ) return ((Std_ReturnType)0x01);
-
+    if (handle == ((void *)0)) return ((Std_ReturnType)0x01);
 
     if (LCD_Aip31068_SendCommand(handle, 0x38U) != ((Std_ReturnType)0x00)) return ((Std_ReturnType)0x01);
-
 
     g_displayControl = 0x0CU;
     if (LCD_Aip31068_SendCommand(handle, (uint8_t)(0x08U | g_displayControl)) != ((Std_ReturnType)0x00)) return ((Std_ReturnType)0x01);
 
-
     if (LCD_Aip31068_Clear(handle) != ((Std_ReturnType)0x00)) return ((Std_ReturnType)0x01);
-
 
     if (LCD_Aip31068_SendCommand(handle, 0x06U) != ((Std_ReturnType)0x00)) return ((Std_ReturnType)0x01);
 
     return ((Std_ReturnType)0x00);
 }
+
+
 
 Std_ReturnType LCD_InitDefault(void)
 {
@@ -854,35 +558,96 @@ Std_ReturnType LCD_InitDefault(void)
     return LCD_Aip31068_Init(&g_lcdHandle);
 }
 
+
 Std_ReturnType LCD_Update(const DriveData_t *pData)
 {
-    char dirChar;
-    char line1[17], line2[17];
+    char line1[17];
+    char line2[17];
+    char temp[6];
+    uint8_t pos;
 
-    if (pData == 
-# 139 "HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.c" 3 4
-                ((void *)0)
-# 139 "HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.c"
-                    )
-    {
+    if (pData == ((void *)0)) {
         return ((Std_ReturnType)0x01);
     }
 
-    switch (pData->direction)
-    {
+
+    pos = 0;
+
+
+    line1[pos++] = 'S';
+    line1[pos++] = 'E';
+    line1[pos++] = 'T';
+
+
+    UTL_IntToStr(pData->rampedRpm, temp, 4);
+    for (uint8_t i = 0; temp[i] != '\0'; i++) {
+        line1[pos++] = temp[i];
+    }
+    line1[pos++] = ' ';
+
+
+    line1[pos++] = 'A';
+    line1[pos++] = 'C';
+    line1[pos++] = 'T';
+
+
+    UTL_IntToStr(pData->measuredRpm, temp, 4);
+    for (uint8_t i = 0; temp[i] != '\0'; i++) {
+        line1[pos++] = temp[i];
+    }
+
+
+    char dirChar;
+    switch (pData->direction) {
         case DIR_FORWARD: dirChar = 'F'; break;
         case DIR_REVERSE: dirChar = 'R'; break;
         default: dirChar = '-'; break;
     }
+    line1[pos++] = dirChar;
 
-    sprintf(line1, "SET%-4d ACT%-4d%c",
-            pData->rampedRpm, pData->measuredRpm, dirChar);
 
-    sprintf(line2, "%3d%% %2d.%dA %2dV %3dC",
-            pData->dutyPct,
-            pData->currentmA / 1000, (pData->currentmA / 100) % 10,
-            pData->busmV / 1000,
-            pData->tempC);
+    while (pos < 16) {
+        line1[pos++] = ' ';
+    }
+    line1[16] = '\0';
+
+
+    pos = 0;
+
+
+    UTL_UIntToStr(pData->dutyPct, temp, 2);
+    line1[pos++] = temp[0];
+    line1[pos++] = temp[1];
+    line1[pos++] = '%';
+    line1[pos++] = ' ';
+
+
+    UTL_IntToStr1Dec(pData->currentmA / 100, temp);
+    for (uint8_t i = 0; temp[i] != '\0'; i++) {
+        line1[pos++] = temp[i];
+    }
+    line1[pos++] = 'A';
+    line1[pos++] = ' ';
+
+
+    UTL_UIntToStr(pData->busmV / 1000, temp, 2);
+    line1[pos++] = temp[0];
+    line1[pos++] = temp[1];
+    line1[pos++] = 'V';
+    line1[pos++] = ' ';
+
+
+    UTL_UIntToStr(pData->tempC, temp, 2);
+    line1[pos++] = temp[0];
+    line1[pos++] = temp[1];
+    line1[pos++] = 'C';
+
+
+    while (pos < 16) {
+        line1[pos++] = ' ';
+    }
+    line2[16] = '\0';
+
 
     LCD_Aip31068_WriteStringAt(&g_lcdHandle, 0, 0, (const uint8_t *)line1);
     LCD_Aip31068_WriteStringAt(&g_lcdHandle, 1, 0, (const uint8_t *)line2);
@@ -897,22 +662,36 @@ Std_ReturnType LCD_ShowTrip(Trip_t tripCode)
     static uint8_t blinkState = 0;
 
     blinkCounter++;
-    if (blinkCounter >= 15)
-    {
+    if (blinkCounter >= 15) {
         blinkCounter = 0;
         blinkState = !blinkState;
     }
 
     LCD_Aip31068_WriteStringAt(&g_lcdHandle, 0, 0, (const uint8_t *)"!! TRIPPED !!   ");
 
-    if (blinkState)
-    {
+    if (blinkState) {
         char buf[17];
-        sprintf(buf, "!TRIP CODE=%d", tripCode);
+        uint8_t pos = 0;
+        buf[pos++] = '!';
+        buf[pos++] = 'T';
+        buf[pos++] = 'R';
+        buf[pos++] = 'I';
+        buf[pos++] = 'P';
+        buf[pos++] = '=';
+
+        char temp[4];
+        UTL_UIntToStr((uint16_t)tripCode, temp, 2);
+        for (uint8_t i = 0; temp[i] != '\0'; i++) {
+            buf[pos++] = temp[i];
+        }
+
+        while (pos < 16) {
+            buf[pos++] = ' ';
+        }
+        buf[16] = '\0';
+
         LCD_Aip31068_WriteStringAt(&g_lcdHandle, 1, 0, (const uint8_t *)buf);
-    }
-    else
-    {
+    } else {
         LCD_Update(&g_driveData);
     }
 

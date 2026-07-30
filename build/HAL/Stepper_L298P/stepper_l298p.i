@@ -195,29 +195,152 @@ Std_ReturnType GPIO_write_pin(uint8_t port, uint8_t pin, uint8_t value);
 GPIO_pin_status GPIO_read_pin(uint8_t port, uint8_t pin);
 Std_ReturnType GPIO_toggle_pin(uint8_t port, uint8_t pin);
 # 4 "HAL/Stepper_L298P/stepper_l298p.c" 2
-# 1 "HAL/Stepper_L298P/stepper_l298p.h" 1
-# 73 "HAL/Stepper_L298P/stepper_l298p.h"
+# 1 "HAL/Stepper_L298P/../../MCL/Timer/timer_interface.h" 1
+
+
+
+# 1 "HAL/Stepper_L298P/../../MCL/Timer/../../Service/STD_Types.h" 1
+# 5 "HAL/Stepper_L298P/../../MCL/Timer/timer_interface.h" 2
+# 1 "HAL/Stepper_L298P/../../MCL/Timer/timer_registers.h" 1
+# 6 "HAL/Stepper_L298P/../../MCL/Timer/timer_interface.h" 2
+# 23 "HAL/Stepper_L298P/../../MCL/Timer/timer_interface.h"
 typedef enum
 {
+    TIMER_CHANNEL_0 = 0,
+    TIMER_CHANNEL_1 = 1,
+    TIMER_CHANNEL_2 = 2,
+    TIMER_CHANNEL_MAX
+} Timer_ChannelType;
+# 39 "HAL/Stepper_L298P/../../MCL/Timer/timer_interface.h"
+typedef enum
+{
+    TIMER_MODE_NORMAL = 0,
+    TIMER_MODE_CTC = 1,
+    TIMER_MODE_FAST_PWM = 2,
+    TIMER_MODE_PHASE_PWM = 3
+} Timer_ModeType;
+
+
+
+
+
+
+
+typedef enum
+{
+    TIMER_CLOCK_STOPPED = 0,
+    TIMER_CLOCK_DIV_1 = 1,
+    TIMER_CLOCK_DIV_8 = 2,
+    TIMER_CLOCK_DIV_64 = 3,
+    TIMER_CLOCK_DIV_256 = 4,
+    TIMER_CLOCK_DIV_1024 = 5
+} Timer_PrescalerType;
+
+
+
+
+
+
+
+typedef enum
+{
+    TIMER_INT_OVERFLOW = 0,
+    TIMER_INT_COMPARE_MATCH = 1
+} Timer_InterruptType;
+# 85 "HAL/Stepper_L298P/../../MCL/Timer/timer_interface.h"
+typedef struct
+{
+    Timer_ChannelType channel;
+    Timer_ModeType mode;
+    Timer_PrescalerType prescaler;
+    uint16_t initialValue;
+    uint16_t compareValue;
+} Timer_ConfigType;
+
+
+
+
+
+
+typedef void (*Timer_CallBackType)(void);
+# 111 "HAL/Stepper_L298P/../../MCL/Timer/timer_interface.h"
+Std_ReturnType Timer0_Init(void);
+# 120 "HAL/Stepper_L298P/../../MCL/Timer/timer_interface.h"
+Std_ReturnType Timer0_EnableInterrupt(Timer_ChannelType channel, Timer_InterruptType intType);
+# 129 "HAL/Stepper_L298P/../../MCL/Timer/timer_interface.h"
+Std_ReturnType Timer0_DisableInterrupt(Timer_ChannelType channel, Timer_InterruptType intType);
+# 139 "HAL/Stepper_L298P/../../MCL/Timer/timer_interface.h"
+Std_ReturnType Timer_SetCallBack(Timer_ChannelType channel, Timer_InterruptType intType,
+                                  Timer_CallBackType callBack);
+
+
+
+
+
+
+
+Std_ReturnType Timer1_Init(void);
+
+
+
+
+
+
+Std_ReturnType Timer1_SetDuty(uint16_t duty_percent);
+
+
+
+
+
+
+
+Std_ReturnType Timer2_Init(void);
+
+
+
+
+
+
+Std_ReturnType Timer2_SetTone(uint16_t tone);
+
+
+
+
+
+
+void Timer_EnableGlobalInterrupt(void);
+
+
+
+
+
+
+void Timer_DisableGlobalInterrupt(void);
+
+
+uint32_t TIMER_GetTick(void);
+# 5 "HAL/Stepper_L298P/stepper_l298p.c" 2
+# 1 "HAL/Stepper_L298P/stepper_l298p.h" 1
+
+
+
+
+
+
+
+typedef enum {
     STEPPER_L298P_MODE_WAVE = 0,
     STEPPER_L298P_MODE_FULL = 1,
     STEPPER_L298P_MODE_HALF = 2
 } Stepper_L298P_ModeType;
 
-
-
-
-
-
-
-typedef enum
-{
+typedef enum {
     STEPPER_L298P_DIR_CW = 0,
     STEPPER_L298P_DIR_CCW = 1
 } Stepper_L298P_DirType;
-# 117 "HAL/Stepper_L298P/stepper_l298p.h"
-typedef struct
-{
+
+
+typedef struct {
 
     uint8_t in1Port; uint8_t in1Pin;
     uint8_t in2Port; uint8_t in2Pin;
@@ -237,100 +360,67 @@ typedef struct
     uint8_t energized;
     sint32 position;
 } Stepper_L298P_HandleType;
-# 152 "HAL/Stepper_L298P/stepper_l298p.h"
+
+
+
 Std_ReturnType Stepper_L298P_Init(Stepper_L298P_HandleType *handle);
-# 163 "HAL/Stepper_L298P/stepper_l298p.h"
 Std_ReturnType Stepper_L298P_SetStepMode(Stepper_L298P_HandleType *handle,
                                          Stepper_L298P_ModeType mode);
-
-
-
-
-
-
-
 Std_ReturnType Stepper_L298P_SetStepDelay(Stepper_L298P_HandleType *handle,
                                           uint16_t stepDelayMs);
-# 185 "HAL/Stepper_L298P/stepper_l298p.h"
 Std_ReturnType Stepper_L298P_SetSpeedRpm(Stepper_L298P_HandleType *handle, uint16_t rpm);
-# 199 "HAL/Stepper_L298P/stepper_l298p.h"
+
+
 Std_ReturnType Stepper_L298P_Step(Stepper_L298P_HandleType *handle,
                                   uint16_t steps, Stepper_L298P_DirType dir);
-# 222 "HAL/Stepper_L298P/stepper_l298p.h"
-Std_ReturnType Stepper_L298P_StepOnce(Stepper_L298P_HandleType *handle,
-                                      Stepper_L298P_DirType dir);
-# 236 "HAL/Stepper_L298P/stepper_l298p.h"
 Std_ReturnType Stepper_L298P_RotateAngle(Stepper_L298P_HandleType *handle,
                                          uint16_t degrees, Stepper_L298P_DirType dir);
-# 247 "HAL/Stepper_L298P/stepper_l298p.h"
+
+
+Std_ReturnType Stepper_L298P_StepOnce(Stepper_L298P_HandleType *handle,
+                                      Stepper_L298P_DirType dir);
+Std_ReturnType Stepper_L298P_StepNonBlocking(Stepper_L298P_HandleType *handle,
+                                              uint16_t steps, Stepper_L298P_DirType dir);
+void Stepper_L298P_Tick(void);
+
+
 Std_ReturnType Stepper_L298P_Hold(Stepper_L298P_HandleType *handle);
-# 258 "HAL/Stepper_L298P/stepper_l298p.h"
 Std_ReturnType Stepper_L298P_Release(Stepper_L298P_HandleType *handle);
-# 267 "HAL/Stepper_L298P/stepper_l298p.h"
+
+
 Std_ReturnType Stepper_L298P_GetPosition(const Stepper_L298P_HandleType *handle,
                                          sint32 *pPosition);
-
-
-
-
-
-
-
 Std_ReturnType Stepper_L298P_ResetPosition(Stepper_L298P_HandleType *handle);
-# 286 "HAL/Stepper_L298P/stepper_l298p.h"
 Std_ReturnType Stepper_L298P_GetStepsPerRev(const Stepper_L298P_HandleType *handle,
                                             uint16_t *pStepsPerRev);
-# 5 "HAL/Stepper_L298P/stepper_l298p.c" 2
-# 18 "HAL/Stepper_L298P/stepper_l298p.c"
-static const uint8_t STEPPER_WAVE_TABLE[4] =
-{
-    0x01U,
-    0x02U,
-    0x04U,
-    0x08U
+# 6 "HAL/Stepper_L298P/stepper_l298p.c" 2
+
+
+static const uint8_t STEPPER_WAVE_TABLE[4] = {
+    0x01U, 0x02U, 0x04U, 0x08U
 };
 
-
-static const uint8_t STEPPER_FULL_TABLE[4] =
-{
-    0x03U,
-    0x06U,
-    0x0CU,
-    0x09U
+static const uint8_t STEPPER_FULL_TABLE[4] = {
+    0x03U, 0x06U, 0x0CU, 0x09U
 };
 
-
-static const uint8_t STEPPER_HALF_TABLE[8] =
-{
-    0x01U,
-    0x03U,
-    0x02U,
-    0x06U,
-    0x04U,
-    0x0CU,
-    0x08U,
-    0x09U
+static const uint8_t STEPPER_HALF_TABLE[8] = {
+    0x01U, 0x03U, 0x02U, 0x06U, 0x04U, 0x0CU, 0x08U, 0x09U
 };
 
 
 
 
+typedef struct {
+    Stepper_L298P_HandleType* handle;
+    uint16_t remainingSteps;
+    Stepper_L298P_DirType dir;
+    uint32_t nextStepTime;
+    uint8_t active;
+} Stepper_MoveContext_t;
 
+static Stepper_MoveContext_t g_stepperMoves[4] = {0};
 
-
-static void Stepper_DelayMs(uint16_t ms)
-{
-    while (ms > 0U)
-    {
-
-        volatile uint32_t count = 4000U;
-        while (count--)
-        {
-            __asm__ volatile ("nop");
-        }
-        ms--;
-    }
-}
 
 
 static uint8_t Stepper_TableLength(Stepper_L298P_ModeType mode)
@@ -338,72 +428,50 @@ static uint8_t Stepper_TableLength(Stepper_L298P_ModeType mode)
     return (mode == STEPPER_L298P_MODE_HALF) ? 8U : 4U;
 }
 
-
 static uint8_t Stepper_TableEntry(Stepper_L298P_ModeType mode, uint8_t index)
 {
-    uint8_t local_Pattern = 0U;
-
-    switch (mode)
-    {
-        case STEPPER_L298P_MODE_WAVE: local_Pattern = STEPPER_WAVE_TABLE[index & 0x03U]; break;
-        case STEPPER_L298P_MODE_HALF: local_Pattern = STEPPER_HALF_TABLE[index & 0x07U]; break;
+    switch (mode) {
+        case STEPPER_L298P_MODE_WAVE: return STEPPER_WAVE_TABLE[index & 0x03U];
+        case STEPPER_L298P_MODE_HALF: return STEPPER_HALF_TABLE[index & 0x07U];
         case STEPPER_L298P_MODE_FULL:
-        default: local_Pattern = STEPPER_FULL_TABLE[index & 0x03U]; break;
+        default: return STEPPER_FULL_TABLE[index & 0x03U];
     }
-
-    return local_Pattern;
 }
-
 
 static void Stepper_ApplyPattern(Stepper_L298P_HandleType *handle, uint8_t pattern)
 {
-    (void)GPIO_set_pin_value(handle->in1Port, handle->in1Pin, (uint8_t)(((pattern) >> (0)) & 0x01));
-    (void)GPIO_set_pin_value(handle->in2Port, handle->in2Pin, (uint8_t)(((pattern) >> (1)) & 0x01));
-    (void)GPIO_set_pin_value(handle->in3Port, handle->in3Pin, (uint8_t)(((pattern) >> (2)) & 0x01));
-    (void)GPIO_set_pin_value(handle->in4Port, handle->in4Pin, (uint8_t)(((pattern) >> (3)) & 0x01));
+    GPIO_set_pin_value(handle->in1Port, handle->in1Pin, (uint8_t)(((pattern) >> (0)) & 0x01));
+    GPIO_set_pin_value(handle->in2Port, handle->in2Pin, (uint8_t)(((pattern) >> (1)) & 0x01));
+    GPIO_set_pin_value(handle->in3Port, handle->in3Pin, (uint8_t)(((pattern) >> (2)) & 0x01));
+    GPIO_set_pin_value(handle->in4Port, handle->in4Pin, (uint8_t)(((pattern) >> (3)) & 0x01));
 
     handle->energized = (pattern != 0U) ? 1U : 0U;
 }
 
 
 
-
-
-
 Std_ReturnType Stepper_L298P_Init(Stepper_L298P_HandleType *handle)
 {
-
-    if (handle == ((void *)0))
-    {
-        return ((Std_ReturnType)0x01);
-    }
-
-    if (handle->stepsPerRev == 0U)
-    {
+    if (handle == ((void *)0) || handle->stepsPerRev == 0U) {
         return ((Std_ReturnType)0x01);
     }
 
 
-    (void)GPIO_set_pin_Direction(handle->in1Port, handle->in1Pin, 1);
-    (void)GPIO_set_pin_Direction(handle->in2Port, handle->in2Pin, 1);
-    (void)GPIO_set_pin_Direction(handle->in3Port, handle->in3Pin, 1);
-    (void)GPIO_set_pin_Direction(handle->in4Port, handle->in4Pin, 1);
+    GPIO_set_pin_Direction(handle->in1Port, handle->in1Pin, 1);
+    GPIO_set_pin_Direction(handle->in2Port, handle->in2Pin, 1);
+    GPIO_set_pin_Direction(handle->in3Port, handle->in3Pin, 1);
+    GPIO_set_pin_Direction(handle->in4Port, handle->in4Pin, 1);
 
 
-
-
-
-    if (handle->useEnablePins != 0U)
-    {
-        (void)GPIO_set_pin_Direction(handle->enAPort, handle->enAPin, 1);
-        (void)GPIO_set_pin_Direction(handle->enBPort, handle->enBPin, 1);
-        (void)GPIO_set_pin_value(handle->enAPort, handle->enAPin, 1);
-        (void)GPIO_set_pin_value(handle->enBPort, handle->enBPin, 1);
+    if (handle->useEnablePins != 0U) {
+        GPIO_set_pin_Direction(handle->enAPort, handle->enAPin, 1);
+        GPIO_set_pin_Direction(handle->enBPort, handle->enBPin, 1);
+        GPIO_set_pin_value(handle->enAPort, handle->enAPin, 1);
+        GPIO_set_pin_value(handle->enBPort, handle->enBPin, 1);
     }
 
 
-    if (handle->stepDelayMs == 0U)
-    {
+    if (handle->stepDelayMs == 0U) {
         handle->stepDelayMs = 1U;
     }
 
@@ -412,277 +480,232 @@ Std_ReturnType Stepper_L298P_Init(Stepper_L298P_HandleType *handle)
     handle->position = 0;
     handle->energized = 0U;
     Stepper_ApplyPattern(handle, 0x00U);
-
-
     handle->initialized = 1U;
 
     return ((Std_ReturnType)0x00);
 }
 
-
 Std_ReturnType Stepper_L298P_SetStepMode(Stepper_L298P_HandleType *handle,
                                           Stepper_L298P_ModeType mode)
 {
-
-    if ((handle == ((void *)0)) || (handle->initialized == 0U))
-    {
+    if (handle == ((void *)0) || handle->initialized == 0U || mode > STEPPER_L298P_MODE_HALF) {
         return ((Std_ReturnType)0x01);
     }
-
-    if (mode > STEPPER_L298P_MODE_HALF)
-    {
-        return ((Std_ReturnType)0x01);
-    }
-
-
-
 
     handle->stepMode = mode;
     handle->phaseIndex = 0U;
-
     return ((Std_ReturnType)0x00);
 }
-
 
 Std_ReturnType Stepper_L298P_SetStepDelay(Stepper_L298P_HandleType *handle,
                                            uint16_t stepDelayMs)
 {
-
-    if ((handle == ((void *)0)) || (handle->initialized == 0U))
-    {
+    if (handle == ((void *)0) || handle->initialized == 0U) {
         return ((Std_ReturnType)0x01);
     }
-
-
     handle->stepDelayMs = (stepDelayMs == 0U) ? 1U : stepDelayMs;
-
     return ((Std_ReturnType)0x00);
 }
-
 
 Std_ReturnType Stepper_L298P_SetSpeedRpm(Stepper_L298P_HandleType *handle, uint16_t rpm)
 {
-    uint32_t local_StepsPerRev = 0UL;
-    uint32_t local_DelayMs = 0UL;
+    uint32_t stepsPerRev;
+    uint32_t delayMs;
 
-
-    if ((handle == ((void *)0)) || (handle->initialized == 0U) || (rpm == 0U))
-    {
+    if (handle == ((void *)0) || handle->initialized == 0U || rpm == 0U) {
         return ((Std_ReturnType)0x01);
     }
 
-
-    local_StepsPerRev = (uint32_t)handle->stepsPerRev;
-
-    if (handle->stepMode == STEPPER_L298P_MODE_HALF)
-    {
-        local_StepsPerRev *= 2UL;
+    stepsPerRev = (uint32_t)handle->stepsPerRev;
+    if (handle->stepMode == STEPPER_L298P_MODE_HALF) {
+        stepsPerRev *= 2UL;
     }
 
-
-
-
-    local_DelayMs = 60000UL / (local_StepsPerRev * (uint32_t)rpm);
-
-    if (local_DelayMs == 0UL)
-    {
+    delayMs = 60000UL / (stepsPerRev * (uint32_t)rpm);
+    if (delayMs == 0UL) {
         return ((Std_ReturnType)0x01);
     }
 
-    handle->stepDelayMs = (uint16_t)local_DelayMs;
-
+    handle->stepDelayMs = (uint16_t)delayMs;
     return ((Std_ReturnType)0x00);
 }
 
+
+
+
+static void Stepper_DelayMs(uint16_t ms)
+{
+    uint32_t startTime = TIMER_GetTick();
+    while ((TIMER_GetTick() - startTime) < ms) {
+
+        __asm__ volatile ("wdr");
+    }
+}
 
 Std_ReturnType Stepper_L298P_Step(Stepper_L298P_HandleType *handle,
                                   uint16_t steps, Stepper_L298P_DirType dir)
 {
-    uint16_t local_Step = 0U;
-
-
-    if ((handle == ((void *)0)) || (handle->initialized == 0U))
-    {
+    if (handle == ((void *)0) || handle->initialized == 0U || dir > STEPPER_L298P_DIR_CCW) {
         return ((Std_ReturnType)0x01);
     }
 
-    if (dir > STEPPER_L298P_DIR_CCW)
-    {
-        return ((Std_ReturnType)0x01);
-    }
-
-
-    for (local_Step = 0U; local_Step < steps; local_Step++)
-    {
-        (void)Stepper_L298P_StepOnce(handle, dir);
+    for (uint16_t i = 0; i < steps; i++) {
+        Stepper_L298P_StepOnce(handle, dir);
         Stepper_DelayMs(handle->stepDelayMs);
     }
 
     return ((Std_ReturnType)0x00);
 }
 
+Std_ReturnType Stepper_L298P_RotateAngle(Stepper_L298P_HandleType *handle,
+                                          uint16_t degrees, Stepper_L298P_DirType dir)
+{
+    uint32_t stepsPerRev;
+    uint32_t steps;
+
+    if (handle == ((void *)0) || handle->initialized == 0U) {
+        return ((Std_ReturnType)0x01);
+    }
+
+    stepsPerRev = (uint32_t)handle->stepsPerRev;
+    if (handle->stepMode == STEPPER_L298P_MODE_HALF) {
+        stepsPerRev *= 2UL;
+    }
+
+    steps = ((uint32_t)degrees * stepsPerRev) / 360UL;
+    return Stepper_L298P_Step(handle, (uint16_t)steps, dir);
+}
+
+
 
 Std_ReturnType Stepper_L298P_StepOnce(Stepper_L298P_HandleType *handle,
                                       Stepper_L298P_DirType dir)
 {
-    uint8_t local_Length = 0U;
+    uint8_t length;
 
-
-    if ((handle == ((void *)0)) || (handle->initialized == 0U))
-    {
+    if (handle == ((void *)0) || handle->initialized == 0U || dir > STEPPER_L298P_DIR_CCW) {
         return ((Std_ReturnType)0x01);
     }
 
-    if (dir > STEPPER_L298P_DIR_CCW)
-    {
-        return ((Std_ReturnType)0x01);
-    }
+    length = Stepper_TableLength(handle->stepMode);
 
-    local_Length = Stepper_TableLength(handle->stepMode);
-
-
-
-
-    if (dir == STEPPER_L298P_DIR_CW)
-    {
-        handle->phaseIndex = (uint8_t)((handle->phaseIndex + 1U) % local_Length);
+    if (dir == STEPPER_L298P_DIR_CW) {
+        handle->phaseIndex = (uint8_t)((handle->phaseIndex + 1U) % length);
         handle->position++;
-    }
-    else
-    {
-        handle->phaseIndex = (uint8_t)((handle->phaseIndex + local_Length - 1U) % local_Length);
+    } else {
+        handle->phaseIndex = (uint8_t)((handle->phaseIndex + length - 1U) % length);
         handle->position--;
     }
 
-
     Stepper_ApplyPattern(handle, Stepper_TableEntry(handle->stepMode, handle->phaseIndex));
-
     return ((Std_ReturnType)0x00);
 }
 
-
-Std_ReturnType Stepper_L298P_RotateAngle(Stepper_L298P_HandleType *handle,
-                                          uint16_t degrees, Stepper_L298P_DirType dir)
+Std_ReturnType Stepper_L298P_StepNonBlocking(Stepper_L298P_HandleType *handle,
+                                              uint16_t steps, Stepper_L298P_DirType dir)
 {
-    uint32_t local_StepsPerRev = 0UL;
-    uint32_t local_Steps = 0UL;
-
-
-    if ((handle == ((void *)0)) || (handle->initialized == 0U))
-    {
+    if (handle == ((void *)0) || handle->initialized == 0U || steps == 0U) {
         return ((Std_ReturnType)0x01);
     }
 
 
-    local_StepsPerRev = (uint32_t)handle->stepsPerRev;
-
-    if (handle->stepMode == STEPPER_L298P_MODE_HALF)
-    {
-        local_StepsPerRev *= 2UL;
+    for (uint8_t i = 0; i < 4; i++) {
+        if (!g_stepperMoves[i].active) {
+            g_stepperMoves[i].handle = handle;
+            g_stepperMoves[i].remainingSteps = steps;
+            g_stepperMoves[i].dir = dir;
+            g_stepperMoves[i].nextStepTime = TIMER_GetTick() + handle->stepDelayMs;
+            g_stepperMoves[i].active = 1;
+            return ((Std_ReturnType)0x00);
+        }
     }
-
-
-    local_Steps = ((uint32_t)degrees * local_StepsPerRev) / 360UL;
-
-
-    return Stepper_L298P_Step(handle, (uint16_t)local_Steps, dir);
+    return ((Std_ReturnType)0x01);
 }
+
+void Stepper_L298P_Tick(void)
+{
+    for (uint8_t i = 0; i < 4; i++) {
+        if (g_stepperMoves[i].active) {
+            if (TIMER_GetTick() >= g_stepperMoves[i].nextStepTime) {
+                Stepper_L298P_StepOnce(g_stepperMoves[i].handle, g_stepperMoves[i].dir);
+                g_stepperMoves[i].remainingSteps--;
+                g_stepperMoves[i].nextStepTime = TIMER_GetTick() +
+                    g_stepperMoves[i].handle->stepDelayMs;
+
+                if (g_stepperMoves[i].remainingSteps == 0) {
+                    g_stepperMoves[i].active = 0;
+                }
+            }
+        }
+    }
+}
+
 
 
 Std_ReturnType Stepper_L298P_Hold(Stepper_L298P_HandleType *handle)
 {
-
-    if ((handle == ((void *)0)) || (handle->initialized == 0U))
-    {
+    if (handle == ((void *)0) || handle->initialized == 0U) {
         return ((Std_ReturnType)0x01);
     }
 
-
-    if (handle->useEnablePins != 0U)
-    {
-        (void)GPIO_set_pin_value(handle->enAPort, handle->enAPin, 1);
-        (void)GPIO_set_pin_value(handle->enBPort, handle->enBPin, 1);
+    if (handle->useEnablePins != 0U) {
+        GPIO_set_pin_value(handle->enAPort, handle->enAPin, 1);
+        GPIO_set_pin_value(handle->enBPort, handle->enBPin, 1);
     }
 
-
     Stepper_ApplyPattern(handle, Stepper_TableEntry(handle->stepMode, handle->phaseIndex));
-
     return ((Std_ReturnType)0x00);
 }
-
 
 Std_ReturnType Stepper_L298P_Release(Stepper_L298P_HandleType *handle)
 {
-
-    if ((handle == ((void *)0)) || (handle->initialized == 0U))
-    {
+    if (handle == ((void *)0) || handle->initialized == 0U) {
         return ((Std_ReturnType)0x01);
     }
 
-
     Stepper_ApplyPattern(handle, 0x00U);
 
-
-    if (handle->useEnablePins != 0U)
-    {
-        (void)GPIO_set_pin_value(handle->enAPort, handle->enAPin, 0);
-        (void)GPIO_set_pin_value(handle->enBPort, handle->enBPin, 0);
+    if (handle->useEnablePins != 0U) {
+        GPIO_set_pin_value(handle->enAPort, handle->enAPin, 0);
+        GPIO_set_pin_value(handle->enBPort, handle->enBPin, 0);
     }
 
     handle->energized = 0U;
-
     return ((Std_ReturnType)0x00);
 }
+
 
 
 Std_ReturnType Stepper_L298P_GetPosition(const Stepper_L298P_HandleType *handle,
                                           sint32 *pPosition)
 {
-
-    if ((handle == ((void *)0)) || (handle->initialized == 0U) || (pPosition == ((void *)0)))
-    {
+    if (handle == ((void *)0) || handle->initialized == 0U || pPosition == ((void *)0)) {
         return ((Std_ReturnType)0x01);
     }
-
-
     *pPosition = handle->position;
-
     return ((Std_ReturnType)0x00);
 }
-
 
 Std_ReturnType Stepper_L298P_ResetPosition(Stepper_L298P_HandleType *handle)
 {
-
-    if ((handle == ((void *)0)) || (handle->initialized == 0U))
-    {
+    if (handle == ((void *)0) || handle->initialized == 0U) {
         return ((Std_ReturnType)0x01);
     }
-
     handle->position = 0;
-
     return ((Std_ReturnType)0x00);
 }
-
 
 Std_ReturnType Stepper_L298P_GetStepsPerRev(const Stepper_L298P_HandleType *handle,
                                             uint16_t *pStepsPerRev)
 {
-
-    if ((handle == ((void *)0)) || (handle->initialized == 0U) || (pStepsPerRev == ((void *)0)))
-    {
+    if (handle == ((void *)0) || handle->initialized == 0U || pStepsPerRev == ((void *)0)) {
         return ((Std_ReturnType)0x01);
     }
 
-
-    if (handle->stepMode == STEPPER_L298P_MODE_HALF)
-    {
+    if (handle->stepMode == STEPPER_L298P_MODE_HALF) {
         *pStepsPerRev = (uint16_t)(handle->stepsPerRev * 2U);
-    }
-    else
-    {
+    } else {
         *pStepsPerRev = handle->stepsPerRev;
     }
-
     return ((Std_ReturnType)0x00);
 }

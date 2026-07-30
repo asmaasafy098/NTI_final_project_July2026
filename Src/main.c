@@ -19,6 +19,7 @@
 #include "../Logic/Communication/console/console.h"
 #include "../Logic/Communication/telemetry/telemetry.h"
 #include "../Logic/Data/eeprom_stub.h"
+
 /* ==================== MCAL Includes ==================== */
 #include "../MCL/GPIO/GPIO_Interface.h"
 #include "../MCL/ADC/ADC_Interfaces.h"
@@ -26,24 +27,24 @@
 #include "../MCL/Interrupt/interrupt_interface.h"
 #include "../MCL/UART/uart_interface.h"
 #include "../MCL/I2C/i2c_interface.h"
-#include "../HAL/UserPanel/UserPanel.h"
 
 /* ==================== HAL Includes ==================== */
-#include "../HAL/DC_Motor/dc_motor.h"
-#include "../HAL/Tachometer/Tachometer.h"              /* TACHO_* functions */
-#include "../HAL/ANALOG_SENSOR/ANALOG_SENSOR.h"        /* ANALOG_* functions */
-#include "../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"  /* LCD_* functions */
-#include "../HAL/BUZZER/BUZZER.h"                      /* BUZZER_* functions */
-#include "../HAL/Stepper_L298P/Stepper_L298P.h" 
-#include "../HAL/MotorBridge/MotorBridge.h"
 #include "../HAL/UserPanel/UserPanel.h"
+#include "../HAL/DC_Motor/dc_motor.h"
+#include "../HAL/Tachometer/Tachometer.h"
+#include "../HAL/ANALOG_SENSOR/ANALOG_SENSOR.h"
+#include "../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
+#include "../HAL/BUZZER/BUZZER.h"
+#include "../HAL/Stepper_L298P/Stepper_L298P.h"
+#include "../HAL/MotorBridge/MotorBridge.h"
+
 /* ==================== Global Variables ==================== */
 DriveData_t g_driveData;
 DriveCfg_t g_driveCfg;
 PI_Handle_t g_pi;
 Ramp_t g_ramp;
 
-/* ==================== E-Stop Flag (Used by INT1 ISR) ==================== */
+/* ==================== E-Stop Flag ==================== */
 volatile uint8_t g_estopFlag = 0;
 
 /* ==================== Function Prototypes ==================== */
@@ -53,54 +54,60 @@ void Task_Control(void);
 void Task_LCD(void);
 void Task_SlowSensors(void);
 void Task_Telemetry(void);
+void Task_StepperTick(void);  /* For non-blocking stepper moves */
 
-/* ==================== Main Function ==================== */
 /* ==================== Main Function ==================== */
 int main(void)
 {
-    /* ===== STEP 1: Disable Global Interrupts First ===== */
-    cli(); 
+    /* ===== STEP 1: Disable Global Interrupts ===== */
+    cli();
 
-    /* ===== STEP 2: Initialize Core System & UART First ===== */
+    /* ===== STEP 2: Initialize Core System & UART ===== */
     UART_ConfigType uartCfg = {
         .baudRate = UART_BAUD_9600,
         .dataSize = UART_DATA_8BITS,
         .parity = UART_PARITY_NONE,
         .stopBits = UART_STOP_1BIT
     };
-    UART_Init(&uartCfg);              
+    UART_Init(&uartCfg);
     UART_SendString("\r\n--- SYSTEM STARTING ---\r\n");
-    UART_SendString("BOOT1: UART OK\r\n"); 
+    UART_SendString("BOOT1: UART OK\r\n");
 
     /* ===== STEP 3: Initialize Hardware (MCAL) ===== */
-    BRIDGE_Init();  /* NFR-14 Safety */
-
+    /* I2C for LCD */
+    I2C_MasterConfigType i2cCfg = { I2C_SCL_100KHZ };
+    I2C_InitMaster(&i2cCfg);
+    
+    /* ADC */
     ADC_ConfigType adcCfg = {
         .uint8ReferenceVoltage = ADC_REF_AVCC,
         .uint8Prescaler = ADC_PRESCALER_128
     };
     ADC_Init(&adcCfg);
 
+    /* Timer0 for system tick (1ms) */
     Timer0_Init();
-    Timer1_Init();
+    
+    /* Timer2 for buzzer */
     Timer2_Init();
 
+    /* External Interrupts */
     EXTI_ConfigType extiCfg1 = { .line = EXTI_INT1, .sense = EXTI_SENSE_RISING };
     EXTI_ConfigType extiCfg0 = { .line = EXTI_INT0, .sense = EXTI_SENSE_RISING };
     EXTI_Init(&extiCfg1);
     EXTI_Init(&extiCfg0);
-
-    I2C_MasterConfigType i2cCfg = { I2C_SCL_100KHZ };
-    I2C_InitMaster(&i2cCfg);
+    
+    /* NOTE: Timer1 is initialized inside BRIDGE_Init() for PWM */
+    
     UART_SendString("BOOT2: MCAL OK\r\n");
 
     /* ===== STEP 4: Initialize HAL ===== */
-    /* تعليق الـ LCD مؤقتاً للتأكد من قيام السيريال */
-     LCD_InitDefault(); 
-    TACHO_Init();   
-    ANALOG_Init();  
-    PANEL_Init();   
-    BUZZER_Init();  
+    LCD_InitDefault();
+    TACHO_Init();
+    ANALOG_Init();
+    PANEL_Init();
+    BUZZER_Init();
+    BRIDGE_Init();  /* This sets up Timer1 PWM */
     UART_SendString("BOOT3: HAL OK\r\n");
 
     /* ===== STEP 5: Default Configuration & APP ===== */
@@ -141,17 +148,18 @@ int main(void)
     
     /* ===== STEP 6: Initialize Scheduler ===== */
     SCHED_Init();
-    SCHED_AddTask(Task_Panel, "Panel", 10, 0);       
-    SCHED_AddTask(Task_Current, "Current", 50, 1);    
-    SCHED_AddTask(Task_Control, "Control", 100, 2);   
-    SCHED_AddTask(Task_LCD, "LCD", 250, 4);       
-    SCHED_AddTask(Task_SlowSensors, "SlowSensors", 500, 3); 
-    SCHED_AddTask(Task_Telemetry, "Telemetry", 1000, 5); 
+    SCHED_AddTask(Task_Panel, "Panel", 10, 0);
+    SCHED_AddTask(Task_Current, "Current", 50, 1);
+    SCHED_AddTask(Task_Control, "Control", 100, 2);
+    SCHED_AddTask(Task_LCD, "LCD", 250, 4);
+    SCHED_AddTask(Task_SlowSensors, "SlowSensors", 500, 3);
+    SCHED_AddTask(Task_Telemetry, "Telemetry", 1000, 5);
+    SCHED_AddTask(Task_StepperTick, "Stepper", 1, 0);  /* 1ms tick for stepper */
 
     UART_SendString("BOOT4: SCHEDULER READY, ENABLING INTERRUPTS...\r\n");
 
     /* ===== STEP 7: Enable Interrupts & Run ===== */
-    sei(); 
+    sei();
     
     while (1) {
         SCHED_Run();
@@ -162,6 +170,7 @@ int main(void)
     
     return 0;
 }
+
 /* ==================== Task Functions ==================== */
 
 /**
@@ -173,8 +182,7 @@ void Task_Panel(void)
     PANEL_Poll();
     Panel_Event_t event = PANEL_GetEvent();
     
-    switch (event)
-    {
+    switch (event) {
         case PNL_START:
             if (!FSM_RequestStart()) {
                 CONSOLE_SendError("ERR START");
@@ -252,7 +260,7 @@ void Task_Current(void)
 
 /**
  * @brief Task_Control - Called every 100ms
- * Main control loop: Tacho → Ramp → Protect → PI → Bridge
+ * Main control loop: Tacho -> Ramp -> Protect -> PI -> Bridge
  */
 void Task_Control(void)
 {
@@ -316,9 +324,16 @@ void Task_Control(void)
  */
 void Task_LCD(void)
 {
+    static uint8_t lastTrip = 0;
+    Trip_t currentTrip = PROTECT_GetActiveTrip();
+    
     if (FSM_IsTripped()) {
-        LCD_ShowTrip(g_driveData.activeTrip);
+        if (currentTrip != lastTrip) {
+            lastTrip = currentTrip;
+            LCD_ShowTrip(currentTrip);
+        }
     } else {
+        lastTrip = 0;
         LCD_Update(&g_driveData);
     }
 }
@@ -346,35 +361,25 @@ void Task_Telemetry(void)
     TELEMETRY_Update(&g_driveData);
 }
 
-/* ==================== Interrupt Service Routines ==================== */
-
-/* 
- * ملاحظة: تم إزالة ISR(INT0_vect) من هنا لمنع تكرار التعريف، 
- * لأن TACHO_Init() تقوم بتسجيل TACHO_PulseISR() كـ Callback داخل EXTI driver.
+/**
+ * @brief Task_StepperTick - Called every 1ms
+ * Updates non-blocking stepper motor moves
  */
+void Task_StepperTick(void)
+{
+    Stepper_L298P_Tick();
+}
+
+/* ==================== Interrupt Service Routines ==================== */
 
 /**
  * @brief INT1 ISR - Emergency Stop
  */
 ISR(INT1_vect)
 {
-    /* 1. Force PWM to 0 */
-    OCR1A = 0;
+    /* 1. Force stop the bridge - clears PWM, direction pins, and enable */
+    BRIDGE_ForceStop();
     
-    /* 2. Disable bridge and clear direction pins */
-    CLR_BIT(PORTB, PB2);  /* EN = 0 */
-    CLR_BIT(PORTB, PB1);  /* IN2 = 0 */
-    CLR_BIT(PORTB, PB0);  /* IN1 = 0 */
-    
-    /* 3. Set flag for FSM */
+    /* 2. Set flag for FSM */
     g_estopFlag = 1;
-}
-
-/**
- * @brief USART RX ISR - Console input
- */
-ISR(USART_RXC_vect)
-{
-    uint8_t ch = UDR;
-    CONSOLE_ProcessChar(ch);
 }

@@ -210,7 +210,11 @@ Std_ReturnType UART_ReceiveByteNonBlocking(uint8_t *puint8Data)
 }
 
 
-Std_ReturnType UART_SendString(const uint8_t *pString)
+/* ================================================================
+ * MODIFIED: UART_SendString now accepts const char* (not uint8_t*)
+ * to fix signedness warnings when passing string literals.
+ * ================================================================ */
+Std_ReturnType UART_SendString(const char *pString)
 {
     uint16_t local_Index = 0U;
 
@@ -227,7 +231,7 @@ Std_ReturnType UART_SendString(const uint8_t *pString)
      */
     for (local_Index = 0U; pString[local_Index] != '\0'; local_Index++)
     {
-        (void)UART_SendByte(pString[local_Index]);
+        (void)UART_SendByte((uint8_t)pString[local_Index]);
     }
 
     /* STEP 3: Return E_OK. */
@@ -310,12 +314,65 @@ Std_ReturnType UART_TxBusy(void)
     return (UART_TxHead != UART_TxTail) ? E_BUSY : E_OK;
 }
 
+
 void USART_TransmitByte(uint8_t byte)
 {
     UART_SendByte(byte);
 }
 
+
 void USART_TransmitString(const char *str)
 {
     UART_SendString(str);
+}
+
+
+/* ================================================================
+ * USART RX COMPLETE INTERRUPT SERVICE ROUTINE
+ * ================================================================ */
+ISR(USART_RXC_vect)
+{
+    uint8_t receivedByte = UART_UDR_REG;
+    uint16_t local_NextHead;
+
+    /* STEP 1: Push received byte into RX ring buffer if there is space */
+    local_NextHead = (uint16_t)((UART_RxHead + 1U) & UART_RX_BUF_MASK);
+    
+    if (local_NextHead != UART_RxTail)
+    {
+        UART_RxBuf[UART_RxHead] = receivedByte;
+        UART_RxHead = local_NextHead;
+    }
+    /* else: buffer full - byte is lost (better than corrupting) */
+
+    /* STEP 2: Invoke callback if registered */
+    if (UART_RxCallBack != NULL)
+    {
+        UART_RxCallBack(receivedByte);
+    }
+}
+
+
+/* ================================================================
+ * USART DATA REGISTER EMPTY INTERRUPT SERVICE ROUTINE
+ * ================================================================ */
+ISR(USART_UDRE_vect)
+{
+    uint8_t txByte;
+
+    /* STEP 1: Check if there is data to transmit */
+    if (UART_TxHead != UART_TxTail)
+    {
+        /* STEP 2: Pop byte from TX ring buffer */
+        txByte = UART_TxBuf[UART_TxTail];
+        UART_TxTail = (uint16_t)((UART_TxTail + 1U) & UART_TX_BUF_MASK);
+
+        /* STEP 3: Send the byte */
+        UART_UDR_REG = txByte;
+    }
+    else
+    {
+        /* STEP 4: Buffer empty - disable UDRE interrupt to save CPU time */
+        CLR_BIT(UART_UCSRB_REG, UART_UDRIE_BIT);
+    }
 }

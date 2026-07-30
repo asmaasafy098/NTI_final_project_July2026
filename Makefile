@@ -5,15 +5,16 @@ CC      = $(PIO)/toolchain-atmelavr/bin/avr-gcc.exe
 OBJCOPY = $(PIO)/toolchain-atmelavr/bin/avr-objcopy.exe
 AVRDUDE = $(PIO)/tool-avrdude/avrdude.exe
 
-MCU     = m32
+MCU     = atmega32
 F_CPU   = 16000000UL
 
-CFLAGS  = -mmcu=atmega32 -DF_CPU=$(F_CPU) -std=c99 -Wall -Os
+CFLAGS  = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -std=c99 -Wall -Os -g
 DEPFLAGS = -MMD -MP
-LDFLAGS = -mmcu=atmega32
+LDFLAGS = -mmcu=$(MCU)
 
-# Discover sources from this project's actual layout
+# ============== مسارات الملفات ==============
 C_SOURCES := $(wildcard Src/*.c) \
+             $(wildcard Service/*.c) \
              $(wildcard MCL/GPIO/*.c) \
              $(wildcard MCL/ADC/*.c) \
              $(wildcard MCL/timer/*.c) \
@@ -37,46 +38,40 @@ C_SOURCES := $(wildcard Src/*.c) \
              $(wildcard Logic/Data/*.c) \
              $(wildcard Logic/Scheduler/*.c)
 
+# ============== مجلدات الـ Include ==============
+INCLUDE_DIRS := . \
+                Src \
+                Service \
+                MCL/GPIO MCL/ADC MCL/timer MCL/Interrupt MCL/UART MCL/I2C \
+                HAL/ANALOG_SENSOR HAL/BUZZER HAL/DC_Motor \
+                HAL/LCD_Aip31068_i2c HAL/MotorBridge \
+                HAL/Stepper_L298P HAL/Tachometer HAL/UserPanel \
+                Logic/Communication/console Logic/Communication/telemetry \
+                Logic/Control/drive_fsm Logic/Control/pi_controller \
+                Logic/Control/protection Logic/Control/ramp_generator \
+                Logic/Data Logic/Scheduler
+
+CFLAGS += $(addprefix -I,$(INCLUDE_DIRS)) $(DEPFLAGS)
+
+# ============== المخرجات ==============
 OBJS      := $(patsubst %.c,build/%.o,$(C_SOURCES))
 DEPS      := $(patsubst %.c,build/%.d,$(C_SOURCES))
 TARGET    := build/firmware
 
-# Include paths for the current project
-INCLUDE_DIRS := . Src \
-                MCL/GPIO MCL/ADC MCL/timer MCL/Interrupt MCL/UART MCL/I2C \
-                HAL/ANALOG_SENSOR HAL/BUZZER HAL/DC_Motor HAL/LCD_Aip31068_i2c \
-                HAL/MotorBridge HAL/Stepper_L298P HAL/Tachometer HAL/UserPanel \
-                Logic/Communication/console Logic/Communication/telemetry \
-                Logic/Control/drive_fsm Logic/Control/pi_controller \
-                Logic/Control/protection Logic/Control/ramp_generator \
-                Logic/Data Logic/Scheduler \
-                Service
-
-CFLAGS += $(addprefix -I,$(INCLUDE_DIRS)) $(DEPFLAGS)
-
 -include $(DEPS)
 
+# ============== الأهداف ==============
 all: $(TARGET).hex
+
+build/%.o: %.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(TARGET).elf: $(OBJS)
 	$(CC) $(LDFLAGS) $(OBJS) -o $@
 
 $(TARGET).hex: $(TARGET).elf
 	$(OBJCOPY) -O ihex -R .eeprom $< $@
-
-build/%.i: %.c
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -MMD -MP -MF $(patsubst %.i,%.d,$@) -E $< -o $@
-
-build/%.s: build/%.i
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -S $< -o $@
-
-build/%.o: build/%.s
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-.SECONDARY:
 
 clean:
 	@rm -rf build

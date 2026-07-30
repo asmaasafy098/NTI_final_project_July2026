@@ -5,6 +5,7 @@
 # 1 "HAL/MotorBridge/MotorBridge.h" 1
 
 
+
 # 1 "HAL/MotorBridge/../../Service/STD_Types.h" 1
 
 
@@ -177,7 +178,7 @@ typedef enum {
 } Std_ReturnType;
 
 typedef Std_ReturnType STD_ReturnType;
-# 4 "HAL/MotorBridge/MotorBridge.h" 2
+# 5 "HAL/MotorBridge/MotorBridge.h" 2
 # 1 "HAL/MotorBridge/../../MCL/timer/timer_interface.h" 1
 
 
@@ -302,7 +303,7 @@ void Timer_DisableGlobalInterrupt(void);
 
 
 uint32_t TIMER_GetTick(void);
-# 5 "HAL/MotorBridge/MotorBridge.h" 2
+# 6 "HAL/MotorBridge/MotorBridge.h" 2
 # 1 "HAL/MotorBridge/../../Logic/Data/data_types.h" 1
 # 9 "HAL/MotorBridge/../../Logic/Data/data_types.h"
 # 1 "Service/STD_Types.h" 1
@@ -434,15 +435,20 @@ typedef struct {
 # 152 "HAL/MotorBridge/../../Logic/Data/data_types.h"
 extern DriveData_t g_driveData;
 extern DriveCfg_t g_driveCfg;
-# 6 "HAL/MotorBridge/MotorBridge.h" 2
+# 7 "HAL/MotorBridge/MotorBridge.h" 2
+
+
 Std_ReturnType BRIDGE_Init(void);
 Std_ReturnType BRIDGE_SetDirection(MotorDir_t dir);
 Std_ReturnType BRIDGE_SetDuty(uint16_t duty_percent);
 Std_ReturnType BRIDGE_Enable(void);
 Std_ReturnType BRIDGE_Disable(void);
 void BRIDGE_ForceStop(void);
+uint8_t BRIDGE_IsEnabled(void);
 # 2 "HAL/MotorBridge/MotorBridge.c" 2
 
+# 1 "HAL/MotorBridge/../../Service/Bit_Math.h" 1
+# 4 "HAL/MotorBridge/MotorBridge.c" 2
 # 1 "HAL/MotorBridge/../../MCL/GPIO/GPIO_interface.h" 1
 
 
@@ -460,44 +466,88 @@ Std_ReturnType GPIO_set_pin_value(uint8_t port, uint8_t pin, uint8_t value);
 Std_ReturnType GPIO_write_pin(uint8_t port, uint8_t pin, uint8_t value);
 GPIO_pin_status GPIO_read_pin(uint8_t port, uint8_t pin);
 Std_ReturnType GPIO_toggle_pin(uint8_t port, uint8_t pin);
-# 4 "HAL/MotorBridge/MotorBridge.c" 2
-# 24 "HAL/MotorBridge/MotorBridge.c"
+# 5 "HAL/MotorBridge/MotorBridge.c" 2
+# 1 "HAL/MotorBridge/../../MCL/Timer/timer_registers.h" 1
+# 6 "HAL/MotorBridge/MotorBridge.c" 2
+# 17 "HAL/MotorBridge/MotorBridge.c"
 static uint16_t masterEnabled = 0;
 static uint16_t lastDutyPct = 0;
+static uint8_t bridgeInitialized = 0;
+
+
 
 static void BRIDGE_ApplyOutput(void)
 {
-    if (masterEnabled && (lastDutyPct >= 10u))
-    {
+    uint16_t dutyCounts = 0;
+
+    if (masterEnabled && (lastDutyPct >= 10U)) {
+
+        dutyCounts = (uint16_t)(((uint32_t)lastDutyPct * 399U) / 100U);
+
+
+        if (dutyCounts > 399U) {
+            dutyCounts = 399U;
+        }
+
+        (*(volatile uint16_t *)0x4A) = dutyCounts;
         GPIO_set_pin_value(1, 2, 1);
-    }
-    else
-    {
+    } else {
+        (*(volatile uint16_t *)0x4A) = 0;
         GPIO_set_pin_value(1, 2, 0);
     }
 }
 
+
+
 Std_ReturnType BRIDGE_Init(void)
 {
+    if (bridgeInitialized) {
+        return ((Std_ReturnType)0x00);
+    }
+
+
     GPIO_set_pin_Direction(1, 0, 1);
     GPIO_set_pin_Direction(1, 1, 1);
     GPIO_set_pin_Direction(1, 2, 1);
+    GPIO_set_pin_Direction(3, 5, 1);
 
 
     GPIO_set_pin_value(1, 0, 0);
     GPIO_set_pin_value(1, 1, 0);
     GPIO_set_pin_value(1, 2, 0);
+    GPIO_set_pin_value(3, 5, 0);
+
+
+
+    (((*(volatile uint8_t *)0x4F)) |= (1 << (1)));
+    (((*(volatile uint8_t *)0x4E)) |= (1 << (3)));
+    (((*(volatile uint8_t *)0x4E)) |= (1 << (4)));
+    (((*(volatile uint8_t *)0x4F)) &= ~(1 << (0)));
+
+
+    (((*(volatile uint8_t *)0x4F)) |= (1 << (7)));
+    (((*(volatile uint8_t *)0x4F)) &= ~(1 << (6)));
+
+
+    (*(volatile uint16_t *)0x46) = 399U;
+    (*(volatile uint16_t *)0x4A) = 0;
+
+
+    (((*(volatile uint8_t *)0x4E)) |= (1 << (0)));
+    (((*(volatile uint8_t *)0x4E)) &= ~(1 << (1)));
+    (((*(volatile uint8_t *)0x4E)) &= ~(1 << (2)));
+
 
     masterEnabled = 0;
     lastDutyPct = 0;
+    bridgeInitialized = 1;
 
     return ((Std_ReturnType)0x00);
 }
 
 Std_ReturnType BRIDGE_SetDirection(MotorDir_t dir)
 {
-    switch (dir)
-    {
+    switch (dir) {
         case DIR_FORWARD:
 
             GPIO_set_pin_value(1, 1, 0);
@@ -520,6 +570,9 @@ Std_ReturnType BRIDGE_SetDirection(MotorDir_t dir)
 
 Std_ReturnType BRIDGE_SetDuty(uint16_t duty_percent)
 {
+    if (duty_percent > 100U) {
+        duty_percent = 100U;
+    }
     lastDutyPct = duty_percent;
     BRIDGE_ApplyOutput();
     return ((Std_ReturnType)0x00);
@@ -535,15 +588,29 @@ Std_ReturnType BRIDGE_Enable(void)
 Std_ReturnType BRIDGE_Disable(void)
 {
     masterEnabled = 0;
+    (*(volatile uint16_t *)0x4A) = 0;
     GPIO_set_pin_value(1, 2, 0);
     return ((Std_ReturnType)0x00);
 }
 
 void BRIDGE_ForceStop(void)
 {
+
+    (*(volatile uint16_t *)0x4A) = 0;
+
+
     GPIO_set_pin_value(1, 2, 0);
+
+
     GPIO_set_pin_value(1, 0, 0);
     GPIO_set_pin_value(1, 1, 0);
+
+
     masterEnabled = 0;
     lastDutyPct = 0;
+}
+
+uint8_t BRIDGE_IsEnabled(void)
+{
+    return (uint8_t)masterEnabled;
 }
