@@ -1,17 +1,17 @@
-# 1 "MCL/timer/timer_modified.c"
+# 1 "MCL/Timer/timer_modified.c"
 # 1 "<built-in>"
 # 1 "<command-line>"
-# 1 "MCL/timer/timer_modified.c"
-# 1 "MCL/timer/../../Service/STD_Types.h" 1
+# 1 "MCL/Timer/timer_modified.c"
+# 1 "MCL/Timer/../../Service/STD_Types.h" 1
 
 
 
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 1 3 4
-# 9 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 3 4
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 1 3 4
-# 125 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 1 3 4
+# 9 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 3 4
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 1 3 4
+# 125 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
 
-# 125 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+# 125 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
 typedef signed int int8_t __attribute__((__mode__(__QI__)));
 typedef unsigned int uint8_t __attribute__((__mode__(__QI__)));
 typedef signed int int16_t __attribute__ ((__mode__ (__HI__)));
@@ -21,14 +21,14 @@ typedef unsigned int uint32_t __attribute__ ((__mode__ (__SI__)));
 
 typedef signed int int64_t __attribute__((__mode__(__DI__)));
 typedef unsigned int uint64_t __attribute__((__mode__(__DI__)));
-# 146 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+# 146 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
 typedef int16_t intptr_t;
 
 
 
 
 typedef uint16_t uintptr_t;
-# 163 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+# 163 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
 typedef int8_t int_least8_t;
 
 
@@ -70,7 +70,7 @@ typedef int64_t int_least64_t;
 
 
 typedef uint64_t uint_least64_t;
-# 217 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+# 217 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
 typedef int8_t int_fast8_t;
 
 
@@ -112,19 +112,19 @@ typedef int64_t int_fast64_t;
 
 
 typedef uint64_t uint_fast64_t;
-# 277 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+# 277 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
 typedef int64_t intmax_t;
 
 
 
 
 typedef uint64_t uintmax_t;
-# 10 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 2 3 4
-# 5 "MCL/timer/../../Service/STD_Types.h" 2
+# 10 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 2 3 4
+# 5 "MCL/Timer/../../Service/STD_Types.h" 2
 
 
 
-# 7 "MCL/timer/../../Service/STD_Types.h"
+# 7 "MCL/Timer/../../Service/STD_Types.h"
 typedef int8_t sint8_t;
 typedef int16_t sint16_t;
 typedef int32_t sint32_t;
@@ -163,7 +163,7 @@ typedef enum {
     FALSE = 0,
     TRUE = 1
 } bool_t;
-# 55 "MCL/timer/../../Service/STD_Types.h"
+# 55 "MCL/Timer/../../Service/STD_Types.h"
 typedef enum {
     E_OK = 0,
     E_NOK,
@@ -174,31 +174,31 @@ typedef enum {
 } Std_ReturnType;
 
 typedef Std_ReturnType STD_ReturnType;
-# 2 "MCL/timer/timer_modified.c" 2
-# 1 "MCL/timer/../../Service/Bit_Math.h" 1
-# 3 "MCL/timer/timer_modified.c" 2
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\interrupt.h" 1 3
-# 38 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\interrupt.h" 3
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 1 3
-# 99 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\sfr_defs.h" 1 3
-# 126 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\sfr_defs.h" 3
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 1 3
-# 77 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 3
+# 2 "MCL/Timer/timer_modified.c" 2
+# 1 "MCL/Timer/../../Service/Bit_Math.h" 1
+# 3 "MCL/Timer/timer_modified.c" 2
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\interrupt.h" 1 3
+# 38 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\interrupt.h" 3
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 1 3
+# 99 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\sfr_defs.h" 1 3
+# 126 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\sfr_defs.h" 3
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 1 3
+# 77 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 3
 
-# 77 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 3
+# 77 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 3
 typedef int32_t int_farptr_t;
 
 
 
 typedef uint32_t uint_farptr_t;
-# 127 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\sfr_defs.h" 2 3
-# 100 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
-# 244 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 1 3
-# 720 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 3
+# 127 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\sfr_defs.h" 2 3
+# 100 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+# 244 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 1 3
+# 720 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 3
        
-# 721 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 3
+# 721 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 3
 
        
        
@@ -223,42 +223,42 @@ typedef uint32_t uint_farptr_t;
        
        
        
-# 245 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
-# 703 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\portpins.h" 1 3
-# 704 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+# 245 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+# 703 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\portpins.h" 1 3
+# 704 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
 
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\common.h" 1 3
-# 706 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\common.h" 1 3
+# 706 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
 
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\version.h" 1 3
-# 708 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
-
-
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\version.h" 1 3
+# 708 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
 
 
 
 
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\fuse.h" 1 3
-# 248 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\fuse.h" 3
+
+
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\fuse.h" 1 3
+# 248 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\fuse.h" 3
 typedef struct
 {
     unsigned char low;
     unsigned char high;
 } __fuse_t;
-# 715 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+# 715 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
 
 
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\lock.h" 1 3
-# 718 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
-# 39 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\interrupt.h" 2 3
-# 4 "MCL/timer/timer_modified.c" 2
-# 1 "MCL/timer/timer_registers.h" 1
-# 5 "MCL/timer/timer_modified.c" 2
-# 1 "MCL/timer/timer_interface.h" 1
-# 23 "MCL/timer/timer_interface.h"
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\lock.h" 1 3
+# 718 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+# 39 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\interrupt.h" 2 3
+# 4 "MCL/Timer/timer_modified.c" 2
+# 1 "MCL/Timer/timer_registers.h" 1
+# 5 "MCL/Timer/timer_modified.c" 2
+# 1 "MCL/Timer/timer_interface.h" 1
+# 23 "MCL/Timer/timer_interface.h"
 
-# 23 "MCL/timer/timer_interface.h"
+# 23 "MCL/Timer/timer_interface.h"
 typedef enum
 {
     TIMER_CHANNEL_0 = 0,
@@ -266,7 +266,7 @@ typedef enum
     TIMER_CHANNEL_2 = 2,
     TIMER_CHANNEL_MAX
 } Timer_ChannelType;
-# 39 "MCL/timer/timer_interface.h"
+# 39 "MCL/Timer/timer_interface.h"
 typedef enum
 {
     TIMER_MODE_NORMAL = 0,
@@ -302,7 +302,7 @@ typedef enum
     TIMER_INT_OVERFLOW = 0,
     TIMER_INT_COMPARE_MATCH = 1
 } Timer_InterruptType;
-# 85 "MCL/timer/timer_interface.h"
+# 85 "MCL/Timer/timer_interface.h"
 typedef struct
 {
     Timer_ChannelType channel;
@@ -318,13 +318,13 @@ typedef struct
 
 
 typedef void (*Timer_CallBackType)(void);
-# 111 "MCL/timer/timer_interface.h"
+# 111 "MCL/Timer/timer_interface.h"
 Std_ReturnType Timer0_Init(void);
-# 120 "MCL/timer/timer_interface.h"
+# 120 "MCL/Timer/timer_interface.h"
 Std_ReturnType Timer0_EnableInterrupt(Timer_ChannelType channel, Timer_InterruptType intType);
-# 129 "MCL/timer/timer_interface.h"
+# 129 "MCL/Timer/timer_interface.h"
 Std_ReturnType Timer0_DisableInterrupt(Timer_ChannelType channel, Timer_InterruptType intType);
-# 139 "MCL/timer/timer_interface.h"
+# 139 "MCL/Timer/timer_interface.h"
 Std_ReturnType Timer_SetCallBack(Timer_ChannelType channel, Timer_InterruptType intType,
                                   Timer_CallBackType callBack);
 
@@ -371,27 +371,29 @@ void Timer_EnableGlobalInterrupt(void);
 
 
 void Timer_DisableGlobalInterrupt(void);
-
-
-uint32_t TIMER_GetTick(void);
-# 6 "MCL/timer/timer_modified.c" 2
-# 1 "MCL/timer/../GPIO/GPIO_Interface.h" 1
+# 6 "MCL/Timer/timer_modified.c" 2
+# 1 "MCL/Timer/../GPIO/GPIO_interface.h" 1
 
 
 
-# 1 "MCL/timer/../GPIO/../../Service/STD_Types.h" 1
-# 5 "MCL/timer/../GPIO/GPIO_Interface.h" 2
-# 27 "MCL/timer/../GPIO/GPIO_Interface.h"
+# 1 "MCL/Timer/../GPIO/../../Service/STD_Types.h" 1
+# 5 "MCL/Timer/../GPIO/GPIO_interface.h" 2
+# 30 "MCL/Timer/../GPIO/GPIO_interface.h"
 typedef unsigned char GPIO_pin_status;
 typedef unsigned char GPIO_port_status;
 
 
 
-Std_ReturnType GPIO_set_pin_Direction(uint8_t port, uint8_t pin, uint8_t direction);
-Std_ReturnType GPIO_write_pin(uint8_t port, uint8_t pin, uint8_t value);
-GPIO_pin_status GPIO_read_pin(uint8_t port, uint8_t pin);
-Std_ReturnType GPIO_toggle_pin(uint8_t port, uint8_t pin);
-# 7 "MCL/timer/timer_modified.c" 2
+Std_ReturnType GPIO_set_pin_Direction(uint8_t uint8_port, uint8_t uint8_pin, uint8_t uint8_direction);
+Std_ReturnType GPIO_get_pin_status(uint8_t uint8_port, uint8_t uint8_pin, uint8_t *pu8PinStatus);
+Std_ReturnType GPIO_pin_toggle(uint8_t uint8_port, uint8_t uint8_pin);
+Std_ReturnType GPIO_set_pin_value(uint8_t uint8_port, uint8_t uint8_pin, uint8_t uint8_value);
+
+
+Std_ReturnType GPIO_set_port_Direction(uint8_t uint8_port, uint8_t uint8_direction);
+Std_ReturnType GPIO_get_port_status(uint8_t uint8_port, uint8_t *pu8PortStatus);
+Std_ReturnType GPIO_set_port_value(uint8_t uint8_port, uint8_t uint8_value);
+# 7 "MCL/Timer/timer_modified.c" 2
 
 
 
@@ -455,10 +457,10 @@ Std_ReturnType Timer_SetCallBack(Timer_ChannelType channel, Timer_InterruptType 
 
 
 
-# 69 "MCL/timer/timer_modified.c" 3
+# 69 "MCL/Timer/timer_modified.c" 3
 void __vector_10 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_10 (void)
 
-# 70 "MCL/timer/timer_modified.c"
+# 70 "MCL/Timer/timer_modified.c"
 {
     if (Timer0_CompareMatch_CallBack != ((void *)0))
     {
@@ -545,20 +547,4 @@ void Timer_EnableGlobalInterrupt(void)
 void Timer_DisableGlobalInterrupt(void)
 {
     (((*(volatile uint8_t *)0x5F)) &= ~(1 << (7)));
-}
-
-static volatile uint32_t g_tickCount = 0;
-
-void Timer0_TickISR(void)
-{
-    g_tickCount++;
-}
-
-uint32_t TIMER_GetTick(void)
-{
-    uint32_t local_tick;
-    Timer_DisableGlobalInterrupt();
-    local_tick = g_tickCount;
-    Timer_EnableGlobalInterrupt();
-    return local_tick;
 }

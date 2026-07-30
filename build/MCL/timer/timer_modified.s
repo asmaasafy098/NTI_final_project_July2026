@@ -330,55 +330,6 @@ Timer_DisableGlobalInterrupt:
 /* epilogue start */
 	ret
 	.size	Timer_DisableGlobalInterrupt, .-Timer_DisableGlobalInterrupt
-.global	Timer0_TickISR
-	.type	Timer0_TickISR, @function
-Timer0_TickISR:
-/* prologue: function */
-/* frame size = 0 */
-/* stack size = 0 */
-.L__stack_usage = 0
-	lds r24,g_tickCount
-	lds r25,g_tickCount+1
-	lds r26,g_tickCount+2
-	lds r27,g_tickCount+3
-	adiw r24,1
-	adc r26,__zero_reg__
-	adc r27,__zero_reg__
-	sts g_tickCount,r24
-	sts g_tickCount+1,r25
-	sts g_tickCount+2,r26
-	sts g_tickCount+3,r27
-/* epilogue start */
-	ret
-	.size	Timer0_TickISR, .-Timer0_TickISR
-.global	TIMER_GetTick
-	.type	TIMER_GetTick, @function
-TIMER_GetTick:
-	push r12
-	push r13
-	push r14
-	push r15
-/* prologue: function */
-/* frame size = 0 */
-/* stack size = 4 */
-.L__stack_usage = 4
-	call Timer_DisableGlobalInterrupt
-	lds r12,g_tickCount
-	lds r13,g_tickCount+1
-	lds r14,g_tickCount+2
-	lds r15,g_tickCount+3
-	call Timer_EnableGlobalInterrupt
-	movw r24,r14
-	movw r22,r12
-/* epilogue start */
-	pop r15
-	pop r14
-	pop r13
-	pop r12
-	ret
-	.size	TIMER_GetTick, .-TIMER_GetTick
-	.local	g_tickCount
-	.comm	g_tickCount,4,1
 	.local	Timer0_CompareMatch_CallBack
 	.comm	Timer0_CompareMatch_CallBack,2,1
 	.ident	"GCC: (GNU) 7.3.0"

@@ -1,17 +1,17 @@
-timer_modified.o: MCL/timer/timer_modified.c \
- MCL/timer/../../Service/STD_Types.h MCL/timer/../../Service/Bit_Math.h \
- MCL/timer/timer_registers.h MCL/timer/timer_interface.h \
- MCL/timer/../GPIO/GPIO_Interface.h \
- MCL/timer/../GPIO/../../Service/STD_Types.h
+timer_modified.o: MCL/Timer/timer_modified.c \
+ MCL/Timer/../../Service/STD_Types.h MCL/Timer/../../Service/Bit_Math.h \
+ MCL/Timer/timer_registers.h MCL/Timer/timer_interface.h \
+ MCL/Timer/../GPIO/GPIO_interface.h \
+ MCL/Timer/../GPIO/../../Service/STD_Types.h
 
-MCL/timer/../../Service/STD_Types.h:
+MCL/Timer/../../Service/STD_Types.h:
 
-MCL/timer/../../Service/Bit_Math.h:
+MCL/Timer/../../Service/Bit_Math.h:
 
-MCL/timer/timer_registers.h:
+MCL/Timer/timer_registers.h:
 
-MCL/timer/timer_interface.h:
+MCL/Timer/timer_interface.h:
 
-MCL/timer/../GPIO/GPIO_Interface.h:
+MCL/Timer/../GPIO/GPIO_interface.h:
 
-MCL/timer/../GPIO/../../Service/STD_Types.h:
+MCL/Timer/../GPIO/../../Service/STD_Types.h:
