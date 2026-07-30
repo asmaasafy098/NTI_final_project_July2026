@@ -82,7 +82,7 @@ int main(void)
         .parity = UART_PARITY_NONE,
         .stopBits = UART_STOP_1BIT
     };
-    
+
     ADC_Init(&adcCfg);
     Timer0_Init();
     Timer1_Init();
@@ -361,49 +361,4 @@ void Task_Telemetry(void)
     
     /* Send telemetry */
     TELEMETRY_Update(&g_driveData);
-}
-
-/* ==================== Interrupt Service Routines ==================== */
-
-/**
- * @brief INT0 ISR - Tacho pulse counting
- * Must be minimal: only increment counter (NFR-10)
- */
-ISR(INT0_vect)
-{
-    /* Increment pulse counter - handled by TACHO_OnPulse() */
-    TACHO_PulseISR();
-}
-
-/**
- * @brief INT1 ISR - Emergency Stop
- * Must be minimal: stop motor immediately (NFR-04)
- * Performs exactly three actions (Section 9.6):
- * 1. OCR1A = 0
- * 2. PORTB &= ~(EN|IN1|IN2)
- * 3. g_estopFlag = 1
- */
-ISR(INT1_vect)
-{
-    /* 1. Force PWM to 0 */
-    OCR1A = 0;
-    
-    /* 2. Disable bridge and clear direction pins */
-    CLR_BIT(PORTB, PB2);  /* EN = 0 */
-    CLR_BIT(PORTB, PB1);  /* IN2 = 0 */
-    CLR_BIT(PORTB, PB0);  /* IN1 = 0 */
-    
-    /* 3. Set flag for FSM */
-    g_estopFlag = 1;
-    
-    /* Note: The E-stop is NOT debounced (per section 10.5) */
-}
-
-/**
- * @brief USART RX ISR - Console input
- */
-ISR(USART_RXC_vect)
-{
-    uint8_t ch = UDR;
-    CONSOLE_ProcessChar(ch);
 }
