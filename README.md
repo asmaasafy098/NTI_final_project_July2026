@@ -1249,13 +1249,13 @@ Maximum **+20**; final score capped at 100.
 *Prepared by Ahmed Ellamie | ahmed.ellamiee@gmail.com*
 ================================================
 
-Summary
+Summary DONE
 
 | **Hardware Design** | Complete |
 
 | **Layer (Service)** | Complete |
 
-| **Layer (Logic)** | Pending | 
+| **Layer (Logic)** | Complete | 
 
 | **MCL Layer** | Complete | 
 
@@ -1263,7 +1263,7 @@ Summary
 
 ================================================
 
-Shorouk (Modules)
+Shorouk (Modules) DONE
 
 DataTypes
 
@@ -1282,11 +1282,11 @@ Scheduler    |    Complete
 
 Console     |    Complete
 
-Telemetry    |   Pending
+Telemetry    |   Complete
 
 ================================================
 
-Asmaa (drivers)
+Asmaa (drivers) DONE
 
 
 TIMER      |      Complete
@@ -1301,4 +1301,4 @@ AnalogSensor   |   Complete
 
 Buzzer     |      Complete
 
-main.c      |     Pending
+main.c      |     Complete
