@@ -1,4 +1,4 @@
-dc_motor.o: HAL/DC_Motor/dc_motor.c \
+build/HAL/DC_Motor/dc_motor.o: HAL/DC_Motor/dc_motor.c \
  HAL/DC_Motor/../../Service/STD_Types.h \
  HAL/DC_Motor/../../Service/Bit_Math.h \
  HAL/DC_Motor/../../MCL/GPIO/GPIO_Interface.h \

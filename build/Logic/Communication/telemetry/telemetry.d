@@ -1,4 +1,5 @@
-telemetry.o: Logic/Communication/telemetry/telemetry.c \
+build/Logic/Communication/telemetry/telemetry.o: \
+ Logic/Communication/telemetry/telemetry.c \
  Logic/Communication/telemetry/telemetry.h Service/STD_Types.h \
  Logic/Data/data_types.h \
  Logic/Communication/telemetry/../console/console.h \

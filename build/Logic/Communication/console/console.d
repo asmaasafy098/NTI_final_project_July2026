@@ -1,4 +1,5 @@
-console.o: Logic/Communication/console/console.c \
+build/Logic/Communication/console/console.o: \
+ Logic/Communication/console/console.c \
  Logic/Communication/console/console.h Service/STD_Types.h \
  Logic/Data/data_types.h \
  Logic/Communication/console/../../../MCL/UART/uart_interface.h \
