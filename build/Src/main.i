@@ -1541,13 +1541,13 @@ uint8_t ANALOG_GetTemperature(void);
 # 1 "Src/../HAL/LCD_Aip31068_i2c/../../Logic/Data/data_types.h" 1
 # 7 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h" 2
 <<<<<<< HEAD
-# 101 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
 =======
 
 void LCD_Update(const DriveData_t *data);
 void LCD_ShowTrip(Trip_t trip);
-# 105 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
+
 >>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
+# 108 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
 typedef struct
 {
 
@@ -1562,7 +1562,6 @@ typedef struct
     uint8_t cursorRow;
     uint8_t cursorCol;
 } LCD_Aip31068_HandleType;
-<<<<<<< HEAD
 
 
 
@@ -1577,15 +1576,9 @@ Std_ReturnType LCD_ShowTrip(Trip_t tripCode);
 
 Std_ReturnType LCD_Aip31068_Init(LCD_Aip31068_HandleType *handle);
 
-=======
-# 136 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
-Std_ReturnType LCD_Aip31068_Init(LCD_Aip31068_HandleType *handle);
-# 145 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
->>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 Std_ReturnType LCD_Aip31068_SendCommand(LCD_Aip31068_HandleType *handle, uint8_t command);
 
 Std_ReturnType LCD_Aip31068_WriteChar(LCD_Aip31068_HandleType *handle, uint8_t character);
-<<<<<<< HEAD
 
 Std_ReturnType LCD_Aip31068_WriteString(LCD_Aip31068_HandleType *handle, const uint8_t *pString);
 
@@ -1595,17 +1588,6 @@ Std_ReturnType LCD_Aip31068_WriteStringAt(LCD_Aip31068_HandleType *handle,
 
 Std_ReturnType LCD_Aip31068_WriteNumber(LCD_Aip31068_HandleType *handle, sint32_t number);
 
-=======
-# 165 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
-Std_ReturnType LCD_Aip31068_WriteString(LCD_Aip31068_HandleType *handle, const uint8_t *pString);
-# 175 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
-Std_ReturnType LCD_Aip31068_WriteStringAt(LCD_Aip31068_HandleType *handle,
-                                          uint8_t row, uint8_t column,
-                                          const uint8_t *pString);
-# 187 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
-Std_ReturnType LCD_Aip31068_WriteNumber(LCD_Aip31068_HandleType *handle, sint32 number);
-# 197 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
->>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 Std_ReturnType LCD_Aip31068_SetCursor(LCD_Aip31068_HandleType *handle,
                                       uint8_t row, uint8_t column);
 
@@ -1618,15 +1600,9 @@ Std_ReturnType LCD_Aip31068_DisplayOnOff(LCD_Aip31068_HandleType *handle, uint8_
 Std_ReturnType LCD_Aip31068_CursorOnOff(LCD_Aip31068_HandleType *handle, uint8_t on);
 
 Std_ReturnType LCD_Aip31068_BlinkOnOff(LCD_Aip31068_HandleType *handle, uint8_t on);
-<<<<<<< HEAD
 
 Std_ReturnType LCD_Aip31068_ShiftDisplay(LCD_Aip31068_HandleType *handle, uint8_t toRight);
 
-=======
-# 246 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
-Std_ReturnType LCD_Aip31068_ShiftDisplay(LCD_Aip31068_HandleType *handle, uint8_t toRight);
-# 256 "Src/../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
->>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 Std_ReturnType LCD_Aip31068_CreateCustomChar(LCD_Aip31068_HandleType *handle,
                                              uint8_t location, const uint8_t *pPattern);
 # 37 "Src/main.c" 2
@@ -1751,106 +1727,37 @@ Std_ReturnType Stepper_L298P_ResetPosition(Stepper_L298P_HandleType *handle);
 # 286 "Src/../HAL/Stepper_L298P/Stepper_L298P.h"
 Std_ReturnType Stepper_L298P_GetStepsPerRev(const Stepper_L298P_HandleType *handle,
                                             uint16_t *pStepsPerRev);
-<<<<<<< HEAD
-# 38 "Src/main.c" 2
-# 1 "Src/../HAL/MotorBridge/MotorBridge.h" 1
-=======
 # 39 "Src/main.c" 2
 # 1 "Src/../HAL/MotorBridge/MotorBridge.h" 1
-
-
-
-# 1 "Src/../HAL/MotorBridge/../../Service/STD_Types.h" 1
-# 5 "Src/../HAL/MotorBridge/MotorBridge.h" 2
-# 1 "Src/../HAL/MotorBridge/../../Logic/Data/data_types.h" 1
-# 6 "Src/../HAL/MotorBridge/MotorBridge.h" 2
-# 1 "Src/../HAL/MotorBridge/../../MCL/Timer/timer_interface.h" 1
-# 7 "Src/../HAL/MotorBridge/MotorBridge.h" 2
-
-Std_ReturnType BRIDGE_Init(void);
-Std_ReturnType BRIDGE_SetDirection(MotorDir_t dir);
-Std_ReturnType BRIDGE_SetDuty(uint16_t duty_percent);
-Std_ReturnType BRIDGE_Enable(void);
-Std_ReturnType BRIDGE_Disable(void);
-void BRIDGE_ForceStop(void);
-# 40 "Src/main.c" 2
-
->>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 
 
 # 1 "Src/../HAL/MotorBridge/../../Service/STD_Types.h" 1
 # 4 "Src/../HAL/MotorBridge/MotorBridge.h" 2
+<<<<<<< HEAD
 # 1 "Src/../HAL/MotorBridge/../../MCL/timer/timer_interface.h" 1
-# 5 "Src/../HAL/MotorBridge/MotorBridge.h" 2
-# 1 "Src/../HAL/MotorBridge/../../Logic/Data/data_types.h" 1
 # 6 "Src/../HAL/MotorBridge/MotorBridge.h" 2
+# 1 "Src/../HAL/MotorBridge/../../Logic/Data/data_types.h" 1
+# 7 "Src/../HAL/MotorBridge/MotorBridge.h" 2
 Std_ReturnType BRIDGE_Init(void);
 Std_ReturnType BRIDGE_SetDirection(MotorDir_t dir);
+=======
+
+# 1 "Src/../HAL/MotorBridge/../../MCL/Timer/timer_interface.h" 1
+# 12 "Src/../HAL/MotorBridge/MotorBridge.h" 2
+
+Std_ReturnType BRIDGE_Init(void);
+Std_ReturnType BRIDGE_SetDirection(MotorDir_t dir);
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 Std_ReturnType BRIDGE_SetDuty(uint16_t duty_percent);
 Std_ReturnType BRIDGE_Enable(void);
 Std_ReturnType BRIDGE_Disable(void);
 void BRIDGE_ForceStop(void);
-# 39 "Src/main.c" 2
-# 1 "Src/../HAL/UserPanel/UserPanel.h" 1
-# 10 "Src/../HAL/UserPanel/UserPanel.h"
-# 1 "Src/../Service/STD_Types.h" 1
-# 11 "Src/../HAL/UserPanel/UserPanel.h" 2
-# 1 "Src/../Logic/Data/data_types.h" 1
-# 12 "Src/../HAL/UserPanel/UserPanel.h" 2
-
-
-typedef enum {
-    PNL_NONE = 0,
-    PNL_START,
-    PNL_STOP,
-    PNL_REVERSE,
-    PNL_RESET
-} Panel_Event_t;
-
-
-
-
-
-
-
-Std_ReturnType PANEL_Init(void);
-
-
-
-
-void PANEL_Poll(void);
-
-
-
-
-
-Panel_Event_t PANEL_GetEvent(void);
-
-
-
-
-
-uint8_t PANEL_IsLocalMode(void);
-
-
-
-
-
-
-void PANEL_SetRunLED(uint8_t state, uint8_t blink);
-
-
-
-
-
-void PANEL_SetFaultLED(uint8_t state);
-
-
-
-
-
-void PANEL_SetDirectionLEDs(MotorDir_t dir);
 # 40 "Src/main.c" 2
+
+<<<<<<< HEAD
+=======
+
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 
 DriveData_t g_driveData;
 DriveCfg_t g_driveCfg;
@@ -1902,12 +1809,6 @@ int main(void)
     EXTI_Init(&extiCfg1);
     EXTI_Init(&extiCfg0);
     UART_Init(&uartCfg);
-<<<<<<< HEAD
-=======
-
-       I2C_Init();
-
->>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 
 
     PANEL_Init();
@@ -1982,15 +1883,9 @@ g_driveCfg.checksum = 0;
 
 
     
-<<<<<<< HEAD
-# 151 "Src/main.c" 3
+# 169 "Src/main.c" 3
    __asm__ __volatile__ ("sei" ::: "memory")
-# 151 "Src/main.c"
-=======
-# 163 "Src/main.c" 3
-   __asm__ __volatile__ ("sei" ::: "memory")
-# 163 "Src/main.c"
->>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
+# 169 "Src/main.c"
         ;
 
 
@@ -2193,114 +2088,64 @@ void Task_Telemetry(void)
 
     TELEMETRY_Update(&g_driveData);
 }
-
-
-
-
-
-
-
-
 <<<<<<< HEAD
-# 355 "Src/main.c" 3
+
+
+
+
+
+
+
+
+# 379 "Src/main.c" 3
 void __vector_1 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_1 (void)
 
-# 356 "Src/main.c"
+# 380 "Src/main.c"
 {
 
      TACHO_PulseISR();
 }
-# 369 "Src/main.c"
+# 393 "Src/main.c"
 
-# 369 "Src/main.c" 3
+# 393 "Src/main.c" 3
 void __vector_2 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_2 (void)
 
-# 370 "Src/main.c"
+# 394 "Src/main.c"
 {
 
     
-# 372 "Src/main.c" 3
+# 396 "Src/main.c" 3
    (*(volatile uint16_t *)((0x2A) + 0x20)) 
-# 372 "Src/main.c"
-=======
-# 372 "Src/main.c" 3
-void __vector_1 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_1 (void)
-
-# 373 "Src/main.c"
-{
-
-    TACHO_PulseISR();
-}
-# 386 "Src/main.c"
-
-# 386 "Src/main.c" 3
-void __vector_2 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_2 (void)
-
-# 387 "Src/main.c"
-{
-
-    
-# 389 "Src/main.c" 3
-   (*(volatile uint16_t *)((0x2A) + 0x20)) 
-# 389 "Src/main.c"
->>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
+# 396 "Src/main.c"
          = 0;
 
 
     ((
-<<<<<<< HEAD
-# 375 "Src/main.c" 3
+# 399 "Src/main.c" 3
    (*(volatile uint8_t *)((0x18) + 0x20))
-# 375 "Src/main.c"
+# 399 "Src/main.c"
    ) &= ~(1 << (
-# 375 "Src/main.c" 3
+# 399 "Src/main.c" 3
    2
-# 375 "Src/main.c"
+# 399 "Src/main.c"
    )));
     ((
-# 376 "Src/main.c" 3
+# 400 "Src/main.c" 3
    (*(volatile uint8_t *)((0x18) + 0x20))
-# 376 "Src/main.c"
+# 400 "Src/main.c"
    ) &= ~(1 << (
-# 376 "Src/main.c" 3
+# 400 "Src/main.c" 3
    1
-# 376 "Src/main.c"
+# 400 "Src/main.c"
    )));
     ((
-# 377 "Src/main.c" 3
+# 401 "Src/main.c" 3
    (*(volatile uint8_t *)((0x18) + 0x20))
-# 377 "Src/main.c"
+# 401 "Src/main.c"
    ) &= ~(1 << (
-# 377 "Src/main.c" 3
+# 401 "Src/main.c" 3
    0
-# 377 "Src/main.c"
-=======
-# 392 "Src/main.c" 3
-   (*(volatile uint8_t *)((0x18) + 0x20))
-# 392 "Src/main.c"
-   ) &= ~(1 << (
-# 392 "Src/main.c" 3
-   2
-# 392 "Src/main.c"
-   )));
-    ((
-# 393 "Src/main.c" 3
-   (*(volatile uint8_t *)((0x18) + 0x20))
-# 393 "Src/main.c"
-   ) &= ~(1 << (
-# 393 "Src/main.c" 3
-   1
-# 393 "Src/main.c"
-   )));
-    ((
-# 394 "Src/main.c" 3
-   (*(volatile uint8_t *)((0x18) + 0x20))
-# 394 "Src/main.c"
-   ) &= ~(1 << (
-# 394 "Src/main.c" 3
-   0
-# 394 "Src/main.c"
->>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
+# 401 "Src/main.c"
    )));
 
 
@@ -2313,27 +2158,17 @@ void __vector_2 (void) __attribute__ ((signal,used, externally_visible)) ; void 
 
 
 
-<<<<<<< HEAD
-# 388 "Src/main.c" 3
+# 412 "Src/main.c" 3
 void __vector_13 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_13 (void)
 
-# 389 "Src/main.c"
+# 413 "Src/main.c"
 {
     uint8_t ch = 
-# 390 "Src/main.c" 3
+# 414 "Src/main.c" 3
                 (*(volatile uint8_t *)((0x0C) + 0x20))
-# 390 "Src/main.c"
-=======
-# 405 "Src/main.c" 3
-void __vector_13 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_13 (void)
-
-# 406 "Src/main.c"
-{
-    uint8_t ch = 
-# 407 "Src/main.c" 3
-                (*(volatile uint8_t *)((0x0C) + 0x20))
-# 407 "Src/main.c"
->>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
+# 414 "Src/main.c"
                    ;
     CONSOLE_ProcessChar(ch);
 }
+=======
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f

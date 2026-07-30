@@ -93,7 +93,6 @@ int main(void)
     EXTI_Init(&extiCfg1);
     EXTI_Init(&extiCfg0);
     UART_Init(&uartCfg);
-<<<<<<< HEAD
     //I2C_InitMaster(&i2cCfg);  /* For LCD */
     //LCD_InitDefault();  
     PANEL_Init();
@@ -101,12 +100,6 @@ int main(void)
   while (1) {
     PANEL_SetRunLED(1, 0);   /* أشعل الـ LED يدويًا بالقوة */
   }      
-=======
-
-       I2C_Init(); 
-   
-    
->>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
     /* ===== STEP 3: Initialize HAL ===== */
     TACHO_Init();   /* Tacho measurement */
     ANALOG_Init();  /* 4 ADC channels */

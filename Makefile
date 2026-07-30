@@ -12,7 +12,6 @@ CFLAGS  = -mmcu=atmega32 -DF_CPU=$(F_CPU) -std=c99 -Wall -Os
 DEPFLAGS = -MMD -MP
 LDFLAGS = -mmcu=atmega32
 
-<<<<<<< HEAD
 # Discover sources from this project's actual layout
 C_SOURCES := $(wildcard Src/*.c) \
              $(wildcard MCL/GPIO/*.c) \
@@ -53,63 +52,6 @@ INCLUDE_DIRS := . Src \
                 Logic/Data Logic/Scheduler \
                 Service
 
-=======
-# ===========================
-# Source Files
-# ===========================
-
-C_SOURCES := \
-$(wildcard Src/*.c) \
-$(wildcard HAL/*/*.c) \
-$(wildcard Logic/*/*.c) \
-$(wildcard Logic/*/*/*.c) \
-$(wildcard MCL/*/*.c) \
-$(wildcard Service/*/*.c)
-
-OBJS   := $(patsubst %.c,build/%.o,$(C_SOURCES))
-DEPS   := $(patsubst %.c,build/%.d,$(C_SOURCES))
-
-TARGET = build/firmware
-
-# ===========================
-# Include Paths
-# ===========================
-
-INCLUDE_DIRS := \
-. \
-Src \
-HAL \
-HAL/ANALOG_SENSOR \
-HAL/BUZZER \
-HAL/DC_Motor \
-HAL/LCD_Aip31068_i2c \
-HAL/MotorBridge \
-HAL/Stepper_L298P \
-HAL/Tachometer \
-HAL/UserPanel \
-Logic \
-Logic/Communication \
-Logic/Communication/console \
-Logic/Communication/telemetry \
-Logic/Control \
-Logic/Control/drive_fsm \
-Logic/Control/pi_controller \
-Logic/Control/protection \
-Logic/Control/ramp_generator \
-Logic/Data \
-Logic/Scheduler \
-MCL \
-MCL/ADC \
-MCL/GPIO \
-MCL/I2C \
-MCL/Interrupt \
-MCL/Timer \
-MCL/UART \
-Service \
-Service/crc16 \
-Service/ring_buffer
-
->>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 CFLAGS += $(addprefix -I,$(INCLUDE_DIRS)) $(DEPFLAGS)
 
 -include $(DEPS)
@@ -127,17 +69,11 @@ build/%.i: %.c
 	$(CC) $(CFLAGS) -MMD -MP -MF $(patsubst %.i,%.d,$@) -E $< -o $@
 
 build/%.s: build/%.i
-<<<<<<< HEAD
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -S $< -o $@
 
 build/%.o: build/%.s
 	@mkdir -p $(dir $@)
-=======
-	$(CC) $(CFLAGS) -S $< -o $@
-
-build/%.o: build/%.s
->>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	$(CC) $(CFLAGS) -c $< -o $@
 
 .SECONDARY:
