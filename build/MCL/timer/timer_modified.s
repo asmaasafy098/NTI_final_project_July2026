@@ -19,17 +19,20 @@ Timer0_Init:
 	ori r24,lo8(8)
 	out 0x33,r24
 	out 0x32,__zero_reg__
-	ldi r24,lo8(77)
+	ldi r24,lo8(-7)
 	out 0x3c,r24
 	in r24,0x33
-	ori r24,lo8(4)
+	andi r24,lo8(-5)
 	out 0x33,r24
 	in r24,0x33
-	andi r24,lo8(-3)
+	ori r24,lo8(2)
 	out 0x33,r24
 	in r24,0x33
 	ori r24,lo8(1)
 	out 0x33,r24
+	in r24,0x39
+	ori r24,lo8(2)
+	out 0x39,r24
 	ldi r25,0
 	ldi r24,0
 /* epilogue start */
@@ -132,6 +135,17 @@ __vector_10:
 /* frame size = 0 */
 /* stack size = 15 */
 .L__stack_usage = 15
+	lds r24,g_tickCount
+	lds r25,g_tickCount+1
+	lds r26,g_tickCount+2
+	lds r27,g_tickCount+3
+	adiw r24,1
+	adc r26,__zero_reg__
+	adc r27,__zero_reg__
+	sts g_tickCount,r24
+	sts g_tickCount+1,r25
+	sts g_tickCount+2,r26
+	sts g_tickCount+3,r27
 	lds r30,Timer0_CompareMatch_CallBack
 	lds r31,Timer0_CompareMatch_CallBack+1
 	sbiw r30,0
@@ -226,7 +240,7 @@ Timer1_SetDuty:
 	ret
 .L23:
 	movw r18,r24
-	ldi r26,lo8(-112)
+	ldi r26,lo8(-113)
 	ldi r27,lo8(1)
 	call __umulhisi3
 	ldi r18,lo8(100)
@@ -234,8 +248,6 @@ Timer1_SetDuty:
 	ldi r20,0
 	ldi r21,0
 	call __udivmodsi4
-	subi r18,1
-	sbc r19,__zero_reg__
 	out 0x2a+1,r19
 	out 0x2a,r18
 	rjmp .L25
@@ -311,10 +323,12 @@ Timer_EnableGlobalInterrupt:
 /* frame size = 0 */
 /* stack size = 0 */
 .L__stack_usage = 0
-	in r24,__SREG__
-	ori r24,lo8(-128)
-	out __SREG__,r24
+/* #APP */
+ ;  167 "MCL/timer/timer_modified.c" 1
+	sei
+ ;  0 "" 2
 /* epilogue start */
+/* #NOAPP */
 	ret
 	.size	Timer_EnableGlobalInterrupt, .-Timer_EnableGlobalInterrupt
 .global	Timer_DisableGlobalInterrupt
@@ -324,57 +338,33 @@ Timer_DisableGlobalInterrupt:
 /* frame size = 0 */
 /* stack size = 0 */
 .L__stack_usage = 0
-	in r24,__SREG__
-	andi r24,lo8(127)
-	out __SREG__,r24
+/* #APP */
+ ;  172 "MCL/timer/timer_modified.c" 1
+	cli
+ ;  0 "" 2
 /* epilogue start */
+/* #NOAPP */
 	ret
 	.size	Timer_DisableGlobalInterrupt, .-Timer_DisableGlobalInterrupt
-.global	Timer0_TickISR
-	.type	Timer0_TickISR, @function
-Timer0_TickISR:
+.global	TIMER_GetTick
+	.type	TIMER_GetTick, @function
+TIMER_GetTick:
 /* prologue: function */
 /* frame size = 0 */
 /* stack size = 0 */
 .L__stack_usage = 0
-	lds r24,g_tickCount
-	lds r25,g_tickCount+1
-	lds r26,g_tickCount+2
-	lds r27,g_tickCount+3
-	adiw r24,1
-	adc r26,__zero_reg__
-	adc r27,__zero_reg__
-	sts g_tickCount,r24
-	sts g_tickCount+1,r25
-	sts g_tickCount+2,r26
-	sts g_tickCount+3,r27
+	in r18,__SREG__
+/* #APP */
+ ;  179 "MCL/timer/timer_modified.c" 1
+	cli
+ ;  0 "" 2
+/* #NOAPP */
+	lds r22,g_tickCount
+	lds r23,g_tickCount+1
+	lds r24,g_tickCount+2
+	lds r25,g_tickCount+3
+	out __SREG__,r18
 /* epilogue start */
-	ret
-	.size	Timer0_TickISR, .-Timer0_TickISR
-.global	TIMER_GetTick
-	.type	TIMER_GetTick, @function
-TIMER_GetTick:
-	push r12
-	push r13
-	push r14
-	push r15
-/* prologue: function */
-/* frame size = 0 */
-/* stack size = 4 */
-.L__stack_usage = 4
-	call Timer_DisableGlobalInterrupt
-	lds r12,g_tickCount
-	lds r13,g_tickCount+1
-	lds r14,g_tickCount+2
-	lds r15,g_tickCount+3
-	call Timer_EnableGlobalInterrupt
-	movw r24,r14
-	movw r22,r12
-/* epilogue start */
-	pop r15
-	pop r14
-	pop r13
-	pop r12
 	ret
 	.size	TIMER_GetTick, .-TIMER_GetTick
 	.local	g_tickCount

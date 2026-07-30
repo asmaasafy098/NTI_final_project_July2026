@@ -17,8 +17,10 @@ ANALOG_Init:
 /* frame size = 2 */
 /* stack size = 4 */
 .L__stack_usage = 4
-	std Y+2,__zero_reg__
-	std Y+1,__zero_reg__
+	ldi r24,lo8(1)
+	std Y+1,r24
+	ldi r24,lo8(7)
+	std Y+2,r24
 	movw r24,r28
 	adiw r24,1
 	call ADC_Init

@@ -1755,87 +1755,79 @@ void Task_SlowSensors(void);
 void Task_Telemetry(void);
 
 
+
 int main(void)
 {
 
+    
+# 62 "Src/main.c" 3
+   __asm__ __volatile__ ("cli" ::: "memory")
+# 62 "Src/main.c"
+        ;
 
-    BRIDGE_Init();
 
-
-    ADC_ConfigType adcCfg = {
-        .uint8ReferenceVoltage = 1,
-        .uint8Prescaler = 7
-    };
-    EXTI_ConfigType extiCfg1 = {
-        .line = EXTI_INT1,
-        .sense = EXTI_SENSE_FALLING
-    };
-    EXTI_ConfigType extiCfg0 = {
-        .line = EXTI_INT0,
-        .sense = EXTI_SENSE_RISING
-    };
     UART_ConfigType uartCfg = {
         .baudRate = 9600UL,
         .dataSize = UART_DATA_8BITS,
         .parity = UART_PARITY_NONE,
         .stopBits = UART_STOP_1BIT
     };
-    I2C_MasterConfigType i2cCfg = { 100000UL };
+    UART_Init(&uartCfg);
+    UART_SendString("\r\n--- SYSTEM STARTING ---\r\n");
+    UART_SendString("BOOT1: UART OK\r\n");
 
+
+    BRIDGE_Init();
+
+    ADC_ConfigType adcCfg = {
+        .uint8ReferenceVoltage = 1,
+        .uint8Prescaler = 7
+    };
     ADC_Init(&adcCfg);
+
     Timer0_Init();
     Timer1_Init();
     Timer2_Init();
+
+    EXTI_ConfigType extiCfg1 = { .line = EXTI_INT1, .sense = EXTI_SENSE_RISING };
+    EXTI_ConfigType extiCfg0 = { .line = EXTI_INT0, .sense = EXTI_SENSE_RISING };
     EXTI_Init(&extiCfg1);
     EXTI_Init(&extiCfg0);
 
-    UART_Init(&uartCfg);
-    UART_SendString("BOOT1\r\n");
 
-    BRIDGE_Init();
-    I2C_InitMaster(&i2cCfg);
-    UART_SendString("BOOT2\r\n");
-    LCD_InitDefault();
-    UART_SendString("BOOT3\r\n");
+
+    UART_SendString("BOOT2: MCAL OK\r\n");
+
+
+
 
     TACHO_Init();
     ANALOG_Init();
     PANEL_Init();
     BUZZER_Init();
+    UART_SendString("BOOT3: HAL OK\r\n");
 
 
-
-g_driveCfg.magic = 0x4D44;
-g_driveCfg.version = 0x01;
-
-g_driveCfg.maxRpm = 3000;
-g_driveCfg.minRpm = 200;
-
-g_driveCfg.accelRpmPerSec = 600;
-g_driveCfg.decelRpmPerSec = 900;
-
-g_driveCfg.deadTimeMs = 500;
-
-g_driveCfg.kp = 384;
-g_driveCfg.ki = 26;
-
-g_driveCfg.ratedCurrentmA = 8000;
-g_driveCfg.shortTripmA = 18000;
-
-g_driveCfg.overTempC = 110;
-g_driveCfg.underVoltmV = 20000;
-g_driveCfg.overVoltmV = 55000;
-
-g_driveCfg.stallSec = 3;
-
-g_driveCfg.totalRunSec = 0;
-g_driveCfg.startCount = 0;
-
-g_driveCfg.tripHead = 0;
-g_driveCfg.latchedTrip = TRIP_NONE;
-
-g_driveCfg.checksum = 0;
-
+    g_driveCfg.magic = 0x4D44;
+    g_driveCfg.version = 0x01;
+    g_driveCfg.maxRpm = 3000;
+    g_driveCfg.minRpm = 200;
+    g_driveCfg.accelRpmPerSec = 600;
+    g_driveCfg.decelRpmPerSec = 900;
+    g_driveCfg.deadTimeMs = 500;
+    g_driveCfg.kp = 384;
+    g_driveCfg.ki = 26;
+    g_driveCfg.ratedCurrentmA = 8000;
+    g_driveCfg.shortTripmA = 18000;
+    g_driveCfg.overTempC = 110;
+    g_driveCfg.underVoltmV = 20000;
+    g_driveCfg.overVoltmV = 55000;
+    g_driveCfg.stallSec = 3;
+    g_driveCfg.totalRunSec = 0;
+    g_driveCfg.startCount = 0;
+    g_driveCfg.tripHead = 0;
+    g_driveCfg.latchedTrip = TRIP_NONE;
+    g_driveCfg.checksum = 0;
 
     DataManager_Init(&g_driveData, &g_driveCfg);
     PI_Init(&g_pi, g_driveCfg.kp, g_driveCfg.ki);
@@ -1846,10 +1838,8 @@ g_driveCfg.checksum = 0;
     RAMP_SetRates(&g_ramp, g_driveCfg.accelRpmPerSec, g_driveCfg.decelRpmPerSec);
 
     PROTECT_Init();
-
     FSM_Init();
     FSM_SetDeadTime(g_driveCfg.deadTimeMs);
-
     CONSOLE_Init();
     TELEMETRY_Init();
 
@@ -1858,22 +1848,21 @@ g_driveCfg.checksum = 0;
     SCHED_AddTask(Task_Panel, "Panel", 10, 0);
     SCHED_AddTask(Task_Current, "Current", 50, 1);
     SCHED_AddTask(Task_Control, "Control", 100, 2);
-    SCHED_AddTask(Task_LCD, "LCD", 250, 4);
+
     SCHED_AddTask(Task_SlowSensors, "SlowSensors", 500, 3);
     SCHED_AddTask(Task_Telemetry, "Telemetry", 1000, 5);
 
+    UART_SendString("BOOT4: SCHEDULER READY, ENABLING INTERRUPTS...\r\n");
+
 
     
-# 166 "Src/main.c" 3
+# 154 "Src/main.c" 3
    __asm__ __volatile__ ("sei" ::: "memory")
-# 166 "Src/main.c"
+# 154 "Src/main.c"
         ;
-
 
     while (1) {
         SCHED_Run();
-
-
         if (CONSOLE_IsCommandReady()) {
             CONSOLE_ExecuteCommand();
         }
@@ -1887,39 +1876,38 @@ g_driveCfg.checksum = 0;
 
 
 
-
 void Task_Panel(void)
 {
     PANEL_Poll();
     Panel_Event_t event = PANEL_GetEvent();
 
     switch (event)
-{
-    case PNL_START:
-        if (!FSM_RequestStart()) {
-            CONSOLE_SendError("ERR START");
-        }
-        break;
+    {
+        case PNL_START:
+            if (!FSM_RequestStart()) {
+                CONSOLE_SendError("ERR START");
+            }
+            break;
 
-    case PNL_STOP:
-        FSM_RequestStop();
-        break;
+        case PNL_STOP:
+            FSM_RequestStop();
+            break;
 
-    case PNL_REVERSE:
-        if (!FSM_RequestReverse()) {
-            CONSOLE_SendError("ERR REV");
-        }
-        break;
+        case PNL_REVERSE:
+            if (!FSM_RequestReverse()) {
+                CONSOLE_SendError("ERR REV");
+            }
+            break;
 
-    case PNL_RESET:
-        if (!FSM_RequestReset()) {
-            CONSOLE_SendError("ERR ACTIVE");
-        }
-        break;
+        case PNL_RESET:
+            if (!FSM_RequestReset()) {
+                CONSOLE_SendError("ERR ACTIVE");
+            }
+            break;
 
-    default:
-        break;
-}
+        default:
+            break;
+    }
 
 
     DriveState_t state = FSM_GetState();
@@ -1974,9 +1962,11 @@ void Task_Current(void)
 
 
 
-
 void Task_Control(void)
 {
+
+    FSM_Run();
+
 
     TACHO_Update();
     g_driveData.measuredRpm = TACHO_GetRPM();
@@ -2026,12 +2016,8 @@ void Task_Control(void)
     BRIDGE_SetDirection(g_driveData.direction);
 
 
-    FSM_Run();
-
-
     DataManager_UpdateError();
 }
-
 
 
 
@@ -2048,13 +2034,11 @@ void Task_LCD(void)
 
 
 
-
 void Task_SlowSensors(void)
 {
     g_driveData.busmV = ANALOG_GetBusVoltage();
     g_driveData.tempC = ANALOG_GetTemperature();
 }
-
 
 
 
@@ -2069,84 +2053,66 @@ void Task_Telemetry(void)
 
     TELEMETRY_Update(&g_driveData);
 }
+# 359 "Src/main.c"
 
-
-
-
-
-
-
-
-# 375 "Src/main.c" 3
-void __vector_1 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_1 (void)
-
-# 376 "Src/main.c"
-{
-
-     TACHO_PulseISR();
-}
-# 389 "Src/main.c"
-
-# 389 "Src/main.c" 3
+# 359 "Src/main.c" 3
 void __vector_2 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_2 (void)
 
-# 390 "Src/main.c"
+# 360 "Src/main.c"
 {
 
     
-# 392 "Src/main.c" 3
+# 362 "Src/main.c" 3
    (*(volatile uint16_t *)((0x2A) + 0x20)) 
-# 392 "Src/main.c"
+# 362 "Src/main.c"
          = 0;
 
 
     ((
-# 395 "Src/main.c" 3
+# 365 "Src/main.c" 3
    (*(volatile uint8_t *)((0x18) + 0x20))
-# 395 "Src/main.c"
+# 365 "Src/main.c"
    ) &= ~(1 << (
-# 395 "Src/main.c" 3
+# 365 "Src/main.c" 3
    2
-# 395 "Src/main.c"
+# 365 "Src/main.c"
    )));
     ((
-# 396 "Src/main.c" 3
+# 366 "Src/main.c" 3
    (*(volatile uint8_t *)((0x18) + 0x20))
-# 396 "Src/main.c"
+# 366 "Src/main.c"
    ) &= ~(1 << (
-# 396 "Src/main.c" 3
+# 366 "Src/main.c" 3
    1
-# 396 "Src/main.c"
+# 366 "Src/main.c"
    )));
     ((
-# 397 "Src/main.c" 3
+# 367 "Src/main.c" 3
    (*(volatile uint8_t *)((0x18) + 0x20))
-# 397 "Src/main.c"
+# 367 "Src/main.c"
    ) &= ~(1 << (
-# 397 "Src/main.c" 3
+# 367 "Src/main.c" 3
    0
-# 397 "Src/main.c"
+# 367 "Src/main.c"
    )));
 
 
     g_estopFlag = 1;
-
-
 }
 
 
 
 
 
-# 408 "Src/main.c" 3
+# 376 "Src/main.c" 3
 void __vector_13 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_13 (void)
 
-# 409 "Src/main.c"
+# 377 "Src/main.c"
 {
     uint8_t ch = 
-# 410 "Src/main.c" 3
+# 378 "Src/main.c" 3
                 (*(volatile uint8_t *)((0x0C) + 0x20))
-# 410 "Src/main.c"
+# 378 "Src/main.c"
                    ;
     CONSOLE_ProcessChar(ch);
 }

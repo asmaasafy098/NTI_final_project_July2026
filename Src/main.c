@@ -55,88 +55,76 @@ void Task_SlowSensors(void);
 void Task_Telemetry(void);
 
 /* ==================== Main Function ==================== */
+/* ==================== Main Function ==================== */
 int main(void)
 {
-    /* ===== STEP 1: SAFETY FIRST ===== */
-    /* Ensure bridge is disabled before anything else (NFR-14) */
-    BRIDGE_Init();  /* Sets OCR1A=0, EN=0, IN1=0, IN2=0 */
-    
-    /* ===== STEP 2: Initialize MCAL ===== */
-    ADC_ConfigType adcCfg = {
-        .uint8ReferenceVoltage = ADC_REF_AVCC,
-        .uint8Prescaler = ADC_PRESCALER_128
-    };
-    EXTI_ConfigType extiCfg1 = {
-        .line = EXTI_INT1,
-        .sense = EXTI_SENSE_FALLING
-    };
-    EXTI_ConfigType extiCfg0 = {
-        .line = EXTI_INT0,
-        .sense = EXTI_SENSE_RISING
-    };
+    /* ===== STEP 1: Disable Global Interrupts First ===== */
+    cli(); 
+
+    /* ===== STEP 2: Initialize Core System & UART First ===== */
     UART_ConfigType uartCfg = {
         .baudRate = UART_BAUD_9600,
         .dataSize = UART_DATA_8BITS,
         .parity = UART_PARITY_NONE,
         .stopBits = UART_STOP_1BIT
     };
-    I2C_MasterConfigType i2cCfg = { I2C_SCL_100KHZ };  /* per lcd_aip31068_i2c.h usage example */
+    UART_Init(&uartCfg);              
+    UART_SendString("\r\n--- SYSTEM STARTING ---\r\n");
+    UART_SendString("BOOT1: UART OK\r\n"); 
 
+    /* ===== STEP 3: Initialize Hardware (MCAL) ===== */
+    BRIDGE_Init();  /* NFR-14 Safety */
+
+    ADC_ConfigType adcCfg = {
+        .uint8ReferenceVoltage = ADC_REF_AVCC,
+        .uint8Prescaler = ADC_PRESCALER_128
+    };
     ADC_Init(&adcCfg);
+
     Timer0_Init();
     Timer1_Init();
     Timer2_Init();
+
+    EXTI_ConfigType extiCfg1 = { .line = EXTI_INT1, .sense = EXTI_SENSE_RISING };
+    EXTI_ConfigType extiCfg0 = { .line = EXTI_INT0, .sense = EXTI_SENSE_RISING };
     EXTI_Init(&extiCfg1);
     EXTI_Init(&extiCfg0);
 
-    UART_Init(&uartCfg);              /* انقليها هنا مؤقتًا */
-    UART_SendString("BOOT1\r\n");     /* checkpoint 1 */
+   // I2C_MasterConfigType i2cCfg = { I2C_SCL_100KHZ };
+    //I2C_InitMaster(&i2cCfg);
+    UART_SendString("BOOT2: MCAL OK\r\n");
 
-    BRIDGE_Init();
-    I2C_InitMaster(&i2cCfg);
-    UART_SendString("BOOT2\r\n");     /* checkpoint 2 - لو معتش ظهرت، المشكلة هنا */
-    LCD_InitDefault();
-    UART_SendString("BOOT3\r\n");  
-    /* ===== STEP 3: Initialize HAL ===== */
-    TACHO_Init();   /* Tacho measurement */
-    ANALOG_Init();  /* 4 ADC channels */
-    PANEL_Init();   /* Buttons and LEDs */
-    BUZZER_Init();  /* Buzzer */
-    
-/* ===== STEP 4: Default Configuration ===== */
+    /* ===== STEP 4: Initialize HAL ===== */
+    /* تعليق الـ LCD مؤقتاً للتأكد من قيام السيريال */
+    // LCD_InitDefault(); 
+    TACHO_Init();   
+    ANALOG_Init();  
+    PANEL_Init();   
+    BUZZER_Init();  
+    UART_SendString("BOOT3: HAL OK\r\n");
 
-g_driveCfg.magic            = 0x4D44;
-g_driveCfg.version          = 0x01;
+    /* ===== STEP 5: Default Configuration & APP ===== */
+    g_driveCfg.magic            = 0x4D44;
+    g_driveCfg.version          = 0x01;
+    g_driveCfg.maxRpm           = 3000;
+    g_driveCfg.minRpm           = 200;
+    g_driveCfg.accelRpmPerSec   = 600;
+    g_driveCfg.decelRpmPerSec   = 900;
+    g_driveCfg.deadTimeMs       = 500;
+    g_driveCfg.kp               = 384;
+    g_driveCfg.ki               = 26;
+    g_driveCfg.ratedCurrentmA   = 8000;
+    g_driveCfg.shortTripmA      = 18000;
+    g_driveCfg.overTempC        = 110;
+    g_driveCfg.underVoltmV      = 20000;
+    g_driveCfg.overVoltmV       = 55000;
+    g_driveCfg.stallSec         = 3;
+    g_driveCfg.totalRunSec      = 0;
+    g_driveCfg.startCount       = 0;
+    g_driveCfg.tripHead         = 0;
+    g_driveCfg.latchedTrip      = TRIP_NONE;
+    g_driveCfg.checksum         = 0;
 
-g_driveCfg.maxRpm           = 3000;
-g_driveCfg.minRpm           = 200;
-
-g_driveCfg.accelRpmPerSec   = 600;
-g_driveCfg.decelRpmPerSec   = 900;
-
-g_driveCfg.deadTimeMs       = 500;
-
-g_driveCfg.kp               = 384;
-g_driveCfg.ki               = 26;
-
-g_driveCfg.ratedCurrentmA   = 8000;
-g_driveCfg.shortTripmA      = 18000;
-
-g_driveCfg.overTempC        = 110;
-g_driveCfg.underVoltmV      = 20000;
-g_driveCfg.overVoltmV       = 55000;
-
-g_driveCfg.stallSec         = 3;
-
-g_driveCfg.totalRunSec      = 0;
-g_driveCfg.startCount       = 0;
-
-g_driveCfg.tripHead         = 0;
-g_driveCfg.latchedTrip      = TRIP_NONE;
-
-g_driveCfg.checksum         = 0;
-
-    /* ===== STEP 5: Initialize APP ===== */
     DataManager_Init(&g_driveData, &g_driveCfg);
     PI_Init(&g_pi, g_driveCfg.kp, g_driveCfg.ki);
     PI_InitLimits(&g_pi, PWM_MIN_RUN, PWM_TOP);
@@ -146,30 +134,27 @@ g_driveCfg.checksum         = 0;
     RAMP_SetRates(&g_ramp, g_driveCfg.accelRpmPerSec, g_driveCfg.decelRpmPerSec);
     
     PROTECT_Init();
-    
     FSM_Init();
     FSM_SetDeadTime(g_driveCfg.deadTimeMs);
-    
     CONSOLE_Init();
     TELEMETRY_Init();
     
     /* ===== STEP 6: Initialize Scheduler ===== */
     SCHED_Init();
-    SCHED_AddTask(Task_Panel, "Panel", 10, 0);       /* Buttons and LEDs */
-    SCHED_AddTask(Task_Current, "Current", 50, 1);    /* Current + Short Circuit */
-    SCHED_AddTask(Task_Control, "Control", 100, 2);   /* ★ MAIN CONTROL LOOP ★ */
-    SCHED_AddTask(Task_LCD, "LCD", 250, 4);       /* LCD Update */
-    SCHED_AddTask(Task_SlowSensors, "SlowSensors", 500, 3); /* Voltage + Temperature */
-    SCHED_AddTask(Task_Telemetry, "Telemetry", 1000, 5); /* Telemetry + Run Hours */
+    SCHED_AddTask(Task_Panel, "Panel", 10, 0);       
+    SCHED_AddTask(Task_Current, "Current", 50, 1);    
+    SCHED_AddTask(Task_Control, "Control", 100, 2);   
+    // SCHED_AddTask(Task_LCD, "LCD", 250, 4);       
+    SCHED_AddTask(Task_SlowSensors, "SlowSensors", 500, 3); 
+    SCHED_AddTask(Task_Telemetry, "Telemetry", 1000, 5); 
+
+    UART_SendString("BOOT4: SCHEDULER READY, ENABLING INTERRUPTS...\r\n");
+
+    /* ===== STEP 7: Enable Interrupts & Run ===== */
+    sei(); 
     
-    /* ===== STEP 7: Enable Interrupts ===== */
-    sei(); /* أو استبدالها بـ ENABLE_INTERRUPTS() لو كانت معرفة داخل interrupt_interface.h */
-    
-    /* ===== STEP 8: Super Loop ===== */
     while (1) {
         SCHED_Run();
-        
-        /* Process console commands */
         if (CONSOLE_IsCommandReady()) {
             CONSOLE_ExecuteCommand();
         }
@@ -177,7 +162,6 @@ g_driveCfg.checksum         = 0;
     
     return 0;
 }
-
 /* ==================== Task Functions ==================== */
 
 /**
@@ -190,39 +174,39 @@ void Task_Panel(void)
     Panel_Event_t event = PANEL_GetEvent();
     
     switch (event)
-{
-    case PNL_START:
-        if (!FSM_RequestStart()) {
-            CONSOLE_SendError("ERR START");
-        }
-        break;
+    {
+        case PNL_START:
+            if (!FSM_RequestStart()) {
+                CONSOLE_SendError("ERR START");
+            }
+            break;
 
-    case PNL_STOP:
-        FSM_RequestStop();
-        break;
+        case PNL_STOP:
+            FSM_RequestStop();
+            break;
 
-    case PNL_REVERSE:
-        if (!FSM_RequestReverse()) {
-            CONSOLE_SendError("ERR REV");
-        }
-        break;
+        case PNL_REVERSE:
+            if (!FSM_RequestReverse()) {
+                CONSOLE_SendError("ERR REV");
+            }
+            break;
 
-    case PNL_RESET:
-        if (!FSM_RequestReset()) {
-            CONSOLE_SendError("ERR ACTIVE");
-        }
-        break;
+        case PNL_RESET:
+            if (!FSM_RequestReset()) {
+                CONSOLE_SendError("ERR ACTIVE");
+            }
+            break;
 
-    default:
-        break;
-}
+        default:
+            break;
+    }
     
     /* Update status LEDs based on FSM state */
     DriveState_t state = FSM_GetState();
     if (state == DS_RUNNING) {
         PANEL_SetRunLED(1, 0);  /* Steady ON */
     } else if (state == DS_STARTING || state == DS_RAMP_DOWN) {
-        PANEL_SetRunLED(1, 1);  /* Blink at 2Hz */
+        PANEL_SetRunLED(1, 1);  /* Blink */
     } else {
         PANEL_SetRunLED(0, 0);  /* OFF */
     }
@@ -269,15 +253,17 @@ void Task_Current(void)
 /**
  * @brief Task_Control - Called every 100ms
  * Main control loop: Tacho → Ramp → Protect → PI → Bridge
- * (Critical ordering per system flow)
  */
 void Task_Control(void)
 {
-    /* ===== 1. Update Tacho ===== */
+    /* ===== 1. Update FSM First ===== */
+    FSM_Run();
+
+    /* ===== 2. Update Tacho ===== */
     TACHO_Update();
     g_driveData.measuredRpm = TACHO_GetRPM();
     
-    /* ===== 2. Update Setpoint ===== */
+    /* ===== 3. Update Setpoint ===== */
     int16_t setpoint;
     if (g_driveData.remote) {
         /* Remote mode: setpoint from console */
@@ -288,14 +274,14 @@ void Task_Control(void)
         g_driveData.setpointRpm = setpoint;
     }
     
-    /* ===== 3. Update Ramp ===== */
+    /* ===== 4. Update Ramp ===== */
     RAMP_SetTarget(&g_ramp, setpoint);
     g_driveData.rampedRpm = RAMP_Step(&g_ramp);
     
-    /* ===== 4. Update Error ===== */
+    /* ===== 5. Update Error ===== */
     g_driveData.errorRpm = g_driveData.rampedRpm - g_driveData.measuredRpm;
     
-    /* ===== 5. Evaluate Protection (Before PI!) ===== */
+    /* ===== 6. Evaluate Protection (Before PI!) ===== */
     Trip_t trip = PROTECT_Evaluate(&g_driveData, &g_driveCfg);
     if (trip != TRIP_NONE) {
         /* Trip detected - stop the motor */
@@ -305,7 +291,7 @@ void Task_Control(void)
         return;  /* Exit early - don't apply PI output */
     }
     
-    /* ===== 6. PI Controller ===== */
+    /* ===== 7. PI Controller ===== */
     int16_t duty;
     if (FSM_IsRunning()) {
         /* Running: apply PI control */
@@ -316,13 +302,10 @@ void Task_Control(void)
         PI_Reset(&g_pi);
     }
     
-    /* ===== 7. Apply to Bridge ===== */
+    /* ===== 8. Apply to Bridge ===== */
     DataManager_UpdateDuty(duty);
     BRIDGE_SetDuty(duty);
     BRIDGE_SetDirection(g_driveData.direction);
-    
-    /* ===== 8. Update FSM ===== */
-    FSM_Run();
     
     /* ===== 9. Update data manager ===== */
     DataManager_UpdateError();
@@ -330,7 +313,6 @@ void Task_Control(void)
 
 /**
  * @brief Task_LCD - Called every 250ms
- * Updates LCD display
  */
 void Task_LCD(void)
 {
@@ -343,7 +325,6 @@ void Task_LCD(void)
 
 /**
  * @brief Task_SlowSensors - Called every 500ms
- * Reads voltage and temperature
  */
 void Task_SlowSensors(void)
 {
@@ -353,7 +334,6 @@ void Task_SlowSensors(void)
 
 /**
  * @brief Task_Telemetry - Called every 1s
- * Sends telemetry frame and updates run hours
  */
 void Task_Telemetry(void)
 {
@@ -368,23 +348,13 @@ void Task_Telemetry(void)
 
 /* ==================== Interrupt Service Routines ==================== */
 
-/**
- * @brief INT0 ISR - Tacho pulse counting
- * Must be minimal: only increment counter (NFR-10)
+/* 
+ * ملاحظة: تم إزالة ISR(INT0_vect) من هنا لمنع تكرار التعريف، 
+ * لأن TACHO_Init() تقوم بتسجيل TACHO_PulseISR() كـ Callback داخل EXTI driver.
  */
-ISR(INT0_vect)
-{
-    /* Increment pulse counter - handled by TACHO_OnPulse() */
-     TACHO_PulseISR();
-}
 
 /**
  * @brief INT1 ISR - Emergency Stop
- * Must be minimal: stop motor immediately (NFR-04)
- * Performs exactly three actions (Section 9.6):
- * 1. OCR1A = 0
- * 2. PORTB &= ~(EN|IN1|IN2)
- * 3. g_estopFlag = 1
  */
 ISR(INT1_vect)
 {
@@ -398,8 +368,6 @@ ISR(INT1_vect)
     
     /* 3. Set flag for FSM */
     g_estopFlag = 1;
-    
-    /* Note: The E-stop is NOT debounced (per section 10.5) */
 }
 
 /**

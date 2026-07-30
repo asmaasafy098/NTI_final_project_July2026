@@ -12,7 +12,7 @@ I2C_Init:
 /* frame size = 0 */
 /* stack size = 0 */
 .L__stack_usage = 0
-	ldi r24,lo8(32)
+	ldi r24,lo8(72)
 	out 0,r24
 	cbi 0x1,0
 	cbi 0x1,1
@@ -42,20 +42,29 @@ I2C_Start:
 .L__stack_usage = 0
 	ldi r24,lo8(-92)
 	out 0x36,r24
+	ldi r25,0
+	ldi r24,0
 .L4:
 	in __tmp_reg__,0x36
 	sbrs __tmp_reg__,7
-	rjmp .L4
-	in r25,0x1
-	andi r25,lo8(-8)
-	ldi r18,lo8(1)
-	ldi r19,0
-	cpi r25,lo8(8)
-	brne .L5
-	ldi r19,0
-	ldi r18,0
-.L5:
-	movw r24,r18
+	rjmp .L6
+	in r18,0x1
+	andi r18,lo8(-8)
+	ldi r24,lo8(1)
+	ldi r25,0
+	cpi r18,lo8(8)
+	brne .L3
+	ldi r24,0
+	ret
+.L6:
+	adiw r24,1
+	cpi r24,17
+	ldi r18,39
+	cpc r25,r18
+	brne .L4
+	ldi r24,lo8(1)
+	ldi r25,0
+.L3:
 /* epilogue start */
 	ret
 	.size	I2C_Start, .-I2C_Start
@@ -83,28 +92,39 @@ I2C_WriteByte:
 	out 0x3,r24
 	ldi r24,lo8(-124)
 	out 0x36,r24
-.L10:
+	ldi r25,0
+	ldi r24,0
+.L11:
 	in __tmp_reg__,0x36
 	sbrs __tmp_reg__,7
-	rjmp .L10
+	rjmp .L13
 	in r18,0x1
 	andi r18,lo8(-8)
 	cpi r18,lo8(24)
-	breq .L14
+	breq .L17
 	cpi r18,lo8(40)
-	breq .L14
+	breq .L17
 	ldi r24,lo8(1)
 	ldi r25,0
 	cpi r18,lo8(64)
-	brne .L9
+	brne .L10
 	ldi r24,0
 	ret
-.L14:
-	ldi r24,0
+.L13:
+	adiw r24,1
+	cpi r24,17
+	ldi r18,39
+	cpc r25,r18
+	brne .L11
+	ldi r24,lo8(1)
+.L18:
 	ldi r25,0
-.L9:
+.L10:
 /* epilogue start */
 	ret
+.L17:
+	ldi r24,0
+	rjmp .L18
 	.size	I2C_WriteByte, .-I2C_WriteByte
 .global	I2C_WriteAddress
 	.type	I2C_WriteAddress, @function
@@ -119,7 +139,7 @@ I2C_WriteAddress:
 	mov r28,r22
 	call I2C_Start
 	sbiw r24,0
-	brne .L17
+	brne .L19
 	mov r24,r29
 	lsl r24
 	andi r28,lo8(1)
@@ -128,7 +148,7 @@ I2C_WriteAddress:
 	pop r29
 	pop r28
 	jmp I2C_WriteByte
-.L17:
+.L19:
 /* epilogue start */
 	pop r29
 	pop r28

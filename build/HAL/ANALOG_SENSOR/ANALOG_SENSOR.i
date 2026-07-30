@@ -255,10 +255,12 @@ uint8_t ANALOG_GetTemperature(void);
 
 Std_ReturnType ANALOG_Init(void)
 {
-    ADC_ConfigType cfg = {0};
+    ADC_ConfigType cfg = {
+        .uint8ReferenceVoltage = 1,
+        .uint8Prescaler = 7
+    };
     return ADC_Init(&cfg);
 }
-
 uint16_t ANALOG_GetSetpoint(void)
 {
     uint16_t raw = 0;

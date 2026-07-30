@@ -4,10 +4,12 @@
 
 Std_ReturnType ANALOG_Init(void)
 {
-    ADC_ConfigType cfg = {0}; 
+    ADC_ConfigType cfg = {
+        .uint8ReferenceVoltage = ADC_REF_AVCC,
+        .uint8Prescaler = ADC_PRESCALER_128
+    }; 
     return ADC_Init(&cfg);
 }
-
 uint16_t ANALOG_GetSetpoint(void)   /* channel 0 -> 0..3000 RPM */
 {
     uint16_t raw = 0;

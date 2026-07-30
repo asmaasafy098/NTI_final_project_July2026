@@ -16,17 +16,17 @@
 
 <item itemtype="Ground" CircId="Ground-51" mainComp="false" Show_id="false" Show_Val="false" Pos="-160,56" rotation="0" hflip="1" vflip="1" label="Ground-51" idLabPos="-16,8" labelrot="0" valLabPos="-16,20" valLabRot="0" />
 
-<item itemtype="Switch" CircId="Switch-60" mainComp="false" Show_id="true" Show_Val="false" Pos="-668,-156" rotation="0" hflip="1" vflip="1" label="Emergency stop" idLabPos="-31.0954,-26.6639" labelrot="0" valLabPos="-16,20" valLabRot="0" Norm_Close="true" DT="false" Poles="1" />
+<item itemtype="Switch" CircId="Switch-60" mainComp="false" Show_id="true" Show_Val="false" Pos="-668,-156" rotation="0" hflip="1" vflip="1" label="Emergency stop" idLabPos="-31.0954,-26.6639" labelrot="0" valLabPos="-16,20" valLabRot="0" Norm_Close="false" DT="false" Poles="1" />
 
-<item itemtype="Potentiometer" CircId="Potentiometer-68" mainComp="false" ShowProp="Resistance" Show_id="true" Show_Val="true" Pos="-320,-264" rotation="90" hflip="1" vflip="1" label="Motor current" idLabPos="-16,-40" labelrot="0" valLabPos="15,-20" valLabRot="0" Resistance="1 kΩ" Value_Ohm="1000 Ω" Slider="false" Scale="1" />
+<item itemtype="Potentiometer" CircId="Potentiometer-68" mainComp="false" ShowProp="Resistance" Show_id="true" Show_Val="true" Pos="-320,-264" rotation="90" hflip="1" vflip="1" label="Motor current" idLabPos="-16,-40" labelrot="0" valLabPos="15,-20" valLabRot="0" Resistance="1 kΩ" Value_Ohm="200 Ω" Slider="false" Scale="1" />
 
-<item itemtype="MCU" CircId="mega32-74" mainComp="false" Show_id="true" Show_Val="false" Pos="-468,-104" rotation="0" hflip="1" vflip="1" label="mega32-74" idLabPos="0,-20" labelrot="0" valLabPos="-16,20" valLabRot="0" Frequency="16 MHz" Program="build/firmware.hex" Auto_Load="true" saveEepr="true" Logic_Symbol="false" Wdt_enabled="false" MainMcu="true" SerialMon="-1" />
+<item itemtype="MCU" CircId="mega32-74" mainComp="false" Show_id="true" Show_Val="false" Pos="-464,-100" rotation="0" hflip="1" vflip="1" label="mega32-74" idLabPos="0,-20" labelrot="0" valLabPos="-16,20" valLabRot="0" Frequency="16 MHz" Program="build/firmware.hex" Auto_Load="true" saveEepr="true" Logic_Symbol="false" Wdt_enabled="false" MainMcu="true" SerialMon="-1" />
 
-<item itemtype="Potentiometer" CircId="Potentiometer-78" mainComp="false" ShowProp="Resistance" Show_id="true" Show_Val="true" Pos="-224,-172" rotation="90" hflip="1" vflip="1" label="DC bus voltage" idLabPos="-24.8779,-45.0731" labelrot="0" valLabPos="15,-20" valLabRot="0" Resistance="1 kΩ" Value_Ohm="131 Ω" Slider="false" Scale="1" />
+<item itemtype="Potentiometer" CircId="Potentiometer-78" mainComp="false" ShowProp="Resistance" Show_id="true" Show_Val="true" Pos="-224,-172" rotation="90" hflip="1" vflip="1" label="DC bus voltage" idLabPos="-24.8779,-45.0731" labelrot="0" valLabPos="15,-20" valLabRot="0" Resistance="1 kΩ" Value_Ohm="500 Ω" Slider="false" Scale="1" />
 
-<item itemtype="Potentiometer" CircId="Potentiometer-79" mainComp="false" ShowProp="Resistance" Show_id="true" Show_Val="true" Pos="-320,-176" rotation="90" hflip="1" vflip="1" label="Motor temperature" idLabPos="-16,-40" labelrot="0" valLabPos="14.8886,-17.5979" valLabRot="0" Resistance="1 kΩ" Value_Ohm="1000 Ω" Slider="false" Scale="1" />
+<item itemtype="Potentiometer" CircId="Potentiometer-79" mainComp="false" ShowProp="Resistance" Show_id="true" Show_Val="true" Pos="-320,-176" rotation="90" hflip="1" vflip="1" label="Motor temperature" idLabPos="-16,-40" labelrot="0" valLabPos="14.8886,-17.5979" valLabRot="0" Resistance="1 kΩ" Value_Ohm="200 Ω" Slider="false" Scale="1" />
 
-<item itemtype="Potentiometer" CircId="Potentiometer-80" mainComp="false" ShowProp="Resistance" Show_id="true" Show_Val="true" Pos="-224,-256" rotation="90" hflip="1" vflip="1" label="Speed setpoint" idLabPos="-36.4257,-44.4164" labelrot="0" valLabPos="15,-20" valLabRot="0" Resistance="1 kΩ" Value_Ohm="688 Ω" Slider="false" Scale="1" />
+<item itemtype="Potentiometer" CircId="Potentiometer-80" mainComp="false" ShowProp="Resistance" Show_id="true" Show_Val="true" Pos="-224,-256" rotation="90" hflip="1" vflip="1" label="Speed setpoint" idLabPos="-36.4257,-44.4164" labelrot="0" valLabPos="15,-20" valLabRot="0" Resistance="1 kΩ" Value_Ohm="650 Ω" Slider="false" Scale="1" />
 
 <item itemtype="Ground" CircId="Ground-81" mainComp="false" Show_id="false" Show_Val="false" Pos="-408,-160" rotation="0" hflip="1" vflip="1" label="Ground-81" idLabPos="-16,8" labelrot="0" valLabPos="-16,20" valLabRot="0" />
 
@@ -86,11 +86,11 @@
 
 <item itemtype="Tunnel" CircId="Tunnel-144" mainComp="false" Show_id="false" Show_Val="false" Pos="-392,-8" rotation="180" hflip="1" vflip="1" label="Tunnel-144" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="C7" IsBus="true" />
 
-<item itemtype="Clock" CircId="Clock-148" mainComp="false" Show_id="true" Show_Val="false" Pos="-644,120" rotation="0" hflip="1" vflip="1" label="Tacho / encoder" idLabPos="-64,-24" labelrot="0" valLabPos="-16,8" valLabRot="0" Out="true" Running="true" Voltage="5 V" Freq="1 kHz" Always_On="false" />
+<item itemtype="Clock" CircId="Clock-148" mainComp="false" Show_id="true" Show_Val="false" Pos="-644,120" rotation="0" hflip="1" vflip="1" label="Tacho / encoder" idLabPos="-64,-24" labelrot="0" valLabPos="-16,8" valLabRot="0" Out="true" Running="true" Voltage="5 V" Freq="16 MHz" Always_On="false" />
 
 <item itemtype="Tunnel" CircId="Tunnel-149" mainComp="false" Show_id="false" Show_Val="false" Pos="-496,28" rotation="720" hflip="1" vflip="1" label="Tunnel-149" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="D2" IsBus="true" />
 
-<item itemtype="Aip31068_i2c" CircId="Aip31068_i2c-152" mainComp="false" Show_id="true" Show_Val="false" Pos="-600,204" rotation="0" hflip="1" vflip="1" label="I2C" idLabPos="70,-82" labelrot="0" valLabPos="-16,20" valLabRot="0" Rows="2" Cols="16" Control_Code="62" Frequency="100 _kHz" />
+<item itemtype="Aip31068_i2c" CircId="Aip31068_i2c-152" mainComp="false" Show_id="true" Show_Val="false" Pos="-600,204" rotation="0" hflip="1" vflip="1" label="LCD" idLabPos="70,-82" labelrot="0" valLabPos="-16,20" valLabRot="0" Rows="2" Cols="16" Control_Code="62" Frequency="100 _kHz" />
 
 <item itemtype="Tunnel" CircId="Tunnel-153" mainComp="false" Show_id="false" Show_Val="false" Pos="-584,228" rotation="270" hflip="1" vflip="1" label="Tunnel-153" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="C1" IsBus="true" />
 
@@ -126,7 +126,7 @@
 
 <item itemtype="Tunnel" CircId="Tunnel-217" mainComp="false" Show_id="false" Show_Val="false" Pos="-780,8" rotation="0" hflip="1" vflip="1" label="Tunnel-217" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="B0" IsBus="true" />
 
-<item itemtype="Tunnel" CircId="Tunnel-218" mainComp="false" Show_id="false" Show_Val="false" Pos="-800,16" rotation="0" hflip="1" vflip="1" label="Tunnel-218" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="B1" IsBus="true" />
+<item itemtype="Tunnel" CircId="Tunnel-218" mainComp="false" Show_id="false" Show_Val="false" Pos="-776,16" rotation="0" hflip="1" vflip="1" label="Tunnel-218" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="B1" IsBus="true" />
 
 <item itemtype="Tunnel" CircId="Tunnel-220" mainComp="false" Show_id="false" Show_Val="false" Pos="-472,-100" rotation="0" hflip="1" vflip="1" label="Tunnel-220" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="B0" IsBus="true" />
 
@@ -146,7 +146,7 @@
 
 <item itemtype="Tunnel" CircId="Tunnel-232" mainComp="false" Show_id="false" Show_Val="false" Pos="-580,-244" rotation="0" hflip="1" vflip="1" label="Tunnel-232" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="TXD" IsBus="true" />
 
-<item itemtype="Tunnel" CircId="Tunnel-233" mainComp="false" Show_id="false" Show_Val="false" Pos="-580,-228" rotation="0" hflip="1" vflip="1" label="Tunnel-233" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="RXD" IsBus="true" />
+<item itemtype="Tunnel" CircId="Tunnel-233" mainComp="false" Show_id="false" Show_Val="false" Pos="-576,-228" rotation="0" hflip="1" vflip="1" label="Tunnel-233" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="RXD" IsBus="true" />
 
 <item itemtype="Led" CircId="Led-236" mainComp="false" Show_id="true" Show_Val="false" Pos="-236,156" rotation="0" hflip="1" vflip="1" label="FWD indicator" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Color="Red" Grounded="false" Threshold="1.8 V" MaxCurrent="30 mA" Resistance="0.6 Ω" />
 
@@ -176,7 +176,7 @@
 
 <item itemtype="Tunnel" CircId="Tunnel-261" mainComp="false" Show_id="false" Show_Val="false" Pos="-244,64" rotation="0" hflip="1" vflip="1" label="Tunnel-261" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="C5" IsBus="true" />
 
-<item itemtype="DcMotor" CircId="DcMotor-264" mainComp="false" Show_id="true" Show_Val="false" Pos="-644,36" rotation="90" hflip="1" vflip="1" label="DcMotor-264" idLabPos="-22,-48" labelrot="0" valLabPos="-14,36" valLabRot="0" RPM_Nominal="60 _RPM" Volt_Nominal="5 V" Resistance="100 Ω" />
+<item itemtype="DcMotor" CircId="DcMotor-264" mainComp="false" Show_id="true" Show_Val="false" Pos="-640,36" rotation="90" hflip="1" vflip="1" label="DcMotor-264" idLabPos="-22,-48" labelrot="0" valLabPos="-14,36" valLabRot="0" RPM_Nominal="60 _RPM" Volt_Nominal="5 V" Resistance="100 Ω" />
 
 <item itemtype="Tunnel" CircId="Tunnel-269" mainComp="false" Show_id="false" Show_Val="false" Pos="-780,48" rotation="0" hflip="1" vflip="1" label="Tunnel-269" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="B2" IsBus="true" />
 
@@ -208,19 +208,17 @@
 
 <item itemtype="Connector" uid="Connector-190" startpinid="Tunnel-96-pin" endpinid="Potentiometer-79-PinM" pointList="-328,-176,-336,-176" />
 
-<item itemtype="Connector" uid="Connector-192" startpinid="mega32-74-PORTA3" endpinid="Tunnel-104-pin" pointList="-412,-72,-396,-72,-396,-68" />
+<item itemtype="Connector" uid="Connector-192" startpinid="mega32-74-PORTA3" endpinid="Tunnel-104-pin" pointList="-408,-68,-396,-68" />
 
 <item itemtype="Connector" uid="Connector-201" startpinid="Tunnel-106-pin" endpinid="Potentiometer-78-PinM" pointList="-240,-172,-240,-172" />
-
-<item itemtype="Connector" uid="Connector-210" startpinid="mega32-74-PORTA0" endpinid="Tunnel-105-pin" pointList="-412,-96,-400,-96" />
 
 <item itemtype="Connector" uid="Connector-212" startpinid="Tunnel-112-pin" endpinid="Potentiometer-80-PinM" pointList="-236,-256,-240,-256" />
 
 <item itemtype="Connector" uid="Connector-213" startpinid="Tunnel-109-pin" endpinid="Potentiometer-68-PinM" pointList="-340,-264,-336,-264" />
 
-<item itemtype="Connector" uid="Connector-214" startpinid="mega32-74-PORTA1" endpinid="Tunnel-110-pin" pointList="-412,-88,-396,-88" />
+<item itemtype="Connector" uid="Connector-214" startpinid="mega32-74-PORTA1" endpinid="Tunnel-110-pin" pointList="-408,-84,-396,-84,-396,-88" />
 
-<item itemtype="Connector" uid="Connector-215" startpinid="mega32-74-PORTA2" endpinid="Tunnel-111-pin" pointList="-412,-80,-396,-80" />
+<item itemtype="Connector" uid="Connector-215" startpinid="mega32-74-PORTA2" endpinid="Tunnel-111-pin" pointList="-408,-76,-396,-76,-396,-80" />
 
 <item itemtype="Connector" uid="Connector-217" startpinid="Tunnel-115-pin" endpinid="Fixed Voltage-116-outnod" pointList="-388,-180,-388,-216" />
 
@@ -244,11 +242,11 @@
 
 <item itemtype="Connector" uid="Connector-270" startpinid="Tunnel-139-pin" endpinid="Push-134-pinP0" pointList="-260,-16,-252,-16,-252,-20" />
 
-<item itemtype="Connector" uid="Connector-273" startpinid="mega32-74-PORTC7" endpinid="Tunnel-144-pin" pointList="-412,-8,-392,-8" />
+<item itemtype="Connector" uid="Connector-273" startpinid="mega32-74-PORTC7" endpinid="Tunnel-144-pin" pointList="-408,-4,-392,-4,-392,-8" />
 
-<item itemtype="Connector" uid="Connector-274" startpinid="mega32-74-PORTC6" endpinid="Tunnel-143-pin" pointList="-412,0,-392,0,-392,4" />
+<item itemtype="Connector" uid="Connector-274" startpinid="mega32-74-PORTC6" endpinid="Tunnel-143-pin" pointList="-408,4,-392,4" />
 
-<item itemtype="Connector" uid="Connector-275" startpinid="Tunnel-142-pin" endpinid="mega32-74-PORTC5" pointList="-396,12,-412,12,-412,8" />
+<item itemtype="Connector" uid="Connector-275" startpinid="Tunnel-142-pin" endpinid="mega32-74-PORTC5" pointList="-396,12,-408,12" />
 
 <item itemtype="Connector" uid="Connector-278" startpinid="Push-134-switch0pinN" endpinid="Node-145-0" pointList="-220,-20,-184,-20,-184,-16" />
 
@@ -256,7 +254,7 @@
 
 <item itemtype="Connector" uid="Connector-287" startpinid="Clock-148-outnod" endpinid="Tunnel-133-pin" pointList="-628,120,-620,120" />
 
-<item itemtype="Connector" uid="Connector-292" startpinid="Tunnel-149-pin" endpinid="mega32-74-PORTD2" pointList="-496,28,-476,28,-476,24" />
+<item itemtype="Connector" uid="Connector-292" startpinid="Tunnel-149-pin" endpinid="mega32-74-PORTD2" pointList="-496,28,-472,28" />
 
 <item itemtype="Connector" uid="Connector-294" startpinid="Tunnel-153-pin" endpinid="Aip31068_i2c-152PinSDA" pointList="-584,228,-584,212" />
 
@@ -264,23 +262,23 @@
 
 <item itemtype="Connector" uid="Connector-317" startpinid="Tunnel-161-pin" endpinid="AudioOut-94-lPin" pointList="-344,164,-344,168" />
 
-<item itemtype="Connector" uid="Connector-318" startpinid="mega32-74-PORTD7" endpinid="Tunnel-162-pin" pointList="-412,56,-412,60,-400,60" />
+<item itemtype="Connector" uid="Connector-318" startpinid="mega32-74-PORTD7" endpinid="Tunnel-162-pin" pointList="-408,60,-400,60" />
 
 <item itemtype="Connector" uid="Connector-339" startpinid="Tunnel-165-pin" endpinid="Led-41-lPin" pointList="-236,112,-236,116" />
 
-<item itemtype="Connector" uid="Connector-340" startpinid="mega32-74-PORTC2" endpinid="Tunnel-169-pin" pointList="-412,32,-396,32,-396,36" />
+<item itemtype="Connector" uid="Connector-340" startpinid="mega32-74-PORTC2" endpinid="Tunnel-169-pin" pointList="-408,36,-396,36" />
 
-<item itemtype="Connector" uid="Connector-341" startpinid="mega32-74-PORTC0" endpinid="Tunnel-170-pin" pointList="-412,48,-412,52,-400,52" />
+<item itemtype="Connector" uid="Connector-341" startpinid="mega32-74-PORTC0" endpinid="Tunnel-170-pin" pointList="-408,52,-400,52" />
 
-<item itemtype="Connector" uid="Connector-342" startpinid="mega32-74-PORTC1" endpinid="Tunnel-171-pin" pointList="-412,40,-412,44,-400,44" />
+<item itemtype="Connector" uid="Connector-342" startpinid="mega32-74-PORTC1" endpinid="Tunnel-171-pin" pointList="-408,44,-400,44" />
 
 <item itemtype="Connector" uid="Connector-397" startpinid="Tunnel-186-pin" endpinid="Switch-60-switch0pinN" pointList="-628,-132,-628,-156,-652,-156" />
 
-<item itemtype="Connector" uid="Connector-427" startpinid="Tunnel-195-pin" endpinid="mega32-74-PORTD3" pointList="-492,36,-476,36,-476,32" />
+<item itemtype="Connector" uid="Connector-427" startpinid="Tunnel-195-pin" endpinid="mega32-74-PORTD3" pointList="-492,36,-472,36" />
 
 <item itemtype="Connector" uid="Connector-437" startpinid="Resistor-201-lPin" endpinid="Fixed Voltage-199-outnod" pointList="-740,-204,-740,-216" />
 
-<item itemtype="Connector" uid="Connector-439" startpinid="Tunnel-204-pin" endpinid="mega32-74-PORTD6" pointList="-484,60,-476,60,-476,56" />
+<item itemtype="Connector" uid="Connector-439" startpinid="Tunnel-204-pin" endpinid="mega32-74-PORTD6" pointList="-484,60,-472,60" />
 
 <item itemtype="Connector" uid="Connector-440" startpinid="Tunnel-207-pin" endpinid="Switch-205-switch0pinN" pointList="-616,-76,-616,-104,-644,-104" />
 
@@ -294,27 +292,27 @@
 
 <item itemtype="Connector" uid="Connector-457" startpinid="Tunnel-217-pin" endpinid="L298P-92-IN1" pointList="-780,8,-768,8" />
 
-<item itemtype="Connector" uid="Connector-458" startpinid="Tunnel-218-pin" endpinid="L298P-92-IN2" pointList="-800,16,-768,16" />
+<item itemtype="Connector" uid="Connector-458" startpinid="Tunnel-218-pin" endpinid="L298P-92-IN2" pointList="-776,16,-768,16" />
 
-<item itemtype="Connector" uid="Connector-460" startpinid="Tunnel-220-pin" endpinid="mega32-74-PORTB0" pointList="-472,-100,-472,-96,-476,-96" />
+<item itemtype="Connector" uid="Connector-460" startpinid="Tunnel-220-pin" endpinid="mega32-74-PORTB0" pointList="-472,-100,-472,-92" />
 
-<item itemtype="Connector" uid="Connector-461" startpinid="Tunnel-221-pin" endpinid="mega32-74-PORTB1" pointList="-472,-88,-476,-88" />
+<item itemtype="Connector" uid="Connector-461" startpinid="Tunnel-221-pin" endpinid="mega32-74-PORTB1" pointList="-472,-88,-472,-84" />
 
-<item itemtype="Connector" uid="Connector-462" startpinid="Tunnel-222-pin" endpinid="mega32-74-PORTB2" pointList="-476,-76,-476,-80" />
+<item itemtype="Connector" uid="Connector-462" startpinid="Tunnel-222-pin" endpinid="mega32-74-PORTB2" pointList="-476,-76,-472,-76" />
 
-<item itemtype="Connector" uid="Connector-472" startpinid="Tunnel-226-pin" endpinid="mega32-74-PORTB3" pointList="-480,-68,-476,-68,-476,-72" />
+<item itemtype="Connector" uid="Connector-472" startpinid="Tunnel-226-pin" endpinid="mega32-74-PORTB3" pointList="-480,-68,-472,-68" />
 
 <item itemtype="Connector" uid="Connector-221" startpinid="Tunnel-121-pin" endpinid="Potentiometer-79-PinA" pointList="-320,-200,-320,-192" />
 
-<item itemtype="Connector" uid="Connector-477" startpinid="Tunnel-229-pin" endpinid="mega32-74-PORTD4" pointList="-480,44,-476,44,-476,40" />
+<item itemtype="Connector" uid="Connector-477" startpinid="Tunnel-229-pin" endpinid="mega32-74-PORTD4" pointList="-480,44,-472,44" />
 
-<item itemtype="Connector" uid="Connector-478" startpinid="Tunnel-231-pin" endpinid="mega32-74-PORTD1" pointList="-476,20,-476,16" />
+<item itemtype="Connector" uid="Connector-478" startpinid="Tunnel-231-pin" endpinid="mega32-74-PORTD1" pointList="-476,20,-472,20" />
 
-<item itemtype="Connector" uid="Connector-479" startpinid="Tunnel-230-pin" endpinid="mega32-74-PORTD0" pointList="-480,8,-476,8" />
+<item itemtype="Connector" uid="Connector-479" startpinid="Tunnel-230-pin" endpinid="mega32-74-PORTD0" pointList="-480,8,-472,8,-472,12" />
 
 <item itemtype="Connector" uid="Connector-480" startpinid="Tunnel-232-pin" endpinid="SerialTerm-228-pin0" pointList="-580,-244,-548,-244" />
 
-<item itemtype="Connector" uid="Connector-481" startpinid="Tunnel-233-pin" endpinid="SerialTerm-228-pin1" pointList="-580,-228,-548,-228" />
+<item itemtype="Connector" uid="Connector-481" startpinid="Tunnel-233-pin" endpinid="SerialTerm-228-pin1" pointList="-576,-228,-548,-228" />
 
 <item itemtype="Connector" uid="Connector-482" startpinid="Tunnel-237-pin" endpinid="Led-236-lPin" pointList="-256,156,-252,156" />
 
@@ -334,9 +332,9 @@
 
 <item itemtype="Connector" uid="Connector-489" startpinid="Resistor-241-rPin" endpinid="Node-243-1" pointList="-168,200,-140,200,-140,128" />
 
-<item itemtype="Connector" uid="Connector-496" startpinid="mega32-74-PORTC4" endpinid="Tunnel-245-pin" pointList="-412,16,-392,16,-392,20" />
+<item itemtype="Connector" uid="Connector-496" startpinid="mega32-74-PORTC4" endpinid="Tunnel-245-pin" pointList="-408,20,-392,20" />
 
-<item itemtype="Connector" uid="Connector-497" startpinid="mega32-74-PORTC3" endpinid="Tunnel-246-pin" pointList="-412,24,-392,24,-392,28" />
+<item itemtype="Connector" uid="Connector-497" startpinid="mega32-74-PORTC3" endpinid="Tunnel-246-pin" pointList="-408,28,-392,28" />
 
 <item itemtype="Connector" uid="Connector-500" startpinid="Push-250-switch0pinN" endpinid="Tunnel-251-pin" pointList="-676,-204,-660,-204" />
 
@@ -360,9 +358,9 @@
 
 <item itemtype="Connector" uid="Connector-513" startpinid="Tunnel-261-pin" endpinid="Push-258-pinP0" pointList="-244,64,-236,64" />
 
-<item itemtype="Connector" uid="Connector-530" startpinid="DcMotor-264-lPin" endpinid="L298P-92-OUT1" pointList="-644,-4,-720,-4,-720,8" />
+<item itemtype="Connector" uid="Connector-530" startpinid="DcMotor-264-lPin" endpinid="L298P-92-OUT1" pointList="-640,-4,-720,-4,-720,8" />
 
-<item itemtype="Connector" uid="Connector-548" startpinid="L298P-92-OUT2" endpinid="DcMotor-264-rPin" pointList="-720,16,-696,16,-696,76,-644,76" />
+<item itemtype="Connector" uid="Connector-548" startpinid="L298P-92-OUT2" endpinid="DcMotor-264-rPin" pointList="-720,16,-696,16,-696,76,-640,76" />
 
 <item itemtype="Connector" uid="Connector-549" startpinid="Tunnel-269-pin" endpinid="L298P-92-EnA" pointList="-780,48,-768,48" />
 
@@ -374,6 +372,6 @@
 
 <item itemtype="Connector" uid="Connector-31" startpinid="Ground-38-Gnd" endpinid="Resistor-37-lPin" pointList="-580,-168,-564,-168" />
 
-<item itemtype="Connector" uid="Connector-581" startpinid="mega32-74-RST" endpinid="mega32-74-RST" pointList="-476,-32,-476,-32" />
+<item itemtype="Connector" uid="Connector-210" startpinid="mega32-74-PORTA0" endpinid="Tunnel-105-pin" pointList="-408,-92,-400,-92,-400,-96" />
 
 </circuit>

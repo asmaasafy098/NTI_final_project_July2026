@@ -227,7 +227,7 @@ Std_ReturnType I2C_InitMaster(const I2C_MasterConfigType *config);
 Std_ReturnType I2C_Init(void)
 {
 
-    (*(volatile uint8_t *)0x20) = 32;
+    (*(volatile uint8_t *)0x20) = 72;
     (((*(volatile uint8_t *)0x21)) &= ~(1 << (0)));
     (((*(volatile uint8_t *)0x21)) &= ~(1 << (1)));
 
@@ -246,10 +246,23 @@ Std_ReturnType I2C_InitMaster(const I2C_MasterConfigType *config)
 }
 
 
+
+
 Std_ReturnType I2C_Start(void)
 {
+    uint32_t timeout = 0;
+
     (*(volatile uint8_t *)0x56) = (1 << 7) | (1 << 5) | (1 << 2);
-    while (((((*(volatile uint8_t *)0x56)) >> (7)) & 0x01) == 0) { }
+
+
+    while (((((*(volatile uint8_t *)0x56)) >> (7)) & 0x01) == 0)
+    {
+        timeout++;
+        if (timeout > 10000U)
+        {
+            return ((Std_ReturnType)0x01);
+        }
+    }
 
     if (((*(volatile uint8_t *)0x21) & 0xF8) != 0x08)
     {
@@ -268,9 +281,19 @@ Std_ReturnType I2C_Stop(void)
 
 Std_ReturnType I2C_WriteByte(uint8_t data)
 {
+    uint32_t timeout = 0;
+
     (*(volatile uint8_t *)0x23) = data;
     (*(volatile uint8_t *)0x56) = (1 << 7) | (1 << 2);
-    while (((((*(volatile uint8_t *)0x56)) >> (7)) & 0x01) == 0) { }
+
+    while (((((*(volatile uint8_t *)0x56)) >> (7)) & 0x01) == 0)
+    {
+        timeout++;
+        if (timeout > 10000U)
+        {
+            return ((Std_ReturnType)0x01);
+        }
+    }
 
     uint8_t status = (*(volatile uint8_t *)0x21) & 0xF8;
     if ((status != 0x18) && (status != 0x28) && (status != 0x40))

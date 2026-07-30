@@ -397,22 +397,29 @@ Std_ReturnType GPIO_toggle_pin(uint8_t port, uint8_t pin);
 
 
 
-
 static Timer_CallBackType Timer0_CompareMatch_CallBack = ((void *)0);
+static volatile uint32_t g_tickCount = 0;
 
 
 
 
-Std_ReturnType Timer0_Init()
+Std_ReturnType Timer0_Init(void)
 {
+
     (((*(volatile uint8_t *)0x53)) &= ~(1 << (6)));
     (((*(volatile uint8_t *)0x53)) |= (1 << (3)));
 
     (*(volatile uint8_t *)0x52) = 0;
-    (*(volatile uint8_t *)0x5C) = 77;
-    (((*(volatile uint8_t *)0x53)) |= (1 << (2)));
-    (((*(volatile uint8_t *)0x53)) &= ~(1 << (1)));
+    (*(volatile uint8_t *)0x5C) = 249;
+
+
+    (((*(volatile uint8_t *)0x53)) &= ~(1 << (2)));
+    (((*(volatile uint8_t *)0x53)) |= (1 << (1)));
     (((*(volatile uint8_t *)0x53)) |= (1 << (0)));
+
+
+    (((*(volatile uint8_t *)0x59)) |= (1 << (1)));
+
     return ((Std_ReturnType)0x00);
 }
 
@@ -449,18 +456,18 @@ Std_ReturnType Timer_SetCallBack(Timer_ChannelType channel, Timer_InterruptType 
         return ((Std_ReturnType)0x01);
     }
 
-
     Timer0_CompareMatch_CallBack = callBack;
     return ((Std_ReturnType)0x00);
 }
 
 
-
-# 69 "MCL/timer/timer_modified.c" 3
+# 74 "MCL/timer/timer_modified.c" 3
 void __vector_10 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_10 (void)
 
-# 70 "MCL/timer/timer_modified.c"
+# 75 "MCL/timer/timer_modified.c"
 {
+    g_tickCount++;
+
     if (Timer0_CompareMatch_CallBack != ((void *)0))
     {
         Timer0_CompareMatch_CallBack();
@@ -469,20 +476,26 @@ void __vector_10 (void) __attribute__ ((signal,used, externally_visible)) ; void
 
 
 
-Std_ReturnType Timer1_Init()
+Std_ReturnType Timer1_Init(void)
 {
+
     (((*(volatile uint8_t *)0x4F)) &= ~(1 << (0)));
     (((*(volatile uint8_t *)0x4F)) |= (1 << (1)));
     (((*(volatile uint8_t *)0x4E)) |= (1 << (3)));
     (((*(volatile uint8_t *)0x4E)) |= (1 << (4)));
 
+
     (((*(volatile uint8_t *)0x4F)) &= ~(1 << (6)));
     (((*(volatile uint8_t *)0x4F)) |= (1 << (7)));
+
     (*(volatile uint16_t *)0x4C) = 0;
     (*(volatile uint16_t *)0x46) = 399;
+
+
     (((*(volatile uint8_t *)0x4E)) &= ~(1 << (2)));
     (((*(volatile uint8_t *)0x4E)) &= ~(1 << (1)));
     (((*(volatile uint8_t *)0x4E)) |= (1 << (0)));
+
     GPIO_set_pin_Direction(3, 5, 1);
     return ((Std_ReturnType)0x00);
 }
@@ -499,19 +512,22 @@ Std_ReturnType Timer1_SetDuty(uint16_t duty_percent)
     }
     else
     {
-        (*(volatile uint16_t *)0x4A) = (((uint32_t)duty_percent * (399 + 1)) / 100) - 1;
+        (*(volatile uint16_t *)0x4A) = (((uint32_t)duty_percent * 399) / 100);
     }
     return ((Std_ReturnType)0x00);
 }
 
 
 
-Std_ReturnType Timer2_Init()
+Std_ReturnType Timer2_Init(void)
 {
+
     (((*(volatile uint8_t *)0x45)) &= ~(1 << (6)));
     (((*(volatile uint8_t *)0x45)) |= (1 << (3)));
 
     (*(volatile uint8_t *)0x44) = 0;
+
+
     (((*(volatile uint8_t *)0x45)) |= (1 << (2)));
     (((*(volatile uint8_t *)0x45)) &= ~(1 << (1)));
     (((*(volatile uint8_t *)0x45)) |= (1 << (0)));
@@ -519,6 +535,7 @@ Std_ReturnType Timer2_Init()
 
     (((*(volatile uint8_t *)0x45)) &= ~(1 << (5)));
     (((*(volatile uint8_t *)0x45)) |= (1 << (4)));
+
     GPIO_set_pin_Direction(3, 7, 1);
     return ((Std_ReturnType)0x00);
 }
@@ -540,26 +557,40 @@ Std_ReturnType Timer2_SetTone(uint16_t tone)
 
 void Timer_EnableGlobalInterrupt(void)
 {
-    (((*(volatile uint8_t *)0x5F)) |= (1 << (7)));
+    
+# 167 "MCL/timer/timer_modified.c" 3
+   __asm__ __volatile__ ("sei" ::: "memory")
+# 167 "MCL/timer/timer_modified.c"
+        ;
 }
 
 void Timer_DisableGlobalInterrupt(void)
 {
-    (((*(volatile uint8_t *)0x5F)) &= ~(1 << (7)));
-}
-
-static volatile uint32_t g_tickCount = 0;
-
-void Timer0_TickISR(void)
-{
-    g_tickCount++;
+    
+# 172 "MCL/timer/timer_modified.c" 3
+   __asm__ __volatile__ ("cli" ::: "memory")
+# 172 "MCL/timer/timer_modified.c"
+        ;
 }
 
 uint32_t TIMER_GetTick(void)
 {
     uint32_t local_tick;
-    Timer_DisableGlobalInterrupt();
+    uint8_t sreg = 
+# 178 "MCL/timer/timer_modified.c" 3
+                  (*(volatile uint8_t *)((0x3F) + 0x20))
+# 178 "MCL/timer/timer_modified.c"
+                      ;
+    
+# 179 "MCL/timer/timer_modified.c" 3
+   __asm__ __volatile__ ("cli" ::: "memory")
+# 179 "MCL/timer/timer_modified.c"
+        ;
     local_tick = g_tickCount;
-    Timer_EnableGlobalInterrupt();
+    
+# 181 "MCL/timer/timer_modified.c" 3
+   (*(volatile uint8_t *)((0x3F) + 0x20)) 
+# 181 "MCL/timer/timer_modified.c"
+        = sreg;
     return local_tick;
 }
