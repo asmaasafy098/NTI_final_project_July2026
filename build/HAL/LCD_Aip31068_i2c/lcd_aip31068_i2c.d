@@ -1,4 +1,5 @@
-lcd_aip31068_i2c.o: HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.c \
+build/HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.o: \
+ HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.c \
  HAL/LCD_Aip31068_i2c/../../Service/STD_Types.h \
  HAL/LCD_Aip31068_i2c/../../Service/string_utils.h \
  HAL/LCD_Aip31068_i2c/../../Service/STD_Types.h \

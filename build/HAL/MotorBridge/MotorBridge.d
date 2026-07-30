@@ -1,4 +1,4 @@
-MotorBridge.o: HAL/MotorBridge/MotorBridge.c \
+build/HAL/MotorBridge/MotorBridge.o: HAL/MotorBridge/MotorBridge.c \
  HAL/MotorBridge/MotorBridge.h HAL/MotorBridge/../../Service/STD_Types.h \
  HAL/MotorBridge/../../MCL/timer/timer_interface.h \
  HAL/MotorBridge/../../MCL/timer/../../Service/STD_Types.h \

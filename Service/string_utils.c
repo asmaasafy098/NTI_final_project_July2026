@@ -1,8 +1,3 @@
-/*
- * string_utils.c
- * Utility string functions implementation
- */
-
 #include "string_utils.h"
 #include <string.h>
 

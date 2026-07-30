@@ -12,7 +12,6 @@ CFLAGS  = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -std=c99 -Wall -Os -g
 DEPFLAGS = -MMD -MP
 LDFLAGS = -mmcu=$(MCU)
 
-# ============== مسارات الملفات ==============
 C_SOURCES := $(wildcard Src/*.c) \
              $(wildcard Service/*.c) \
              $(wildcard MCL/GPIO/*.c) \
@@ -38,7 +37,6 @@ C_SOURCES := $(wildcard Src/*.c) \
              $(wildcard Logic/Data/*.c) \
              $(wildcard Logic/Scheduler/*.c)
 
-# ============== مجلدات الـ Include ==============
 INCLUDE_DIRS := . \
                 Src \
                 Service \
@@ -53,14 +51,12 @@ INCLUDE_DIRS := . \
 
 CFLAGS += $(addprefix -I,$(INCLUDE_DIRS)) $(DEPFLAGS)
 
-# ============== المخرجات ==============
 OBJS      := $(patsubst %.c,build/%.o,$(C_SOURCES))
 DEPS      := $(patsubst %.c,build/%.d,$(C_SOURCES))
 TARGET    := build/firmware
 
 -include $(DEPS)
 
-# ============== الأهداف ==============
 all: $(TARGET).hex
 
 build/%.o: %.c

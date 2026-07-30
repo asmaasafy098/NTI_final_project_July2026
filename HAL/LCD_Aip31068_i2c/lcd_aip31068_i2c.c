@@ -11,8 +11,6 @@ static LCD_Aip31068_HandleType g_lcdHandle;
 
 static uint8_t g_displayControl = 0x0C;
 
-/* ==================== Low-Level Functions ==================== */
-
 Std_ReturnType LCD_Aip31068_SendCommand(LCD_Aip31068_HandleType *handle, uint8_t command)
 {
     if (handle == NULL) return E_NOK;
@@ -72,7 +70,6 @@ Std_ReturnType LCD_Aip31068_WriteStringAt(LCD_Aip31068_HandleType *handle,
 Std_ReturnType LCD_Aip31068_Clear(LCD_Aip31068_HandleType *handle)
 {
     Std_ReturnType status = LCD_Aip31068_SendCommand(handle, 0x01U);
-    /* Small delay for LCD to process clear command */
     for (volatile uint32_t i = 0; i < 2000; i++);
     return status;
 }
@@ -105,8 +102,6 @@ Std_ReturnType LCD_Aip31068_Init(LCD_Aip31068_HandleType *handle)
     return E_OK;
 }
 
-/* ==================== High-Level App Functions ==================== */
-
 Std_ReturnType LCD_InitDefault(void)
 {
     g_lcdHandle.i2cAddress = 0x3E;
@@ -115,7 +110,6 @@ Std_ReturnType LCD_InitDefault(void)
     return LCD_Aip31068_Init(&g_lcdHandle);
 }
 
-/* ===== LCD_Update - بدون sprintf ===== */
 Std_ReturnType LCD_Update(const DriveData_t *pData)
 {
     char line1[17];
@@ -127,33 +121,27 @@ Std_ReturnType LCD_Update(const DriveData_t *pData)
         return E_NOK;
     }
     
-    /* ===== LINE 1: "SET1500 ACT1450 F" ===== */
+    /* LINE 1: "SET1500 ACT1450 F" */
     pos = 0;
-    
-    /* "SET" */
     line1[pos++] = 'S';
     line1[pos++] = 'E';
     line1[pos++] = 'T';
     
-    /* Setpoint RPM */
     UTL_IntToStr(pData->rampedRpm, temp, 4);
     for (uint8_t i = 0; temp[i] != '\0'; i++) {
         line1[pos++] = temp[i];
     }
     line1[pos++] = ' ';
     
-    /* "ACT" */
     line1[pos++] = 'A';
     line1[pos++] = 'C';
     line1[pos++] = 'T';
     
-    /* Measured RPM */
     UTL_IntToStr(pData->measuredRpm, temp, 4);
     for (uint8_t i = 0; temp[i] != '\0'; i++) {
         line1[pos++] = temp[i];
     }
     
-    /* Direction */
     char dirChar;
     switch (pData->direction) {
         case DIR_FORWARD: dirChar = 'F'; break;
@@ -162,57 +150,49 @@ Std_ReturnType LCD_Update(const DriveData_t *pData)
     }
     line1[pos++] = dirChar;
     
-    /* Pad with spaces */
     while (pos < 16) {
         line1[pos++] = ' ';
     }
     line1[16] = '\0';
     
-    /* ===== LINE 2: "75% 8.2A 24V 45C" ===== */
+    /* LINE 2: "75% 8.2A 24V 45C" */
     pos = 0;
     
-    /* Duty percentage */
     UTL_UIntToStr(pData->dutyPct, temp, 2);
     line1[pos++] = temp[0];
     line1[pos++] = temp[1];
     line1[pos++] = '%';
     line1[pos++] = ' ';
     
-    /* Current: X.X A */
-    UTL_IntToStr1Dec(pData->currentmA / 100, temp);  /* /100 gives one decimal */
+    UTL_IntToStr1Dec(pData->currentmA / 100, temp);
     for (uint8_t i = 0; temp[i] != '\0'; i++) {
         line1[pos++] = temp[i];
     }
     line1[pos++] = 'A';
     line1[pos++] = ' ';
     
-    /* Voltage: XX V */
     UTL_UIntToStr(pData->busmV / 1000, temp, 2);
     line1[pos++] = temp[0];
     line1[pos++] = temp[1];
     line1[pos++] = 'V';
     line1[pos++] = ' ';
     
-    /* Temperature: XX C */
     UTL_UIntToStr(pData->tempC, temp, 2);
     line1[pos++] = temp[0];
     line1[pos++] = temp[1];
     line1[pos++] = 'C';
     
-    /* Pad with spaces */
     while (pos < 16) {
         line1[pos++] = ' ';
     }
     line2[16] = '\0';
     
-    /* Send to LCD */
     LCD_Aip31068_WriteStringAt(&g_lcdHandle, 0, 0, (const uint8_t *)line1);
     LCD_Aip31068_WriteStringAt(&g_lcdHandle, 1, 0, (const uint8_t *)line2);
     
     return E_OK;
 }
 
-/* ===== LCD_ShowTrip - محسّن ===== */
 Std_ReturnType LCD_ShowTrip(Trip_t tripCode)
 {
     static uint16_t blinkCounter = 0;
