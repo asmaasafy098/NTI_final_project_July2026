@@ -1794,13 +1794,13 @@ int main(void)
     EXTI_Init(&extiCfg1);
     EXTI_Init(&extiCfg0);
 
-
-
+    I2C_MasterConfigType i2cCfg = { 100000UL };
+    I2C_InitMaster(&i2cCfg);
     UART_SendString("BOOT2: MCAL OK\r\n");
 
 
 
-
+     LCD_InitDefault();
     TACHO_Init();
     ANALOG_Init();
     PANEL_Init();
@@ -1848,7 +1848,7 @@ int main(void)
     SCHED_AddTask(Task_Panel, "Panel", 10, 0);
     SCHED_AddTask(Task_Current, "Current", 50, 1);
     SCHED_AddTask(Task_Control, "Control", 100, 2);
-
+    SCHED_AddTask(Task_LCD, "LCD", 250, 4);
     SCHED_AddTask(Task_SlowSensors, "SlowSensors", 500, 3);
     SCHED_AddTask(Task_Telemetry, "Telemetry", 1000, 5);
 

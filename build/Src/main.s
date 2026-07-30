@@ -275,6 +275,24 @@ Task_Control:
 	ldi r28,0
 	rjmp .L39
 	.size	Task_Control, .-Task_Control
+.global	Task_LCD
+	.type	Task_LCD, @function
+Task_LCD:
+/* prologue: function */
+/* frame size = 0 */
+/* stack size = 0 */
+.L__stack_usage = 0
+	call FSM_IsTripped
+	tst r24
+	breq .L41
+	lds r24,g_driveData+24
+	lds r25,g_driveData+24+1
+	jmp LCD_ShowTrip
+.L41:
+	ldi r24,lo8(g_driveData)
+	ldi r25,hi8(g_driveData)
+	jmp LCD_Update
+	.size	Task_LCD, .-Task_LCD
 	.section	.rodata.str1.1
 .LC5:
 	.string	"\r\n--- SYSTEM STARTING ---\r\n"
@@ -291,10 +309,12 @@ Task_Control:
 .LC11:
 	.string	"Control"
 .LC12:
-	.string	"SlowSensors"
+	.string	"LCD"
 .LC13:
-	.string	"Telemetry"
+	.string	"SlowSensors"
 .LC14:
+	.string	"Telemetry"
+.LC15:
 	.string	"BOOT4: SCHEDULER READY, ENABLING INTERRUPTS...\r\n"
 	.section	.rodata
 .LC0:
@@ -316,16 +336,16 @@ main:
 	push r29
 	in r28,__SP_L__
 	in r29,__SP_H__
-	sbiw r28,20
+	sbiw r28,24
 	in __tmp_reg__,__SREG__
 	cli
 	out __SP_H__,r29
 	out __SREG__,__tmp_reg__
 	out __SP_L__,r28
 /* prologue: function */
-/* frame size = 20 */
-/* stack size = 22 */
-.L__stack_usage = 22
+/* frame size = 24 */
+/* stack size = 26 */
+.L__stack_usage = 26
 /* #APP */
  ;  62 "Src/main.c" 1
 	cli
@@ -353,11 +373,11 @@ main:
 	call BRIDGE_Init
 	clr r15
 	inc r15
-	std Y+19,r15
+	std Y+23,r15
 	ldi r24,lo8(7)
-	std Y+20,r24
+	std Y+24,r24
 	movw r24,r28
-	adiw r24,19
+	adiw r24,23
 	call ADC_Init
 	call Timer0_Init
 	call Timer1_Init
@@ -366,25 +386,37 @@ main:
 	lds r25,.LC1+1
 	lds r26,.LC1+2
 	lds r27,.LC1+3
-	std Y+15,r24
-	std Y+16,r25
-	std Y+17,r26
-	std Y+18,r27
-	std Y+12,__zero_reg__
-	std Y+11,__zero_reg__
+	std Y+19,r24
+	std Y+20,r25
+	std Y+21,r26
+	std Y+22,r27
+	std Y+16,__zero_reg__
+	std Y+15,__zero_reg__
 	ldi r16,lo8(3)
 	ldi r17,0
-	std Y+14,r17
-	std Y+13,r16
+	std Y+18,r17
+	std Y+17,r16
+	movw r24,r28
+	adiw r24,19
+	call EXTI_Init
 	movw r24,r28
 	adiw r24,15
 	call EXTI_Init
+	ldi r24,lo8(-96)
+	ldi r25,lo8(-122)
+	ldi r26,lo8(1)
+	ldi r27,0
+	std Y+11,r24
+	std Y+12,r25
+	std Y+13,r26
+	std Y+14,r27
 	movw r24,r28
 	adiw r24,11
-	call EXTI_Init
+	call I2C_InitMaster
 	ldi r24,lo8(.LC7)
 	ldi r25,hi8(.LC7)
 	call UART_SendString
+	call LCD_InitDefault
 	call TACHO_Init
 	call ANALOG_Init
 	call PANEL_Init
@@ -528,12 +560,21 @@ main:
 	ldi r24,lo8(gs(Task_Control))
 	ldi r25,hi8(gs(Task_Control))
 	call SCHED_AddTask
+	ldi r18,lo8(4)
+	ldi r19,0
+	ldi r20,lo8(-6)
+	ldi r21,0
+	ldi r22,lo8(.LC12)
+	ldi r23,hi8(.LC12)
+	ldi r24,lo8(gs(Task_LCD))
+	ldi r25,hi8(gs(Task_LCD))
+	call SCHED_AddTask
 	ldi r18,lo8(3)
 	ldi r19,0
 	ldi r20,lo8(-12)
 	ldi r21,lo8(1)
-	ldi r22,lo8(.LC12)
-	ldi r23,hi8(.LC12)
+	ldi r22,lo8(.LC13)
+	ldi r23,hi8(.LC13)
 	ldi r24,lo8(gs(Task_SlowSensors))
 	ldi r25,hi8(gs(Task_SlowSensors))
 	call SCHED_AddTask
@@ -541,46 +582,28 @@ main:
 	ldi r19,0
 	ldi r20,lo8(-24)
 	ldi r21,lo8(3)
-	ldi r22,lo8(.LC13)
-	ldi r23,hi8(.LC13)
+	ldi r22,lo8(.LC14)
+	ldi r23,hi8(.LC14)
 	ldi r24,lo8(gs(Task_Telemetry))
 	ldi r25,hi8(gs(Task_Telemetry))
 	call SCHED_AddTask
-	ldi r24,lo8(.LC14)
-	ldi r25,hi8(.LC14)
+	ldi r24,lo8(.LC15)
+	ldi r25,hi8(.LC15)
 	call UART_SendString
 /* #APP */
  ;  154 "Src/main.c" 1
 	sei
  ;  0 "" 2
 /* #NOAPP */
-.L41:
+.L43:
 	call SCHED_Run
 	call CONSOLE_IsCommandReady
 	tst r24
-	breq .L41
+	breq .L43
 	call CONSOLE_ExecuteCommand
-	rjmp .L41
+	rjmp .L43
 	.size	main, .-main
 	.text
-.global	Task_LCD
-	.type	Task_LCD, @function
-Task_LCD:
-/* prologue: function */
-/* frame size = 0 */
-/* stack size = 0 */
-.L__stack_usage = 0
-	call FSM_IsTripped
-	tst r24
-	breq .L46
-	lds r24,g_driveData+24
-	lds r25,g_driveData+24+1
-	jmp LCD_ShowTrip
-.L46:
-	ldi r24,lo8(g_driveData)
-	ldi r25,hi8(g_driveData)
-	jmp LCD_Update
-	.size	Task_LCD, .-Task_LCD
 .global	__vector_2
 	.type	__vector_2, @function
 __vector_2:
