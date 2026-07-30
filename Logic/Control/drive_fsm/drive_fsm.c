@@ -7,6 +7,7 @@
 #include "../pi_controller/pi_controller.h"
 #include "../ramp_generator/ramp_generator.h"
 #include "../protection/protection.h"
+#include "../MotorBridge/MotorBridge.h"
 #include "../../Data/data_manager.h"
 #include "../../../Service/util_math.h"
 
@@ -54,16 +55,17 @@ void FSM_Run(void) {
         FSM_Init();
         return;
     }
-    
+
     /* Update state timer (called every 10ms) */
     g_fsm.stateTimer += 10;
-    
+
     /* Check E-Stop first (highest priority) */
     if (g_driveData.estopRaw && g_fsm.currentState != DS_ESTOP) {
         FSM_RequestEmergencyStop();
+        FSM_ExecuteActions();   /* apply the ESTOP-safe outputs immediately */
         return;
     }
-    
+
     /* Execute state handler */
     switch (g_fsm.currentState) {
         case DS_INIT:
@@ -96,6 +98,11 @@ void FSM_Run(void) {
         default:
             break;
     }
+
+    /* Apply the current state to the physical bridge every cycle.
+     * This was previously missing -- without it nothing ever wrote
+     * to MotorBridge and the motor could never actually turn. */
+    FSM_ExecuteActions();
 }
 
 /* ==================== State Handlers ==================== */
@@ -121,10 +128,10 @@ static void FSM_HandleStopped(void) {
 
 static void FSM_HandleStarting(void) {
     /* Check if at setpoint */
-    if (RAMP_AtTarget(&g_ramp) && 
+    if (RAMP_AtTarget(&g_ramp) &&
         ABS(g_driveData.measuredRpm - g_driveData.rampedRpm) <= 100) {
         g_fsm.atSpeedCounter++;
-        if (g_fsm.atSpeedCounter >= 10) {  /* 1 second */
+        if (g_fsm.atSpeedCounter >= 100) {  /* 100 * 10ms tick = 1 second */
             FSM_TransitionTo(DS_RUNNING);
             g_fsm.atSpeedCounter = 0;
         }
@@ -189,7 +196,7 @@ static void FSM_HandleEStop(void) {
 
 static void FSM_TransitionTo(DriveState_t newState) {
     DriveState_t oldState = g_fsm.currentState;
-    
+
     /* Execute exit actions for old state */
     switch (oldState) {
         case DS_RUNNING:
@@ -203,12 +210,12 @@ static void FSM_TransitionTo(DriveState_t newState) {
         default:
             break;
     }
-    
+
     /* Update state */
     g_fsm.previousState = oldState;
     g_fsm.currentState = newState;
     g_fsm.stateTimer = 0;
-    
+
     /* Execute entry actions for new state */
     switch (newState) {
         case DS_STOPPED:
@@ -218,7 +225,7 @@ static void FSM_TransitionTo(DriveState_t newState) {
             PI_Reset(&g_pi);
             RAMP_Reset(&g_ramp);
             break;
-            
+
         case DS_STARTING:
             g_driveData.direction = g_fsm.direction;
             PI_Reset(&g_pi);
@@ -226,46 +233,99 @@ static void FSM_TransitionTo(DriveState_t newState) {
             g_driveData.startCount++;
             g_fsm.atSpeedCounter = 0;
             break;
-            
+
         case DS_RUNNING:
             /* Running state - PI is active */
             break;
-            
+
         case DS_RAMP_DOWN:
             RAMP_SetTarget(&g_ramp, 0);
             break;
-            
+
         case DS_DEAD_TIME:
             /* Both direction pins LOW */
             g_driveData.direction = DIR_STOP;
             g_driveData.dutyCounts = 0;
             g_driveData.dutyPct = 0;
             break;
-            
+
         case DS_COASTING:
             g_driveData.direction = DIR_STOP;
             g_driveData.dutyCounts = 0;
             g_driveData.dutyPct = 0;
             break;
-            
+
         case DS_TRIPPED:
             g_driveData.direction = DIR_STOP;
             g_driveData.dutyCounts = 0;
             g_driveData.dutyPct = 0;
             break;
-            
+
         case DS_ESTOP:
             g_driveData.direction = DIR_STOP;
             g_driveData.dutyCounts = 0;
             g_driveData.dutyPct = 0;
             break;
-            
+
         default:
             break;
     }
-    
+
     /* Update global state */
     g_driveData.state = newState;
+}
+
+/* Applies the current FSM state to the physical bridge every cycle.
+ * This is the only place (besides the E-stop ISR itself) that talks
+ * to MotorBridge, keeping the "only bridge.c writes the pins" rule
+ * intact -- FSM just decides WHAT to ask for.
+ *
+ * NOTE: PD5/OC1A is not wired in the SimulIDE circuit, so there is no
+ * hardware PWM path. BRIDGE_SetDuty() only does bang-bang ON/OFF
+ * against a minimum-run threshold; the 100 ms control task still
+ * calls BRIDGE_SetDuty(g_driveData.dutyCounts) after PI_Step() runs.
+ * FSM only owns direction + master enable here. */
+static void FSM_ExecuteActions(void) {
+    switch (g_fsm.currentState) {
+        case DS_STARTING:
+        case DS_RUNNING:
+            /* direction pins must be set before duty is applied (FR-06) */
+            BRIDGE_SetDirection(g_fsm.direction);
+            BRIDGE_Enable();
+            break;
+
+        case DS_RAMP_DOWN:
+            /* keep direction held, ramp target is already 0
+             * (set in FSM_TransitionTo -> DS_RAMP_DOWN), let it coast down */
+            BRIDGE_SetDirection(g_fsm.direction);
+            BRIDGE_Enable();
+            break;
+
+        case DS_DEAD_TIME:
+            /* NFR-05: both direction pins LOW, enable LOW, for the
+             * whole dead-time window */
+            BRIDGE_SetDirection(DIR_STOP);
+            BRIDGE_Disable();
+            break;
+
+        case DS_COASTING:
+        case DS_STOPPED:
+        case DS_INIT:
+            BRIDGE_SetDirection(DIR_STOP);
+            BRIDGE_Disable();
+            break;
+
+        case DS_TRIPPED:
+        case DS_ESTOP:
+            /* redundant with the ISR/trip path, but cheap insurance:
+             * force safe every cycle while latched */
+            BRIDGE_ForceStop();
+            break;
+
+        default:
+            BRIDGE_ForceStop();
+            break;
+    }
 }
 
 /* ==================== Public Functions ==================== */
@@ -295,12 +355,12 @@ MotorDir_t FSM_GetDirection(void) {
 }
 
 uint8_t FSM_IsRunning(void) {
-    return (g_fsm.currentState == DS_RUNNING || 
+    return (g_fsm.currentState == DS_RUNNING ||
             g_fsm.currentState == DS_STARTING);
 }
 
 uint8_t FSM_IsTripped(void) {
-    return (g_fsm.currentState == DS_TRIPPED || 
+    return (g_fsm.currentState == DS_TRIPPED ||
             g_fsm.currentState == DS_ESTOP);
 }
 
@@ -308,15 +368,15 @@ uint8_t FSM_RequestStart(void) {
     if (g_fsm.currentState != DS_STOPPED) {
         return 0;  /* Not in stopped state */
     }
-    
+
     if (g_fsm.currentState == DS_TRIPPED || g_fsm.currentState == DS_ESTOP) {
         return 0;  /* Tripped */
     }
-    
+
     if (g_driveData.setpointRpm < g_driveCfg.minRpm) {
         return 0;  /* Setpoint below minRpm */
     }
-    
+
     g_fsm.direction = DIR_FORWARD;
     FSM_TransitionTo(DS_STARTING);
     return 1;
@@ -334,18 +394,18 @@ uint8_t FSM_RequestReverse(void) {
     if (g_fsm.currentState != DS_RUNNING) {
         return 0;  /* Not running */
     }
-    
+
     if (g_fsm.reversalPending) {
         return 0;  /* Reversal already pending */
     }
-    
+
     /* Determine new direction */
     if (g_fsm.direction == DIR_FORWARD) {
         g_fsm.pendingDirection = DIR_REVERSE;
     } else {
         g_fsm.pendingDirection = DIR_FORWARD;
     }
-    
+
     g_fsm.reversalPending = 1;
     FSM_TransitionTo(DS_RAMP_DOWN);
     return 1;
@@ -362,7 +422,7 @@ uint8_t FSM_RequestReset(void) {
         }
         return 0;  /* Cause still active */
     }
-    
+
     if (g_fsm.currentState == DS_ESTOP) {
         /* Check if E-Stop contact is closed */
         if (!g_driveData.estopRaw) {
@@ -371,7 +431,7 @@ uint8_t FSM_RequestReset(void) {
         }
         return 0;  /* E-Stop still open */
     }
-    
+
     return 0;  /* Not in tripped state */
 }
 

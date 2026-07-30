@@ -88,10 +88,15 @@ int main(void)
     Timer2_Init();
     EXTI_Init(&extiCfg1);
     EXTI_Init(&extiCfg0);
-    UART_Init(&uartCfg);
-    I2C_InitMaster(&i2cCfg);  /* For LCD */
-    LCD_InitDefault();  
-    PANEL_Init();
+
+    UART_Init(&uartCfg);              /* انقليها هنا مؤقتًا */
+    UART_SendString("BOOT1\r\n");     /* checkpoint 1 */
+
+    BRIDGE_Init();
+    I2C_InitMaster(&i2cCfg);
+    UART_SendString("BOOT2\r\n");     /* checkpoint 2 - لو معتش ظهرت، المشكلة هنا */
+    LCD_InitDefault();
+    UART_SendString("BOOT3\r\n");  
     /* ===== STEP 3: Initialize HAL ===== */
     TACHO_Init();   /* Tacho measurement */
     ANALOG_Init();  /* 4 ADC channels */
