@@ -27,6 +27,7 @@
 #include "../MCL/Interrupt/interrupt_interface.h"
 #include "../MCL/UART/uart_interface.h"
 #include "../MCL/I2C/i2c_interface.h"
+#include "../HAL/UserPanel/UserPanel.h"
 
 /* ==================== HAL Includes ==================== */
 #include "../HAL/DC_Motor/dc_motor.h"
@@ -37,6 +38,10 @@
 #include "../HAL/Stepper_L298P/Stepper_L298P.h" 
 #include "../HAL/MotorBridge/MotorBridge.h"
 #include "../HAL/UserPanel/UserPanel.h"
+<<<<<<< HEAD
+=======
+
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 /* ==================== Global Variables ==================== */
 DriveData_t g_driveData;
 DriveCfg_t g_driveCfg;
@@ -80,17 +85,15 @@ int main(void)
         .parity = UART_PARITY_NONE,
         .stopBits = UART_STOP_1BIT
     };
-    I2C_MasterConfigType i2cCfg = {
-        .sclFrequency = I2C_SCL_100KHZ
-    };
 
     ADC_Init(&adcCfg);
     Timer0_Init();
     Timer1_Init();
     Timer2_Init();
-    EXTI_Init(&extiCfg1);  /* arm E-stop first */
+    EXTI_Init(&extiCfg1);
     EXTI_Init(&extiCfg0);
     UART_Init(&uartCfg);
+<<<<<<< HEAD
     //I2C_InitMaster(&i2cCfg);  /* For LCD */
     //LCD_InitDefault();  
     PANEL_Init();
@@ -98,29 +101,51 @@ int main(void)
   while (1) {
     PANEL_SetRunLED(1, 0);   /* أشعل الـ LED يدويًا بالقوة */
   }      
+=======
+
+       I2C_Init(); 
+   
+    
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
     /* ===== STEP 3: Initialize HAL ===== */
     TACHO_Init();   /* Tacho measurement */
     ANALOG_Init();  /* 4 ADC channels */
     PANEL_Init();   /* Buttons and LEDs */
     BUZZER_Init();  /* Buzzer */
-    EEPROM_Init();  /* 25LC256 SPI EEPROM */
-    TRIPLOG_Init(); /* Trip log */
     
-    /* ===== STEP 4: Load Configuration from EEPROM ===== */
-    if (!EEPROM_LoadConfig(&g_driveCfg)) {
-        /* If load fails, use defaults and save them */
-        EEPROM_LoadDefaults(&g_driveCfg);
-        EEPROM_SaveConfig(&g_driveCfg);
-    }
-    
-    /* Check for latched trip from EEPROM */
-    Trip_t latchedTrip = EEPROM_LoadLatchTrip();
-    if (latchedTrip != TRIP_NONE) {
-        g_driveCfg.latchedTrip = latchedTrip;
-        g_driveData.activeTrip = latchedTrip;
-        FSM_RequestTrip(latchedTrip);
-    }
-    
+/* ===== STEP 4: Default Configuration ===== */
+
+g_driveCfg.magic            = 0x4D44;
+g_driveCfg.version          = 0x01;
+
+g_driveCfg.maxRpm           = 3000;
+g_driveCfg.minRpm           = 200;
+
+g_driveCfg.accelRpmPerSec   = 600;
+g_driveCfg.decelRpmPerSec   = 900;
+
+g_driveCfg.deadTimeMs       = 500;
+
+g_driveCfg.kp               = 384;
+g_driveCfg.ki               = 26;
+
+g_driveCfg.ratedCurrentmA   = 8000;
+g_driveCfg.shortTripmA      = 18000;
+
+g_driveCfg.overTempC        = 110;
+g_driveCfg.underVoltmV      = 20000;
+g_driveCfg.overVoltmV       = 55000;
+
+g_driveCfg.stallSec         = 3;
+
+g_driveCfg.totalRunSec      = 0;
+g_driveCfg.startCount       = 0;
+
+g_driveCfg.tripHead         = 0;
+g_driveCfg.latchedTrip      = TRIP_NONE;
+
+g_driveCfg.checksum         = 0;
+
     /* ===== STEP 5: Initialize APP ===== */
     DataManager_Init(&g_driveData, &g_driveCfg);
     PI_Init(&g_pi, g_driveCfg.kp, g_driveCfg.ki);
@@ -172,30 +197,35 @@ int main(void)
 void Task_Panel(void)
 {
     PANEL_Poll();
-    PanelEvent_t event = PANEL_GetEvent();
+    Panel_Event_t event = PANEL_GetEvent();
     
-    switch (event) {
-        case EVENT_START_PRESSED:
-            if (!FSM_RequestStart()) {
-                CONSOLE_SendError("ERR START");
-            }
-            break;
-        case EVENT_STOP_PRESSED:
-            FSM_RequestStop();
-            break;
-        case EVENT_REVERSE_PRESSED:
-            if (!FSM_RequestReverse()) {
-                CONSOLE_SendError("ERR REV");
-            }
-            break;
-        case EVENT_RESET_PRESSED:
-            if (!FSM_RequestReset()) {
-                CONSOLE_SendError("ERR ACTIVE");
-            }
-            break;
-        default:
-            break;
-    }
+    switch (event)
+{
+    case PNL_START:
+        if (!FSM_RequestStart()) {
+            CONSOLE_SendError("ERR START");
+        }
+        break;
+
+    case PNL_STOP:
+        FSM_RequestStop();
+        break;
+
+    case PNL_REVERSE:
+        if (!FSM_RequestReverse()) {
+            CONSOLE_SendError("ERR REV");
+        }
+        break;
+
+    case PNL_RESET:
+        if (!FSM_RequestReset()) {
+            CONSOLE_SendError("ERR ACTIVE");
+        }
+        break;
+
+    default:
+        break;
+}
     
     /* Update status LEDs based on FSM state */
     DriveState_t state = FSM_GetState();
@@ -345,6 +375,7 @@ void Task_Telemetry(void)
     /* Send telemetry */
     TELEMETRY_Update(&g_driveData);
 }
+<<<<<<< HEAD
 
 /* ==================== Interrupt Service Routines ==================== */
 
@@ -390,3 +421,5 @@ ISR(USART_RXC_vect)
     uint8_t ch = UDR;
     CONSOLE_ProcessChar(ch);
 }
+=======
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f

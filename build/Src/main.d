@@ -23,7 +23,8 @@ main.o: Src/main.c Src/../Service/STD_Types.h Src/../Service/Bit_Math.h \
  Src/../MCL/UART/../../Service/STD_Types.h \
  Src/../MCL/UART/uart_registers.h Src/../MCL/I2C/i2c_interface.h \
  Src/../MCL/I2C/../../Service/STD_Types.h Src/../MCL/I2C/i2c_registers.h \
- Src/../HAL/DC_Motor/dc_motor.h \
+ Src/../HAL/UserPanel/UserPanel.h Src/../Service/STD_Types.h \
+ Src/../Logic/Data/data_types.h Src/../HAL/DC_Motor/dc_motor.h \
  Src/../HAL/DC_Motor/../../Service/STD_Types.h \
  Src/../HAL/DC_Motor/../../MCL/GPIO/GPIO_Interface.h \
  Src/../HAL/Tachometer/Tachometer.h \
@@ -36,6 +37,7 @@ main.o: Src/main.c Src/../Service/STD_Types.h Src/../Service/Bit_Math.h \
  Src/../HAL/BUZZER/BUZZER.h Src/../HAL/BUZZER/../../Service/STD_Types.h \
  Src/../HAL/Stepper_L298P/Stepper_L298P.h \
  Src/../HAL/Stepper_L298P/../../Service/STD_Types.h \
+<<<<<<< HEAD
  Src/../HAL/Stepper_L298P/../../MCL/GPIO/GPIO_Interface.h \
  Src/../HAL/MotorBridge/MotorBridge.h \
  Src/../HAL/MotorBridge/../../Service/STD_Types.h \
@@ -43,6 +45,13 @@ main.o: Src/main.c Src/../Service/STD_Types.h Src/../Service/Bit_Math.h \
  Src/../HAL/MotorBridge/../../Logic/Data/data_types.h \
  Src/../HAL/UserPanel/UserPanel.h Src/../Service/STD_Types.h \
  Src/../Logic/Data/data_types.h
+=======
+ Src/../HAL/Stepper_L298P/../../MCL/GPIO/gpio_interface.h \
+ Src/../HAL/MotorBridge/MotorBridge.h \
+ Src/../HAL/MotorBridge/../../Service/STD_Types.h \
+ Src/../HAL/MotorBridge/../../Logic/Data/data_types.h \
+ Src/../HAL/MotorBridge/../../MCL/Timer/timer_interface.h
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 
 Src/../Service/STD_Types.h:
 
@@ -110,6 +119,12 @@ Src/../MCL/I2C/../../Service/STD_Types.h:
 
 Src/../MCL/I2C/i2c_registers.h:
 
+Src/../HAL/UserPanel/UserPanel.h:
+
+Src/../Service/STD_Types.h:
+
+Src/../Logic/Data/data_types.h:
+
 Src/../HAL/DC_Motor/dc_motor.h:
 
 Src/../HAL/DC_Motor/../../Service/STD_Types.h:
@@ -138,12 +153,17 @@ Src/../HAL/Stepper_L298P/Stepper_L298P.h:
 
 Src/../HAL/Stepper_L298P/../../Service/STD_Types.h:
 
+<<<<<<< HEAD
 Src/../HAL/Stepper_L298P/../../MCL/GPIO/GPIO_Interface.h:
+=======
+Src/../HAL/Stepper_L298P/../../MCL/GPIO/gpio_interface.h:
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 
 Src/../HAL/MotorBridge/MotorBridge.h:
 
 Src/../HAL/MotorBridge/../../Service/STD_Types.h:
 
+<<<<<<< HEAD
 Src/../HAL/MotorBridge/../../MCL/timer/timer_interface.h:
 
 Src/../HAL/MotorBridge/../../Logic/Data/data_types.h:
@@ -153,3 +173,8 @@ Src/../HAL/UserPanel/UserPanel.h:
 Src/../Service/STD_Types.h:
 
 Src/../Logic/Data/data_types.h:
+=======
+Src/../HAL/MotorBridge/../../Logic/Data/data_types.h:
+
+Src/../HAL/MotorBridge/../../MCL/Timer/timer_interface.h:
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f

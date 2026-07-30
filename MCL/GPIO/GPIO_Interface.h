@@ -24,6 +24,9 @@
 #define GPIO_PIN6        6
 #define GPIO_PIN7        7
 
+#define GPIO_NUMBER_OF_PORTS    4
+#define GPIO_NUMBER_OF_PINS     8
+
 typedef unsigned char GPIO_pin_status;
 typedef unsigned char GPIO_port_status;
 

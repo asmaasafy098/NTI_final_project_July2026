@@ -240,18 +240,38 @@ EXTI_SetCallBack:
 /* frame size = 0 */
 /* stack size = 0 */
 .L__stack_usage = 0
+<<<<<<< HEAD
 	sbiw r24,3
 	brsh .L50
 	ldi r24,lo8(1)
 	ldi r25,0
 	or r22,r23
 	breq .L47
+=======
+	cpi r24,3
+	cpc r25,__zero_reg__
+	brsh .L50
+	cp r22,__zero_reg__
+	cpc r23,__zero_reg__
+	breq .L50
+	lsl r24
+	rol r25
+	movw r30,r24
+	subi r30,lo8(-(EXTI_CallBacks))
+	sbci r31,hi8(-(EXTI_CallBacks))
+	std Z+1,r23
+	st Z,r22
+	ldi r25,0
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	ldi r24,0
 	ret
 .L50:
 	ldi r24,lo8(1)
 	ldi r25,0
+<<<<<<< HEAD
 .L47:
+=======
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 /* epilogue start */
 	ret
 	.size	EXTI_SetCallBack, .-EXTI_SetCallBack
@@ -281,4 +301,158 @@ EXTI_DisableGlobalInterrupt:
 /* epilogue start */
 	ret
 	.size	EXTI_DisableGlobalInterrupt, .-EXTI_DisableGlobalInterrupt
+<<<<<<< HEAD
 	.ident	"GCC: (GNU) 7.3.0"
+=======
+.global	__vector_1
+	.type	__vector_1, @function
+__vector_1:
+	push r1
+	push r0
+	in r0,__SREG__
+	push r0
+	clr __zero_reg__
+	push r18
+	push r19
+	push r20
+	push r21
+	push r22
+	push r23
+	push r24
+	push r25
+	push r26
+	push r27
+	push r30
+	push r31
+/* prologue: Signal */
+/* frame size = 0 */
+/* stack size = 15 */
+.L__stack_usage = 15
+	lds r30,EXTI_CallBacks
+	lds r31,EXTI_CallBacks+1
+	sbiw r30,0
+	breq .L53
+	icall
+.L53:
+/* epilogue start */
+	pop r31
+	pop r30
+	pop r27
+	pop r26
+	pop r25
+	pop r24
+	pop r23
+	pop r22
+	pop r21
+	pop r20
+	pop r19
+	pop r18
+	pop r0
+	out __SREG__,r0
+	pop r0
+	pop r1
+	reti
+	.size	__vector_1, .-__vector_1
+.global	__vector_2
+	.type	__vector_2, @function
+__vector_2:
+	push r1
+	push r0
+	in r0,__SREG__
+	push r0
+	clr __zero_reg__
+	push r18
+	push r19
+	push r20
+	push r21
+	push r22
+	push r23
+	push r24
+	push r25
+	push r26
+	push r27
+	push r30
+	push r31
+/* prologue: Signal */
+/* frame size = 0 */
+/* stack size = 15 */
+.L__stack_usage = 15
+	lds r30,EXTI_CallBacks+2
+	lds r31,EXTI_CallBacks+2+1
+	sbiw r30,0
+	breq .L58
+	icall
+.L58:
+/* epilogue start */
+	pop r31
+	pop r30
+	pop r27
+	pop r26
+	pop r25
+	pop r24
+	pop r23
+	pop r22
+	pop r21
+	pop r20
+	pop r19
+	pop r18
+	pop r0
+	out __SREG__,r0
+	pop r0
+	pop r1
+	reti
+	.size	__vector_2, .-__vector_2
+.global	__vector_3
+	.type	__vector_3, @function
+__vector_3:
+	push r1
+	push r0
+	in r0,__SREG__
+	push r0
+	clr __zero_reg__
+	push r18
+	push r19
+	push r20
+	push r21
+	push r22
+	push r23
+	push r24
+	push r25
+	push r26
+	push r27
+	push r30
+	push r31
+/* prologue: Signal */
+/* frame size = 0 */
+/* stack size = 15 */
+.L__stack_usage = 15
+	lds r30,EXTI_CallBacks+4
+	lds r31,EXTI_CallBacks+4+1
+	sbiw r30,0
+	breq .L63
+	icall
+.L63:
+/* epilogue start */
+	pop r31
+	pop r30
+	pop r27
+	pop r26
+	pop r25
+	pop r24
+	pop r23
+	pop r22
+	pop r21
+	pop r20
+	pop r19
+	pop r18
+	pop r0
+	out __SREG__,r0
+	pop r0
+	pop r1
+	reti
+	.size	__vector_3, .-__vector_3
+	.local	EXTI_CallBacks
+	.comm	EXTI_CallBacks,6,1
+	.ident	"GCC: (GNU) 7.3.0"
+.global __do_clear_bss
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f

@@ -51,39 +51,57 @@ Stepper_ApplyPattern:
 	movw r28,r24
 	mov r17,r22
 	mov r20,r22
+<<<<<<< HEAD
 	andi r20,1
 	ldd r22,Y+1
 	ldi r23,0
 	ld r24,Y
 	ldi r21,0
 	ldi r25,0
+=======
+	andi r20,lo8(1)
+	ldd r22,Y+1
+	ld r24,Y
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	call GPIO_set_pin_value
 	bst r17,1
 	clr r20
 	bld r20,0
 	ldd r22,Y+3
+<<<<<<< HEAD
 	ldi r23,0
 	ldd r24,Y+2
 	ldi r21,0
 	ldi r25,0
+=======
+	ldd r24,Y+2
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	call GPIO_set_pin_value
 	bst r17,2
 	clr r20
 	bld r20,0
 	ldd r22,Y+5
+<<<<<<< HEAD
 	ldi r23,0
 	ldd r24,Y+4
 	ldi r21,0
 	ldi r25,0
+=======
+	ldd r24,Y+4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	call GPIO_set_pin_value
 	bst r17,3
 	clr r20
 	bld r20,0
 	ldd r22,Y+7
+<<<<<<< HEAD
 	ldi r23,0
 	ldd r24,Y+6
 	ldi r21,0
 	ldi r25,0
+=======
+	ldd r24,Y+6
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	call GPIO_set_pin_value
 	ldi r24,lo8(1)
 	cpse r17,__zero_reg__
@@ -143,6 +161,7 @@ Stepper_L298P_Init:
 	ldd r22,Y+11
 	ldd r24,Y+10
 	call GPIO_set_pin_Direction
+<<<<<<< HEAD
 	ldd r22,Y+9
 	ldi r23,0
 	ldd r24,Y+8
@@ -156,6 +175,15 @@ Stepper_L298P_Init:
 	ldi r20,lo8(1)
 	ldi r21,0
 	ldi r25,0
+=======
+	ldi r20,lo8(1)
+	ldd r22,Y+9
+	ldd r24,Y+8
+	call GPIO_set_pin_value
+	ldi r20,lo8(1)
+	ldd r22,Y+11
+	ldd r24,Y+10
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	call GPIO_set_pin_value
 .L12:
 	ldd r24,Y+17
@@ -608,6 +636,7 @@ Stepper_L298P_Hold:
 	ldd r24,Z+12
 	tst r24
 	breq .L66
+<<<<<<< HEAD
 	ldd r22,Z+9
 	ldi r23,0
 	ldd r24,Z+8
@@ -621,6 +650,15 @@ Stepper_L298P_Hold:
 	ldi r20,lo8(1)
 	ldi r21,0
 	ldi r25,0
+=======
+	ldi r20,lo8(1)
+	ldd r22,Z+9
+	ldd r24,Z+8
+	call GPIO_set_pin_value
+	ldi r20,lo8(1)
+	ldd r22,Y+11
+	ldd r24,Y+10
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	call GPIO_set_pin_value
 .L66:
 	ldd r22,Y+20
@@ -663,6 +701,7 @@ Stepper_L298P_Release:
 	ldd r24,Y+12
 	tst r24
 	breq .L74
+<<<<<<< HEAD
 	ldd r22,Y+9
 	ldi r23,0
 	ldd r24,Y+8
@@ -676,6 +715,15 @@ Stepper_L298P_Release:
 	ldi r21,0
 	ldi r20,0
 	ldi r25,0
+=======
+	ldi r20,0
+	ldd r22,Y+9
+	ldd r24,Y+8
+	call GPIO_set_pin_value
+	ldi r20,0
+	ldd r22,Y+11
+	ldd r24,Y+10
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	call GPIO_set_pin_value
 .L74:
 	std Y+21,__zero_reg__

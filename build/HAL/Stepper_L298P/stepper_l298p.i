@@ -6,12 +6,21 @@
 
 
 
+<<<<<<< HEAD
 # 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 1 3 4
 # 9 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 3 4
 # 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 1 3 4
 # 125 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
 
 # 125 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+=======
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 1 3 4
+# 9 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 3 4
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 1 3 4
+# 125 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+
+# 125 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef signed int int8_t __attribute__((__mode__(__QI__)));
 typedef unsigned int uint8_t __attribute__((__mode__(__QI__)));
 typedef signed int int16_t __attribute__ ((__mode__ (__HI__)));
@@ -21,14 +30,22 @@ typedef unsigned int uint32_t __attribute__ ((__mode__ (__SI__)));
 
 typedef signed int int64_t __attribute__((__mode__(__DI__)));
 typedef unsigned int uint64_t __attribute__((__mode__(__DI__)));
+<<<<<<< HEAD
 # 146 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+=======
+# 146 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef int16_t intptr_t;
 
 
 
 
 typedef uint16_t uintptr_t;
+<<<<<<< HEAD
 # 163 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+=======
+# 163 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef int8_t int_least8_t;
 
 
@@ -70,7 +87,11 @@ typedef int64_t int_least64_t;
 
 
 typedef uint64_t uint_least64_t;
+<<<<<<< HEAD
 # 217 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+=======
+# 217 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef int8_t int_fast8_t;
 
 
@@ -112,14 +133,22 @@ typedef int64_t int_fast64_t;
 
 
 typedef uint64_t uint_fast64_t;
+<<<<<<< HEAD
 # 277 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+=======
+# 277 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef int64_t intmax_t;
 
 
 
 
 typedef uint64_t uintmax_t;
+<<<<<<< HEAD
 # 10 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 2 3 4
+=======
+# 10 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 2 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 # 5 "HAL/Stepper_L298P/../../Service/STD_Types.h" 2
 
 
@@ -183,18 +212,42 @@ typedef Std_ReturnType STD_ReturnType;
 
 # 1 "HAL/Stepper_L298P/../../MCL/GPIO/../../Service/STD_Types.h" 1
 # 5 "HAL/Stepper_L298P/../../MCL/GPIO/GPIO_Interface.h" 2
+<<<<<<< HEAD
 # 27 "HAL/Stepper_L298P/../../MCL/GPIO/GPIO_Interface.h"
+=======
+# 30 "HAL/Stepper_L298P/../../MCL/GPIO/GPIO_Interface.h"
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef unsigned char GPIO_pin_status;
 typedef unsigned char GPIO_port_status;
 
 
 
+<<<<<<< HEAD
 Std_ReturnType GPIO_set_pin_Direction(uint8_t port, uint8_t pin, uint8_t direction);
 Std_ReturnType GPIO_write_pin(uint8_t port, uint8_t pin, uint8_t value);
 GPIO_pin_status GPIO_read_pin(uint8_t port, uint8_t pin);
 Std_ReturnType GPIO_toggle_pin(uint8_t port, uint8_t pin);
 # 4 "HAL/Stepper_L298P/stepper_l298p.c" 2
 # 1 "HAL/Stepper_L298P/stepper_l298p.h" 1
+=======
+Std_ReturnType GPIO_set_pin_Direction(uint8_t uint8_port, uint8_t uint8_pin, uint8_t uint8_direction);
+Std_ReturnType GPIO_get_pin_status(uint8_t uint8_port, uint8_t uint8_pin, uint8_t *pu8PinStatus);
+Std_ReturnType GPIO_pin_toggle(uint8_t uint8_port, uint8_t uint8_pin);
+Std_ReturnType GPIO_set_pin_value(uint8_t uint8_port, uint8_t uint8_pin, uint8_t uint8_value);
+
+
+Std_ReturnType GPIO_set_port_Direction(uint8_t uint8_port, uint8_t uint8_direction);
+Std_ReturnType GPIO_get_port_status(uint8_t uint8_port, uint8_t *pu8PortStatus);
+Std_ReturnType GPIO_set_port_value(uint8_t uint8_port, uint8_t uint8_value);
+# 4 "HAL/Stepper_L298P/stepper_l298p.c" 2
+# 1 "HAL/Stepper_L298P/stepper_l298p.h" 1
+
+
+
+
+# 1 "HAL/Stepper_L298P/../../MCL/GPIO/gpio_interface.h" 1
+# 6 "HAL/Stepper_L298P/stepper_l298p.h" 2
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 # 73 "HAL/Stepper_L298P/stepper_l298p.h"
 typedef enum
 {

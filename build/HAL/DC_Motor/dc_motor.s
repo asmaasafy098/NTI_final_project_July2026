@@ -128,6 +128,7 @@ DC_Motor_ApplyState:
 	mov r20,r17
 	mov r17,r24
 .L19:
+<<<<<<< HEAD
 	ldi r21,0
 	ldd r22,Y+1
 	ldi r23,0
@@ -140,6 +141,14 @@ DC_Motor_ApplyState:
 	ldi r23,0
 	ldd r24,Y+2
 	ldi r25,0
+=======
+	ldd r22,Y+1
+	ld r24,Y
+	call GPIO_set_pin_value
+	mov r20,r17
+	ldd r22,Y+3
+	ldd r24,Y+2
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	call GPIO_set_pin_value
 	std Y+12,r15
 	std Y+11,r14
@@ -237,19 +246,30 @@ DC_Motor_ApplySpeed:
 	sbiw r24,0
 	brne .L39
 	ldi r20,lo8(1)
+<<<<<<< HEAD
 	ldi r21,0
 	ldd r24,Z+10
 	cpse r24,__zero_reg__
 	rjmp .L40
 	ldi r21,0
+=======
+	ldd r24,Z+10
+	cpse r24,__zero_reg__
+	rjmp .L40
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	ldi r20,0
 .L40:
 	movw r30,r16
 	ldd r22,Z+5
+<<<<<<< HEAD
 	ldi r23,0
 	ldd r24,Z+4
 .L44:
 	ldi r25,0
+=======
+	ldd r24,Z+4
+.L44:
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	call GPIO_set_pin_value
 .L38:
 /* epilogue start */
@@ -277,11 +297,17 @@ DC_Motor_ApplySpeed:
 	ldi r22,0
 	movw r24,r18
 	call DC_Motor_PwmConnect
+<<<<<<< HEAD
 	ldd r22,Y+1
 	ldi r23,0
 	ldd r24,Y+2
 	ldi r21,0
 	ldi r20,0
+=======
+	ldi r20,0
+	ldd r22,Y+1
+	ldd r24,Y+2
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	rjmp .L44
 .L42:
 	ldi r31,lo8(-1)
@@ -352,6 +378,7 @@ DC_Motor_Init:
 	ldd r22,Z+3
 	ldd r24,Z+2
 	call GPIO_set_pin_Direction
+<<<<<<< HEAD
 	movw r30,r16
 	ldd r22,Z+1
 	ldi r23,0
@@ -367,6 +394,17 @@ DC_Motor_Init:
 	ldi r21,0
 	ldi r20,0
 	ldi r25,0
+=======
+	ldi r20,0
+	movw r30,r16
+	ldd r22,Z+1
+	ld r24,Z
+	call GPIO_set_pin_value
+	ldi r20,0
+	movw r30,r16
+	ldd r22,Z+3
+	ldd r24,Z+2
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	call GPIO_set_pin_value
 	movw r30,r16
 	ldd r24,Z+6
@@ -379,6 +417,7 @@ DC_Motor_Init:
 	ldi r20,lo8(1)
 	ldd r22,Z+5
 	call GPIO_set_pin_Direction
+<<<<<<< HEAD
 	movw r30,r16
 	ldd r22,Z+5
 	ldi r23,0
@@ -386,6 +425,12 @@ DC_Motor_Init:
 	ldi r21,0
 	ldi r20,0
 	ldi r25,0
+=======
+	ldi r20,0
+	movw r30,r16
+	ldd r22,Z+5
+	ldd r24,Z+4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	call GPIO_set_pin_value
 .L50:
 	movw r30,r16
@@ -413,12 +458,18 @@ DC_Motor_Init:
 	ldd r22,Y+1
 	ldd r24,Y+2
 	call GPIO_set_pin_Direction
+<<<<<<< HEAD
 	ldd r22,Y+1
 	ldi r23,0
 	ldd r24,Y+2
 	ldi r21,0
 	ldi r20,0
 	ldi r25,0
+=======
+	ldi r20,0
+	ldd r22,Y+1
+	ldd r24,Y+2
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	call GPIO_set_pin_value
 	movw r30,r16
 	ldd r24,Z+6
@@ -618,6 +669,7 @@ DC_Motor_Stop:
 	ldd r25,Z+7
 	sbiw r24,0
 	brne .L79
+<<<<<<< HEAD
 	ldd r22,Z+5
 	ldi r23,0
 	ldd r24,Z+4
@@ -625,6 +677,12 @@ DC_Motor_Stop:
 	ldi r21,0
 	ldi r20,0
 	ldi r25,0
+=======
+	ldi r20,0
+	ldd r22,Z+5
+	ldd r24,Z+4
+.L82:
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	call GPIO_set_pin_value
 	ldi r25,0
 	ldi r24,0
@@ -650,8 +708,13 @@ DC_Motor_Stop:
 	ldd r24,Z+6
 	ldd r25,Z+7
 	call DC_Motor_PwmConnect
+<<<<<<< HEAD
 	ldd r22,Y+1
 	ldi r23,0
+=======
+	ldi r20,0
+	ldd r22,Y+1
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	ldd r24,Y+2
 	rjmp .L82
 .L81:
@@ -682,12 +745,18 @@ DC_Motor_Brake:
 	ldd r25,Y+7
 	sbiw r24,0
 	brne .L85
+<<<<<<< HEAD
 	ldd r22,Y+5
 	ldi r23,0
 	ldd r24,Y+4
 	ldi r20,lo8(1)
 	ldi r21,0
 	ldi r25,0
+=======
+	ldi r20,lo8(1)
+	ldd r22,Y+5
+	ldd r24,Y+4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	call GPIO_set_pin_value
 .L88:
 	ldi r25,0
@@ -814,12 +883,18 @@ DC_Motor_DeInit:
 	ldd r24,Z+6
 	ldd r25,Z+7
 	call DC_Motor_PwmSetDuty
+<<<<<<< HEAD
 	ldd r22,Y+1
 	ldi r23,0
 	ldd r24,Y+2
 	ldi r21,0
 	ldi r20,0
 	ldi r25,0
+=======
+	ldi r20,0
+	ldd r22,Y+1
+	ldd r24,Y+2
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	call GPIO_set_pin_value
 .L101:
 	movw r30,r16

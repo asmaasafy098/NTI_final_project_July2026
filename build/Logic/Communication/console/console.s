@@ -51,6 +51,10 @@ CONSOLE_ProcessChar:
 	tst r24
 	breq .L9
 	mov r24,r28
+<<<<<<< HEAD
+=======
+	ldi r25,0
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	call USART_TransmitByte
 .L9:
 	lds r30,g_console+64
@@ -68,8 +72,15 @@ CONSOLE_ProcessChar:
 	sbci r31,hi8(-(g_console))
 	st Z,__zero_reg__
 	ldi r24,lo8(32)
+<<<<<<< HEAD
 	call USART_TransmitByte
 	ldi r24,lo8(8)
+=======
+	ldi r25,0
+	call USART_TransmitByte
+	ldi r24,lo8(8)
+	ldi r25,0
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 /* epilogue start */
 	pop r28
 	jmp USART_TransmitByte

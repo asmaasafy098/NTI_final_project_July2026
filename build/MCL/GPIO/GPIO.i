@@ -180,7 +180,7 @@ typedef Std_ReturnType STD_ReturnType;
 # 1 "MCL/GPIO/GPIO_Registers.h" 1
 # 4 "MCL/GPIO/GPIO.c" 2
 # 1 "MCL/GPIO/GPIO_Interface.h" 1
-# 27 "MCL/GPIO/GPIO_Interface.h"
+# 30 "MCL/GPIO/GPIO_Interface.h"
 typedef unsigned char GPIO_pin_status;
 typedef unsigned char GPIO_port_status;
 
@@ -207,12 +207,19 @@ static volatile uint8_t * const GPIO_PINx[4] = {
 };
 
 
+<<<<<<< HEAD
+=======
+Std_ReturnType GPIO_set_pin_Direction(uint8_t uint8_port, uint8_t uint8_pin, uint8_t uint8_direction)
+{
+    Std_ReturnType local_Status = ((Std_ReturnType)0x00);
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 
 
 Std_ReturnType GPIO_set_pin_Direction(uint8_t port, uint8_t pin, uint8_t direction)
 {
     if ((port >= 4) || (pin >= 8))
     {
+<<<<<<< HEAD
         return ((Std_ReturnType)0x01);
     }
 
@@ -223,9 +230,115 @@ Std_ReturnType GPIO_set_pin_Direction(uint8_t port, uint8_t pin, uint8_t directi
     else
     {
         ((*GPIO_DDRx[port]) &= ~(1 << (pin)));
+=======
+        local_Status = ((Std_ReturnType)0x01);
+    }
+    else
+    {
+        switch (uint8_direction)
+        {
+            case 0:
+                ((*GPIO_DDRx[uint8_port]) &= ~(1 << (uint8_pin)));
+                break;
+            case 1:
+                ((*GPIO_DDRx[uint8_port]) |= (1 << (uint8_pin)));
+                break;
+            default:
+                local_Status = ((Std_ReturnType)0x01);
+                break;
+        }
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
     }
 
+<<<<<<< HEAD
     return ((Std_ReturnType)0x00);
+=======
+
+Std_ReturnType GPIO_set_pin_value(uint8_t uint8_port, uint8_t uint8_pin, uint8_t uint8_value)
+{
+    Std_ReturnType local_Status = ((Std_ReturnType)0x00);
+
+    if ((uint8_port >= 4) || (uint8_pin >= 8))
+    {
+        local_Status = ((Std_ReturnType)0x01);
+    }
+    else
+    {
+        switch (uint8_value)
+        {
+            case 0:
+                ((*GPIO_PORTx[uint8_port]) &= ~(1 << (uint8_pin)));
+                break;
+            case 1:
+                ((*GPIO_PORTx[uint8_port]) |= (1 << (uint8_pin)));
+                break;
+            default:
+                local_Status = ((Std_ReturnType)0x01);
+                break;
+        }
+    }
+    return local_Status;
+}
+
+
+Std_ReturnType GPIO_pin_toggle(uint8_t uint8_port, uint8_t uint8_pin)
+{
+    Std_ReturnType local_Status = ((Std_ReturnType)0x00);
+
+    if ((uint8_port >= 4) || (uint8_pin >= 8))
+    {
+        local_Status = ((Std_ReturnType)0x01);
+    }
+    else
+    {
+        ((*GPIO_PORTx[uint8_port]) ^= (1 << (uint8_pin)));
+    }
+    return local_Status;
+}
+
+
+Std_ReturnType GPIO_set_port_Direction(uint8_t uint8_port, uint8_t uint8_direction)
+{
+    Std_ReturnType local_Status = ((Std_ReturnType)0x00);
+
+    if (uint8_port >= 4)
+    {
+        local_Status = ((Std_ReturnType)0x01);
+    }
+    else
+    {
+        if (uint8_direction == 0) {
+            *GPIO_DDRx[uint8_port] = 0x00;
+        } else if (uint8_direction == 1) {
+            *GPIO_DDRx[uint8_port] = 0xFF;
+        } else {
+            *GPIO_DDRx[uint8_port] = uint8_direction;
+        }
+    }
+    return local_Status;
+}
+
+
+Std_ReturnType GPIO_set_port_value(uint8_t uint8_port, uint8_t uint8_value)
+{
+    Std_ReturnType local_Status = ((Std_ReturnType)0x00);
+
+    if (uint8_port >= 4)
+    {
+        local_Status = ((Std_ReturnType)0x01);
+    }
+    else
+    {
+        if (uint8_value == 0) {
+            *GPIO_PORTx[uint8_port] = 0x00;
+        } else if (uint8_value == 1) {
+            *GPIO_PORTx[uint8_port] = 0xFF;
+        } else {
+            *GPIO_PORTx[uint8_port] = uint8_value;
+        }
+    }
+    return local_Status;
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 }
 
 

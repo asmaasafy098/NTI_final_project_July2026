@@ -15,10 +15,21 @@ TELEMETRY_Init:
 	ldi r24,lo8(1)
 	sts g_telemetryEnabled,r24
 	call TIMER_GetTick
+<<<<<<< HEAD
 	sts g_lastSendTime,r22
 	sts g_lastSendTime+1,r23
 	sts g_lastSendTime+2,r24
 	sts g_lastSendTime+3,r25
+=======
+	mov __tmp_reg__,r25
+	lsl r0
+	sbc r26,r26
+	sbc r27,r27
+	sts g_lastSendTime,r24
+	sts g_lastSendTime+1,r25
+	sts g_lastSendTime+2,r26
+	sts g_lastSendTime+3,r27
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 /* epilogue start */
 	ret
 	.size	TELEMETRY_Init, .-TELEMETRY_Init
@@ -40,8 +51,15 @@ TELEMETRY_Update:
 	breq .L2
 	movw r28,r24
 	call TIMER_GetTick
+<<<<<<< HEAD
 	movw r12,r22
 	movw r14,r24
+=======
+	movw r12,r24
+	lsl r25
+	sbc r14,r14
+	sbc r15,r15
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	lds r24,g_lastSendTime
 	lds r25,g_lastSendTime+1
 	lds r26,g_lastSendTime+2

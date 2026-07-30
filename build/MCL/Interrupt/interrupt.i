@@ -6,12 +6,21 @@
 
 
 
+<<<<<<< HEAD
 # 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 1 3 4
 # 9 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 3 4
 # 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 1 3 4
 # 125 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
 
 # 125 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+=======
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 1 3 4
+# 9 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 3 4
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 1 3 4
+# 125 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+
+# 125 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef signed int int8_t __attribute__((__mode__(__QI__)));
 typedef unsigned int uint8_t __attribute__((__mode__(__QI__)));
 typedef signed int int16_t __attribute__ ((__mode__ (__HI__)));
@@ -21,14 +30,22 @@ typedef unsigned int uint32_t __attribute__ ((__mode__ (__SI__)));
 
 typedef signed int int64_t __attribute__((__mode__(__DI__)));
 typedef unsigned int uint64_t __attribute__((__mode__(__DI__)));
+<<<<<<< HEAD
 # 146 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+=======
+# 146 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef int16_t intptr_t;
 
 
 
 
 typedef uint16_t uintptr_t;
+<<<<<<< HEAD
 # 163 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+=======
+# 163 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef int8_t int_least8_t;
 
 
@@ -70,7 +87,11 @@ typedef int64_t int_least64_t;
 
 
 typedef uint64_t uint_least64_t;
+<<<<<<< HEAD
 # 217 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+=======
+# 217 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef int8_t int_fast8_t;
 
 
@@ -112,14 +133,22 @@ typedef int64_t int_fast64_t;
 
 
 typedef uint64_t uint_fast64_t;
+<<<<<<< HEAD
 # 277 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+=======
+# 277 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef int64_t intmax_t;
 
 
 
 
 typedef uint64_t uintmax_t;
+<<<<<<< HEAD
 # 10 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 2 3 4
+=======
+# 10 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 2 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 # 5 "MCL/Interrupt/../../Service/STD_Types.h" 2
 
 
@@ -177,6 +206,7 @@ typedef Std_ReturnType STD_ReturnType;
 # 2 "MCL/Interrupt/interrupt.c" 2
 # 1 "MCL/Interrupt/../../Service/Bit_Math.h" 1
 # 3 "MCL/Interrupt/interrupt.c" 2
+<<<<<<< HEAD
 # 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\interrupt.h" 1 3
 # 38 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\interrupt.h" 3
 # 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 1 3
@@ -187,11 +217,24 @@ typedef Std_ReturnType STD_ReturnType;
 # 77 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 3
 
 # 77 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 3
+=======
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\interrupt.h" 1 3
+# 38 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\interrupt.h" 3
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 1 3
+# 99 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\sfr_defs.h" 1 3
+# 126 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\sfr_defs.h" 3
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 1 3
+# 77 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 3
+
+# 77 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 3
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef int32_t int_farptr_t;
 
 
 
 typedef uint32_t uint_farptr_t;
+<<<<<<< HEAD
 # 127 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\sfr_defs.h" 2 3
 # 100 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
 # 244 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
@@ -199,6 +242,15 @@ typedef uint32_t uint_farptr_t;
 # 720 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 3
        
 # 721 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 3
+=======
+# 127 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\sfr_defs.h" 2 3
+# 100 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+# 244 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 1 3
+# 720 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 3
+       
+# 721 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 3
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 
        
        
@@ -223,6 +275,7 @@ typedef uint32_t uint_farptr_t;
        
        
        
+<<<<<<< HEAD
 # 245 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
 # 703 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
 # 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\portpins.h" 1 3
@@ -233,25 +286,51 @@ typedef uint32_t uint_farptr_t;
 
 # 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\version.h" 1 3
 # 708 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+=======
+# 245 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+# 703 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\portpins.h" 1 3
+# 704 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\common.h" 1 3
+# 706 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\version.h" 1 3
+# 708 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 
 
 
 
 
 
+<<<<<<< HEAD
 # 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\fuse.h" 1 3
 # 248 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\fuse.h" 3
+=======
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\fuse.h" 1 3
+# 248 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\fuse.h" 3
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef struct
 {
     unsigned char low;
     unsigned char high;
 } __fuse_t;
+<<<<<<< HEAD
 # 715 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
 
 
 # 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\lock.h" 1 3
 # 718 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
 # 39 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\interrupt.h" 2 3
+=======
+# 715 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+
+
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\lock.h" 1 3
+# 718 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+# 39 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\interrupt.h" 2 3
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 # 4 "MCL/Interrupt/interrupt.c" 2
 # 1 "MCL/Interrupt/interrupt_registers.h" 1
 # 5 "MCL/Interrupt/interrupt.c" 2
@@ -513,3 +592,47 @@ void EXTI_DisableGlobalInterrupt(void)
 {
     (((*(volatile u8 *)0x5F)) &= ~(1 << (7)));
 }
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+# 227 "MCL/Interrupt/interrupt.c" 3
+void __vector_1 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_1 (void)
+
+# 228 "MCL/Interrupt/interrupt.c"
+{
+    if (EXTI_CallBacks[EXTI_INT0] != ((void *)0))
+    {
+        EXTI_CallBacks[EXTI_INT0]();
+    }
+}
+
+
+# 235 "MCL/Interrupt/interrupt.c" 3
+void __vector_2 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_2 (void)
+
+# 236 "MCL/Interrupt/interrupt.c"
+{
+    if (EXTI_CallBacks[EXTI_INT1] != ((void *)0))
+    {
+        EXTI_CallBacks[EXTI_INT1]();
+    }
+}
+
+
+# 243 "MCL/Interrupt/interrupt.c" 3
+void __vector_3 (void) __attribute__ ((signal,used, externally_visible)) ; void __vector_3 (void)
+
+# 244 "MCL/Interrupt/interrupt.c"
+{
+    if (EXTI_CallBacks[EXTI_INT2] != ((void *)0))
+    {
+        EXTI_CallBacks[EXTI_INT2]();
+    }
+}
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f

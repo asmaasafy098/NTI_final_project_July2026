@@ -13,12 +13,21 @@
 
 
 
+<<<<<<< HEAD
 # 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 1 3 4
 # 9 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 3 4
 # 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 1 3 4
 # 125 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
 
 # 125 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+=======
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 1 3 4
+# 9 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 3 4
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 1 3 4
+# 125 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+
+# 125 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef signed int int8_t __attribute__((__mode__(__QI__)));
 typedef unsigned int uint8_t __attribute__((__mode__(__QI__)));
 typedef signed int int16_t __attribute__ ((__mode__ (__HI__)));
@@ -28,14 +37,22 @@ typedef unsigned int uint32_t __attribute__ ((__mode__ (__SI__)));
 
 typedef signed int int64_t __attribute__((__mode__(__DI__)));
 typedef unsigned int uint64_t __attribute__((__mode__(__DI__)));
+<<<<<<< HEAD
 # 146 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+=======
+# 146 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef int16_t intptr_t;
 
 
 
 
 typedef uint16_t uintptr_t;
+<<<<<<< HEAD
 # 163 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+=======
+# 163 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef int8_t int_least8_t;
 
 
@@ -77,7 +94,11 @@ typedef int64_t int_least64_t;
 
 
 typedef uint64_t uint_least64_t;
+<<<<<<< HEAD
 # 217 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+=======
+# 217 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef int8_t int_fast8_t;
 
 
@@ -119,14 +140,22 @@ typedef int64_t int_fast64_t;
 
 
 typedef uint64_t uint_fast64_t;
+<<<<<<< HEAD
 # 277 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+=======
+# 277 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef int64_t intmax_t;
 
 
 
 
 typedef uint64_t uintmax_t;
+<<<<<<< HEAD
 # 10 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 2 3 4
+=======
+# 10 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 2 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 # 5 "Service/STD_Types.h" 2
 
 
@@ -204,6 +233,10 @@ typedef enum {
     DIR_REVERSE = 2
 } MotorDir_t;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef enum {
     TRIP_NONE = 0,
     TRIP_ESTOP = 1,
@@ -304,7 +337,11 @@ typedef struct {
     uint8_t tempC;
     uint8_t dutyPct;
 } TripRec_t;
+<<<<<<< HEAD
 # 152 "Logic/Data/data_types.h"
+=======
+# 153 "Logic/Data/data_types.h"
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 extern DriveData_t g_driveData;
 extern DriveCfg_t g_driveCfg;
 # 11 "Logic/Communication/console/console.h" 2
@@ -484,8 +521,11 @@ Std_ReturnType UART_SetRxCallBack(UART_RxCallBackType callBack);
 
 
 Std_ReturnType UART_TxBusy(void);
+<<<<<<< HEAD
 void USART_TransmitByte(uint8_t byte);
 void USART_TransmitString(const char *str);
+=======
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 # 8 "Logic/Communication/console/console.c" 2
 # 1 "Logic/Communication/console/../../Control/drive_fsm/drive_fsm.h" 1
 # 13 "Logic/Communication/console/../../Control/drive_fsm/drive_fsm.h"
@@ -896,6 +936,7 @@ static inline int16_t Util_Deadband(int16_t value, int16_t lastValue, int16_t th
     return value;
 }
 # 14 "Logic/Communication/console/console.c" 2
+<<<<<<< HEAD
 # 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 1 3
 # 46 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
 # 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stddef.h" 1 3 4
@@ -905,6 +946,17 @@ static inline int16_t Util_Deadband(int16_t value, int16_t lastValue, int16_t th
 typedef unsigned int size_t;
 # 47 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 2 3
 # 125 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+=======
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 1 3
+# 46 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stddef.h" 1 3 4
+# 216 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stddef.h" 3 4
+
+# 216 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stddef.h" 3 4
+typedef unsigned int size_t;
+# 47 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 2 3
+# 125 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 extern int ffs(int __val) __attribute__((__const__));
 
 
@@ -918,6 +970,7 @@ extern int ffsl(long __val) __attribute__((__const__));
 
 
 __extension__ extern int ffsll(long long __val) __attribute__((__const__));
+<<<<<<< HEAD
 # 150 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
 extern void *memccpy(void *, const void *, int, size_t);
 # 162 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
@@ -987,6 +1040,77 @@ extern char *strtok(char *, const char *);
 # 593 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
 extern char *strtok_r(char *, const char *, char **);
 # 606 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+=======
+# 150 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern void *memccpy(void *, const void *, int, size_t);
+# 162 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern void *memchr(const void *, int, size_t) __attribute__((__pure__));
+# 180 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern int memcmp(const void *, const void *, size_t) __attribute__((__pure__));
+# 191 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern void *memcpy(void *, const void *, size_t);
+# 203 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern void *memmem(const void *, size_t, const void *, size_t) __attribute__((__pure__));
+# 213 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern void *memmove(void *, const void *, size_t);
+# 225 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern void *memrchr(const void *, int, size_t) __attribute__((__pure__));
+# 235 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern void *memset(void *, int, size_t);
+# 248 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern char *strcat(char *, const char *);
+# 262 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern char *strchr(const char *, int) __attribute__((__pure__));
+# 274 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern char *strchrnul(const char *, int) __attribute__((__pure__));
+# 287 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern int strcmp(const char *, const char *) __attribute__((__pure__));
+# 305 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern char *strcpy(char *, const char *);
+# 320 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern int strcasecmp(const char *, const char *) __attribute__((__pure__));
+# 333 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern char *strcasestr(const char *, const char *) __attribute__((__pure__));
+# 344 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern size_t strcspn(const char *__s, const char *__reject) __attribute__((__pure__));
+# 364 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern char *strdup(const char *s1);
+# 377 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern size_t strlcat(char *, const char *, size_t);
+# 388 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern size_t strlcpy(char *, const char *, size_t);
+# 399 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern size_t strlen(const char *) __attribute__((__pure__));
+# 411 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern char *strlwr(char *);
+# 422 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern char *strncat(char *, const char *, size_t);
+# 434 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern int strncmp(const char *, const char *, size_t) __attribute__((__pure__));
+# 449 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern char *strncpy(char *, const char *, size_t);
+# 464 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern int strncasecmp(const char *, const char *, size_t) __attribute__((__pure__));
+# 478 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern size_t strnlen(const char *, size_t) __attribute__((__pure__));
+# 491 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern char *strpbrk(const char *__s, const char *__accept) __attribute__((__pure__));
+# 505 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern char *strrchr(const char *, int) __attribute__((__pure__));
+# 515 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern char *strrev(char *);
+# 533 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern char *strsep(char **, const char *);
+# 544 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern size_t strspn(const char *__s, const char *__accept) __attribute__((__pure__));
+# 557 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern char *strstr(const char *, const char *) __attribute__((__pure__));
+# 576 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern char *strtok(char *, const char *);
+# 593 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+extern char *strtok_r(char *, const char *, char **);
+# 606 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\string.h" 3
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 extern char *strupr(char *);
 
 
@@ -995,6 +1119,7 @@ extern int strcoll(const char *s1, const char *s2);
 extern char *strerror(int errnum);
 extern size_t strxfrm(char *dest, const char *src, size_t n);
 # 15 "Logic/Communication/console/console.c" 2
+<<<<<<< HEAD
 # 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 1 3
 # 48 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
 # 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stddef.h" 1 3 4
@@ -1002,6 +1127,15 @@ extern size_t strxfrm(char *dest, const char *src, size_t n);
 typedef int wchar_t;
 # 49 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 2 3
 # 70 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+=======
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 1 3
+# 48 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stddef.h" 1 3 4
+# 328 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stddef.h" 3 4
+typedef int wchar_t;
+# 49 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 2 3
+# 70 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef struct {
  int quot;
  int rem;
@@ -1015,16 +1149,26 @@ typedef struct {
 
 
 typedef int (*__compar_fn_t)(const void *, const void *);
+<<<<<<< HEAD
 # 116 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+=======
+# 116 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 extern void abort(void) __attribute__((__noreturn__));
 
 
 
 
 extern int abs(int __i) __attribute__((__const__));
+<<<<<<< HEAD
 # 130 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
 extern long labs(long __i) __attribute__((__const__));
 # 153 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+=======
+# 130 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+extern long labs(long __i) __attribute__((__const__));
+# 153 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 extern void *bsearch(const void *__key, const void *__base, size_t __nmemb,
        size_t __size, int (*__compar)(const void *, const void *));
 
@@ -1041,6 +1185,7 @@ extern div_t div(int __num, int __denom) __asm__("__divmodhi4") __attribute__((_
 
 
 extern ldiv_t ldiv(long __num, long __denom) __asm__("__divmodsi4") __attribute__((__const__));
+<<<<<<< HEAD
 # 185 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
 extern void qsort(void *__base, size_t __nmemb, size_t __size,
     __compar_fn_t __compar);
@@ -1055,6 +1200,22 @@ extern int atoi(const char *__s) __attribute__((__pure__));
 # 288 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
 extern void exit(int __status) __attribute__((__noreturn__));
 # 300 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+=======
+# 185 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+extern void qsort(void *__base, size_t __nmemb, size_t __size,
+    __compar_fn_t __compar);
+# 218 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+extern long strtol(const char *__nptr, char **__endptr, int __base);
+# 252 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+extern unsigned long strtoul(const char *__nptr, char **__endptr, int __base);
+# 264 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+extern long atol(const char *__s) __attribute__((__pure__));
+# 276 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+extern int atoi(const char *__s) __attribute__((__pure__));
+# 288 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+extern void exit(int __status) __attribute__((__noreturn__));
+# 300 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 extern void *malloc(size_t __size) __attribute__((__malloc__));
 
 
@@ -1085,6 +1246,7 @@ extern char *__malloc_heap_end;
 
 
 extern void *calloc(size_t __nele, size_t __size) __attribute__((__malloc__));
+<<<<<<< HEAD
 # 348 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
 extern void *realloc(void *__ptr, size_t __size) __attribute__((__malloc__));
 
@@ -1092,6 +1254,15 @@ extern double strtod(const char *__nptr, char **__endptr);
 # 361 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
 extern double atof(const char *__nptr);
 # 383 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+=======
+# 348 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+extern void *realloc(void *__ptr, size_t __size) __attribute__((__malloc__));
+
+extern double strtod(const char *__nptr, char **__endptr);
+# 361 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+extern double atof(const char *__nptr);
+# 383 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 extern int rand(void);
 
 
@@ -1104,7 +1275,11 @@ extern void srand(unsigned int __seed);
 
 
 extern int rand_r(unsigned long *__ctx);
+<<<<<<< HEAD
 # 428 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+=======
+# 428 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 extern __inline__ __attribute__((__gnu_inline__))
 char *itoa (int __val, char *__s, int __radix)
 {
@@ -1119,7 +1294,11 @@ char *itoa (int __val, char *__s, int __radix)
  return __itoa_ncheck (__val, __s, __radix);
     }
 }
+<<<<<<< HEAD
 # 473 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+=======
+# 473 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 extern __inline__ __attribute__((__gnu_inline__))
 char *ltoa (long __val, char *__s, int __radix)
 {
@@ -1134,7 +1313,11 @@ char *ltoa (long __val, char *__s, int __radix)
  return __ltoa_ncheck (__val, __s, __radix);
     }
 }
+<<<<<<< HEAD
 # 516 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+=======
+# 516 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 extern __inline__ __attribute__((__gnu_inline__))
 char *utoa (unsigned int __val, char *__s, int __radix)
 {
@@ -1149,7 +1332,11 @@ char *utoa (unsigned int __val, char *__s, int __radix)
  return __utoa_ncheck (__val, __s, __radix);
     }
 }
+<<<<<<< HEAD
 # 558 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+=======
+# 558 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 extern __inline__ __attribute__((__gnu_inline__))
 char *ultoa (unsigned long __val, char *__s, int __radix)
 {
@@ -1164,7 +1351,11 @@ char *ultoa (unsigned long __val, char *__s, int __radix)
  return __ultoa_ncheck (__val, __s, __radix);
     }
 }
+<<<<<<< HEAD
 # 590 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+=======
+# 590 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 extern long random(void);
 
 
@@ -1179,6 +1370,7 @@ extern void srandom(unsigned long __seed);
 
 
 extern long random_r(unsigned long *__ctx);
+<<<<<<< HEAD
 # 649 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
 extern char *dtostre(double __val, char *__s, unsigned char __prec,
        unsigned char __flags);
@@ -1186,6 +1378,15 @@ extern char *dtostre(double __val, char *__s, unsigned char __prec,
 extern char *dtostrf(double __val, signed char __width,
                      unsigned char __prec, char *__s);
 # 685 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+=======
+# 649 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+extern char *dtostre(double __val, char *__s, unsigned char __prec,
+       unsigned char __flags);
+# 666 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+extern char *dtostrf(double __val, signed char __width,
+                     unsigned char __prec, char *__s);
+# 685 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdlib.h" 3
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 extern int atexit(void (*)(void));
 extern int system (const char *);
 extern char *getenv (const char *);

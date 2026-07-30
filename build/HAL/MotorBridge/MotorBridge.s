@@ -38,11 +38,15 @@ BRIDGE_SetDirection:
 	breq .L4
 	sbiw r24,2
 	breq .L5
+<<<<<<< HEAD
 	ldi r21,0
+=======
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	ldi r20,0
 	rjmp .L8
 .L4:
 	ldi r20,lo8(1)
+<<<<<<< HEAD
 	ldi r21,0
 .L8:
 	ldi r23,0
@@ -68,6 +72,23 @@ BRIDGE_SetDirection:
 	ldi r23,0
 	ldi r24,lo8(1)
 	ldi r25,0
+=======
+.L8:
+	ldi r22,0
+	ldi r24,lo8(1)
+	call GPIO_set_pin_value
+	ldi r20,0
+	rjmp .L9
+.L5:
+	ldi r20,0
+	ldi r22,0
+	ldi r24,lo8(1)
+	call GPIO_set_pin_value
+	ldi r20,lo8(1)
+.L9:
+	ldi r22,lo8(1)
+	ldi r24,lo8(1)
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	call GPIO_set_pin_value
 	ldi r25,0
 	ldi r24,0
@@ -91,11 +112,16 @@ BRIDGE_Enable:
 /* stack size = 0 */
 .L__stack_usage = 0
 	ldi r20,lo8(1)
+<<<<<<< HEAD
 	ldi r21,0
 	ldi r22,lo8(2)
 	ldi r23,0
 	ldi r24,lo8(1)
 	ldi r25,0
+=======
+	ldi r22,lo8(2)
+	ldi r24,lo8(1)
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	call GPIO_set_pin_value
 	ldi r25,0
 	ldi r24,0
@@ -109,12 +135,18 @@ BRIDGE_Disable:
 /* frame size = 0 */
 /* stack size = 0 */
 .L__stack_usage = 0
+<<<<<<< HEAD
 	ldi r21,0
 	ldi r20,0
 	ldi r22,lo8(2)
 	ldi r23,0
 	ldi r24,lo8(1)
 	ldi r25,0
+=======
+	ldi r20,0
+	ldi r22,lo8(2)
+	ldi r24,lo8(1)
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	call GPIO_set_pin_value
 	ldi r25,0
 	ldi r24,0
@@ -131,6 +163,7 @@ BRIDGE_ForceStop:
 	ldi r25,0
 	ldi r24,0
 	call Timer1_SetDuty
+<<<<<<< HEAD
 	ldi r21,0
 	ldi r20,0
 	ldi r22,lo8(2)
@@ -151,6 +184,19 @@ BRIDGE_ForceStop:
 	ldi r23,0
 	ldi r24,lo8(1)
 	ldi r25,0
+=======
+	ldi r20,0
+	ldi r22,lo8(2)
+	ldi r24,lo8(1)
+	call GPIO_set_pin_value
+	ldi r20,0
+	ldi r22,0
+	ldi r24,lo8(1)
+	call GPIO_set_pin_value
+	ldi r20,0
+	ldi r22,lo8(1)
+	ldi r24,lo8(1)
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	jmp GPIO_set_pin_value
 	.size	BRIDGE_ForceStop, .-BRIDGE_ForceStop
 	.ident	"GCC: (GNU) 7.3.0"

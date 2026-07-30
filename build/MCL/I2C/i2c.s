@@ -24,6 +24,7 @@ I2C_Init:
 /* epilogue start */
 	ret
 	.size	I2C_Init, .-I2C_Init
+<<<<<<< HEAD
 .global	I2C_InitMaster
 	.type	I2C_InitMaster, @function
 I2C_InitMaster:
@@ -33,6 +34,8 @@ I2C_InitMaster:
 .L__stack_usage = 0
 	jmp I2C_Init
 	.size	I2C_InitMaster, .-I2C_InitMaster
+=======
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 .global	I2C_Start
 	.type	I2C_Start, @function
 I2C_Start:
@@ -42,19 +45,33 @@ I2C_Start:
 .L__stack_usage = 0
 	ldi r24,lo8(-92)
 	out 0x36,r24
+<<<<<<< HEAD
 .L4:
 	in __tmp_reg__,0x36
 	sbrs __tmp_reg__,7
 	rjmp .L4
+=======
+.L3:
+	in __tmp_reg__,0x36
+	sbrs __tmp_reg__,7
+	rjmp .L3
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	in r25,0x1
 	andi r25,lo8(-8)
 	ldi r18,lo8(1)
 	ldi r19,0
 	cpi r25,lo8(8)
+<<<<<<< HEAD
 	brne .L5
 	ldi r19,0
 	ldi r18,0
 .L5:
+=======
+	brne .L4
+	ldi r19,0
+	ldi r18,0
+.L4:
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	movw r24,r18
 /* epilogue start */
 	ret
@@ -83,6 +100,7 @@ I2C_WriteByte:
 	out 0x3,r24
 	ldi r24,lo8(-124)
 	out 0x36,r24
+<<<<<<< HEAD
 .L10:
 	in __tmp_reg__,0x36
 	sbrs __tmp_reg__,7
@@ -143,4 +161,29 @@ I2C_WriteData:
 .L__stack_usage = 0
 	jmp I2C_WriteByte
 	.size	I2C_WriteData, .-I2C_WriteData
+=======
+.L9:
+	in __tmp_reg__,0x36
+	sbrs __tmp_reg__,7
+	rjmp .L9
+	in r18,0x1
+	andi r18,lo8(-8)
+	cpi r18,lo8(24)
+	breq .L13
+	cpi r18,lo8(40)
+	breq .L13
+	ldi r24,lo8(1)
+	ldi r25,0
+	cpi r18,lo8(64)
+	brne .L8
+	ldi r24,0
+	ret
+.L13:
+	ldi r24,0
+	ldi r25,0
+.L8:
+/* epilogue start */
+	ret
+	.size	I2C_WriteByte, .-I2C_WriteByte
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	.ident	"GCC: (GNU) 7.3.0"

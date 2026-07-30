@@ -83,6 +83,7 @@ PANEL_Init:
 	ldi r22,lo8(4)
 	ldi r24,lo8(2)
 	call GPIO_set_pin_Direction
+<<<<<<< HEAD
 	ldi r20,0
 	ldi r22,lo8(3)
 	ldi r24,lo8(1)
@@ -98,6 +99,35 @@ PANEL_Init:
 	ldi r20,0
 	ldi r22,lo8(4)
 	ldi r24,lo8(2)
+=======
+	ldi r21,0
+	ldi r20,0
+	ldi r22,lo8(3)
+	ldi r23,0
+	ldi r24,lo8(1)
+	ldi r25,0
+	call GPIO_write_pin
+	ldi r21,0
+	ldi r20,0
+	ldi r22,lo8(2)
+	ldi r23,0
+	ldi r24,lo8(2)
+	ldi r25,0
+	call GPIO_write_pin
+	ldi r21,0
+	ldi r20,0
+	ldi r22,lo8(3)
+	ldi r23,0
+	ldi r24,lo8(2)
+	ldi r25,0
+	call GPIO_write_pin
+	ldi r21,0
+	ldi r20,0
+	ldi r22,lo8(4)
+	ldi r23,0
+	ldi r24,lo8(2)
+	ldi r25,0
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	call GPIO_write_pin
 	ldi r25,0
 	ldi r24,0
@@ -114,6 +144,11 @@ PANEL_Init:
 .global	PANEL_Poll
 	.type	PANEL_Poll, @function
 PANEL_Poll:
+<<<<<<< HEAD
+=======
+	push r12
+	push r13
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	push r14
 	push r15
 	push r16
@@ -130,6 +165,7 @@ PANEL_Poll:
 	out __SP_L__,r28
 /* prologue: function */
 /* frame size = 12 */
+<<<<<<< HEAD
 /* stack size = 18 */
 .L__stack_usage = 18
 	ldi r22,lo8(5)
@@ -149,21 +185,67 @@ PANEL_Poll:
 	call GPIO_read_pin
 	ldi r25,lo8(1)
 	cpse r15,__zero_reg__
+=======
+/* stack size = 20 */
+.L__stack_usage = 20
+	ldi r22,lo8(5)
+	ldi r23,0
+	ldi r24,lo8(2)
+	ldi r25,0
+	call GPIO_read_pin
+	movw r12,r24
+	ldi r22,lo8(6)
+	ldi r23,0
+	ldi r24,lo8(2)
+	ldi r25,0
+	call GPIO_read_pin
+	movw r14,r24
+	ldi r22,lo8(7)
+	ldi r23,0
+	ldi r24,lo8(2)
+	ldi r25,0
+	call GPIO_read_pin
+	movw r16,r24
+	ldi r22,lo8(6)
+	ldi r23,0
+	ldi r24,lo8(3)
+	ldi r25,0
+	call GPIO_read_pin
+	movw r18,r24
+	ldi r25,lo8(1)
+	or r12,r13
+	breq .L3
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	ldi r25,0
 .L3:
 	std Y+9,r25
 	ldi r25,lo8(1)
+<<<<<<< HEAD
 	cpse r16,__zero_reg__
+=======
+	or r14,r15
+	breq .L4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	ldi r25,0
 .L4:
 	std Y+10,r25
 	ldi r25,lo8(1)
+<<<<<<< HEAD
 	cpse r17,__zero_reg__
+=======
+	or r16,r17
+	breq .L5
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	ldi r25,0
 .L5:
 	std Y+11,r25
 	ldi r25,lo8(1)
+<<<<<<< HEAD
 	cpse r24,__zero_reg__
+=======
+	or r18,r19
+	breq .L6
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	ldi r25,0
 .L6:
 	std Y+12,r25
@@ -226,6 +308,11 @@ PANEL_Poll:
 	pop r16
 	pop r15
 	pop r14
+<<<<<<< HEAD
+=======
+	pop r13
+	pop r12
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	ret
 .L7:
 	cpi r18,lo8(1)
@@ -287,6 +374,7 @@ PANEL_IsLocalMode:
 /* stack size = 0 */
 .L__stack_usage = 0
 	ldi r22,lo8(4)
+<<<<<<< HEAD
 	ldi r24,lo8(3)
 	call GPIO_read_pin
 	ldi r25,lo8(1)
@@ -294,6 +382,18 @@ PANEL_IsLocalMode:
 	ldi r25,0
 .L26:
 	mov r24,r25
+=======
+	ldi r23,0
+	ldi r24,lo8(3)
+	ldi r25,0
+	call GPIO_read_pin
+	ldi r18,lo8(1)
+	or r24,r25
+	breq .L26
+	ldi r18,0
+.L26:
+	mov r24,r18
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 /* epilogue start */
 	ret
 	.size	PANEL_IsLocalMode, .-PANEL_IsLocalMode
@@ -316,6 +416,7 @@ PANEL_SetRunLED:
 .L32:
 	sts g_blinkCounter,__zero_reg__
 	ldi r22,lo8(3)
+<<<<<<< HEAD
 	ldi r24,lo8(1)
 	jmp GPIO_toggle_pin
 .L31:
@@ -326,6 +427,24 @@ PANEL_SetRunLED:
 .L34:
 	ldi r22,lo8(3)
 	ldi r24,lo8(1)
+=======
+	ldi r23,0
+	ldi r24,lo8(1)
+	ldi r25,0
+	jmp GPIO_toggle_pin
+.L31:
+	ldi r20,lo8(1)
+	ldi r21,0
+	cpse r24,__zero_reg__
+	rjmp .L34
+	ldi r21,0
+	ldi r20,0
+.L34:
+	ldi r22,lo8(3)
+	ldi r23,0
+	ldi r24,lo8(1)
+	ldi r25,0
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	jmp GPIO_write_pin
 	.size	PANEL_SetRunLED, .-PANEL_SetRunLED
 .global	PANEL_SetFaultLED
@@ -336,12 +455,25 @@ PANEL_SetFaultLED:
 /* stack size = 0 */
 .L__stack_usage = 0
 	ldi r20,lo8(1)
+<<<<<<< HEAD
 	cpse r24,__zero_reg__
 	rjmp .L37
 	ldi r20,0
 .L37:
 	ldi r22,lo8(2)
 	ldi r24,lo8(2)
+=======
+	ldi r21,0
+	cpse r24,__zero_reg__
+	rjmp .L37
+	ldi r21,0
+	ldi r20,0
+.L37:
+	ldi r22,lo8(2)
+	ldi r23,0
+	ldi r24,lo8(2)
+	ldi r25,0
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	jmp GPIO_write_pin
 	.size	PANEL_SetFaultLED, .-PANEL_SetFaultLED
 .global	PANEL_SetDirectionLEDs
@@ -356,10 +488,15 @@ PANEL_SetDirectionLEDs:
 	breq .L40
 	sbiw r24,2
 	breq .L41
+<<<<<<< HEAD
+=======
+	ldi r21,0
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	ldi r20,0
 	rjmp .L43
 .L40:
 	ldi r20,lo8(1)
+<<<<<<< HEAD
 .L43:
 	ldi r22,lo8(3)
 	ldi r24,lo8(2)
@@ -375,6 +512,33 @@ PANEL_SetDirectionLEDs:
 .L44:
 	ldi r22,lo8(4)
 	ldi r24,lo8(2)
+=======
+	ldi r21,0
+.L43:
+	ldi r22,lo8(3)
+	ldi r23,0
+	ldi r24,lo8(2)
+	ldi r25,0
+	call GPIO_write_pin
+	ldi r21,0
+	ldi r20,0
+	rjmp .L44
+.L41:
+	ldi r21,0
+	ldi r20,0
+	ldi r22,lo8(3)
+	ldi r23,0
+	ldi r24,lo8(2)
+	ldi r25,0
+	call GPIO_write_pin
+	ldi r20,lo8(1)
+	ldi r21,0
+.L44:
+	ldi r22,lo8(4)
+	ldi r23,0
+	ldi r24,lo8(2)
+	ldi r25,0
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	jmp GPIO_write_pin
 	.size	PANEL_SetDirectionLEDs, .-PANEL_SetDirectionLEDs
 	.local	g_blinkCounter

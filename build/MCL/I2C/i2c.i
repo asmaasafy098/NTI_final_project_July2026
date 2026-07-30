@@ -6,12 +6,21 @@
 
 
 
+<<<<<<< HEAD
 # 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 1 3 4
 # 9 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 3 4
 # 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 1 3 4
 # 125 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
 
 # 125 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+=======
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 1 3 4
+# 9 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 3 4
+# 1 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 1 3 4
+# 125 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+
+# 125 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef signed int int8_t __attribute__((__mode__(__QI__)));
 typedef unsigned int uint8_t __attribute__((__mode__(__QI__)));
 typedef signed int int16_t __attribute__ ((__mode__ (__HI__)));
@@ -21,14 +30,22 @@ typedef unsigned int uint32_t __attribute__ ((__mode__ (__SI__)));
 
 typedef signed int int64_t __attribute__((__mode__(__DI__)));
 typedef unsigned int uint64_t __attribute__((__mode__(__DI__)));
+<<<<<<< HEAD
 # 146 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+=======
+# 146 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef int16_t intptr_t;
 
 
 
 
 typedef uint16_t uintptr_t;
+<<<<<<< HEAD
 # 163 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+=======
+# 163 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef int8_t int_least8_t;
 
 
@@ -70,7 +87,11 @@ typedef int64_t int_least64_t;
 
 
 typedef uint64_t uint_least64_t;
+<<<<<<< HEAD
 # 217 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+=======
+# 217 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef int8_t int_fast8_t;
 
 
@@ -112,14 +133,22 @@ typedef int64_t int_fast64_t;
 
 
 typedef uint64_t uint_fast64_t;
+<<<<<<< HEAD
 # 277 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+=======
+# 277 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef int64_t intmax_t;
 
 
 
 
 typedef uint64_t uintmax_t;
+<<<<<<< HEAD
 # 10 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 2 3 4
+=======
+# 10 "c:\\users\\alroad laptop\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 2 3 4
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 # 5 "MCL/I2C/../../Service/STD_Types.h" 2
 
 
@@ -186,16 +215,39 @@ typedef enum
     I2C_NACK = 0,
     I2C_ACK = 1
 } I2C_AckType;
+<<<<<<< HEAD
 # 53 "MCL/I2C/i2c_interface.h"
+=======
+
+
+
+
+
+
+typedef struct
+{
+    uint32_t sclFrequency;
+} I2C_MasterConfigType;
+
+
+
+
+
+
+
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 typedef struct
 {
     uint8_t ownAddress;
     uint8_t enableGeneralCall;
 } I2C_SlaveConfigType;
 
+<<<<<<< HEAD
 typedef struct {
     uint32_t sclFrequency;
 } I2C_MasterConfigType;
+=======
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 
 
 
@@ -206,6 +258,7 @@ Std_ReturnType I2C_Start(void);
 Std_ReturnType I2C_Stop(void);
 
 Std_ReturnType I2C_WriteByte(uint8_t data);
+<<<<<<< HEAD
 
 
 
@@ -221,6 +274,8 @@ Std_ReturnType I2C_WriteAddress(uint8_t address, uint8_t rw_bit);
 
 Std_ReturnType I2C_WriteData(uint8_t data);
 Std_ReturnType I2C_InitMaster(const I2C_MasterConfigType *config);
+=======
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 # 5 "MCL/I2C/i2c.c" 2
 
 
@@ -237,6 +292,7 @@ Std_ReturnType I2C_Init(void)
 }
 
 
+<<<<<<< HEAD
 Std_ReturnType I2C_InitMaster(const I2C_MasterConfigType *config)
 {
 
@@ -246,6 +302,8 @@ Std_ReturnType I2C_InitMaster(const I2C_MasterConfigType *config)
 }
 
 
+=======
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 Std_ReturnType I2C_Start(void)
 {
     (*(volatile uint8_t *)0x56) = (1 << 7) | (1 << 5) | (1 << 2);
@@ -279,6 +337,7 @@ Std_ReturnType I2C_WriteByte(uint8_t data)
     }
     return ((Std_ReturnType)0x00);
 }
+<<<<<<< HEAD
 
 
 Std_ReturnType I2C_WriteAddress(uint8_t address, uint8_t rw_bit)
@@ -301,3 +360,5 @@ Std_ReturnType I2C_WriteData(uint8_t data)
 {
     return I2C_WriteByte(data);
 }
+=======
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f

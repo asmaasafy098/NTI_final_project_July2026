@@ -27,6 +27,7 @@ Std_ReturnType LCD_Aip31068_SendCommand(LCD_Aip31068_HandleType *handle, uint8_t
     return E_OK;
 }
 
+<<<<<<< HEAD
 
 Std_ReturnType LCD_Aip31068_WriteChar(LCD_Aip31068_HandleType *handle, uint8_t character)
 {
@@ -51,9 +52,37 @@ Std_ReturnType LCD_Aip31068_WriteString(LCD_Aip31068_HandleType *handle, const u
         if (I2C_WriteData(*pString) != E_OK) { I2C_Stop(); return E_NOK; }
         pString++;
     }
+=======
+    if (I2C_Start() != E_OK)
+    return E_NOK;
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 
+/* Send Slave Address + Write bit */
+if (I2C_WriteByte((handle->i2cAddress << 1) | 0) != E_OK)
+{
     I2C_Stop();
-    return E_OK;
+    return E_NOK;
+}
+
+/* Send Control Byte */
+if (I2C_WriteByte(controlByte) != E_OK)
+{
+    I2C_Stop();
+    return E_NOK;
+}
+
+/* Send Data */
+for (uint8_t i = 0; i < length; i++)
+{
+    if (I2C_WriteByte(pData[i]) != E_OK)
+    {
+        I2C_Stop();
+        return E_NOK;
+    }
+}
+
+I2C_Stop();
+return E_OK;
 }
 
 
@@ -136,6 +165,7 @@ Std_ReturnType LCD_Update(const DriveData_t *pData)
         return E_NOK;
     }
 
+<<<<<<< HEAD
     switch (pData->direction)
     {
         case DIR_FORWARD: dirChar = 'F'; break;
@@ -185,4 +215,75 @@ Std_ReturnType LCD_ShowTrip(Trip_t tripCode)
     }
 
     return E_OK;
+=======
+    return LCD_Aip31068_SetCursor(handle, 0, 0);
+}
+
+static LCD_Aip31068_HandleType lcd =
+{
+    .i2cAddress = LCD_AIP31068_DEFAULT_ADDRESS,
+    .rows = 2,
+    .cols = 16
+};
+
+void LCD_Update(const DriveData_t *data)
+{
+    LCD_Aip31068_Clear(&lcd);
+
+    LCD_Aip31068_WriteStringAt(&lcd,0,0,(uint8_t*)"RPM:");
+    LCD_Aip31068_WriteNumber(&lcd,data->measuredRpm);
+
+    LCD_Aip31068_WriteStringAt(&lcd,1,0,(uint8_t*)"SET:");
+    LCD_Aip31068_WriteNumber(&lcd,data->setpointRpm);
+}
+
+void LCD_ShowTrip(Trip_t trip)
+{
+    LCD_Aip31068_Clear(&lcd);
+
+    LCD_Aip31068_WriteStringAt(&lcd, 0, 0, (const uint8_t *)"FAULT");
+
+    switch (trip)
+    {
+        case TRIP_ESTOP:
+            LCD_Aip31068_WriteStringAt(&lcd, 1, 0, (const uint8_t *)"E-STOP");
+            break;
+
+        case TRIP_SHORT:
+            LCD_Aip31068_WriteStringAt(&lcd, 1, 0, (const uint8_t *)"SHORT");
+            break;
+
+        case TRIP_OVERLOAD:
+            LCD_Aip31068_WriteStringAt(&lcd, 1, 0, (const uint8_t *)"OVERLOAD");
+            break;
+
+        case TRIP_OVERTEMP:
+            LCD_Aip31068_WriteStringAt(&lcd, 1, 0, (const uint8_t *)"OVERTEMP");
+            break;
+
+        case TRIP_UNDERVOLT:
+            LCD_Aip31068_WriteStringAt(&lcd, 1, 0, (const uint8_t *)"UNDERVOLT");
+            break;
+
+        case TRIP_OVERVOLT:
+            LCD_Aip31068_WriteStringAt(&lcd, 1, 0, (const uint8_t *)"OVERVOLT");
+            break;
+
+        case TRIP_STALL:
+            LCD_Aip31068_WriteStringAt(&lcd, 1, 0, (const uint8_t *)"STALL");
+            break;
+
+        case TRIP_OVERSPEED:
+            LCD_Aip31068_WriteStringAt(&lcd, 1, 0, (const uint8_t *)"OVERSPEED");
+            break;
+
+        case TRIP_NOFEEDBACK:
+            LCD_Aip31068_WriteStringAt(&lcd, 1, 0, (const uint8_t *)"NO FEEDBACK");
+            break;
+
+        default:
+            LCD_Aip31068_WriteStringAt(&lcd, 1, 0, (const uint8_t *)"UNKNOWN");
+            break;
+    }
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 }

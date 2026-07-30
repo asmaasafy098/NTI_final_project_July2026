@@ -88,7 +88,11 @@ BUZZER_Update:
 .L14:
 	sts Buzzer_TickCounter+1,__zero_reg__
 	sts Buzzer_TickCounter,__zero_reg__
+<<<<<<< HEAD
 	lds r18,soundOn.1487
+=======
+	lds r18,soundOn.1485
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	tst r18
 	breq .L15
 	ldi r25,0
@@ -96,11 +100,19 @@ BUZZER_Update:
 .L17:
 	call Timer2_SetTone
 	ldi r24,lo8(1)
+<<<<<<< HEAD
 	lds r25,soundOn.1487
 	cpse r25,__zero_reg__
 	ldi r24,0
 .L18:
 	sts soundOn.1487,r24
+=======
+	lds r25,soundOn.1485
+	cpse r25,__zero_reg__
+	ldi r24,0
+.L18:
+	sts soundOn.1485,r24
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 .L9:
 /* epilogue start */
 	ret
@@ -116,9 +128,15 @@ BUZZER_Update:
 	rjmp .L17
 	.size	BUZZER_Update, .-BUZZER_Update
 	.data
+<<<<<<< HEAD
 	.type	soundOn.1487, @object
 	.size	soundOn.1487, 1
 soundOn.1487:
+=======
+	.type	soundOn.1485, @object
+	.size	soundOn.1485, 1
+soundOn.1485:
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	.byte	1
 .global	Buzzer_TickCounter
 	.section .bss

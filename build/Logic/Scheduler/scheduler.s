@@ -49,10 +49,21 @@ SCHED_Init:
 	sts g_busyTime+2,__zero_reg__
 	sts g_busyTime+3,__zero_reg__
 	call TIMER_GetTick
+<<<<<<< HEAD
 	sts g_lastLoadCheck,r22
 	sts g_lastLoadCheck+1,r23
 	sts g_lastLoadCheck+2,r24
 	sts g_lastLoadCheck+3,r25
+=======
+	mov __tmp_reg__,r25
+	lsl r0
+	sbc r26,r26
+	sbc r27,r27
+	sts g_lastLoadCheck,r24
+	sts g_lastLoadCheck+1,r25
+	sts g_lastLoadCheck+2,r26
+	sts g_lastLoadCheck+3,r27
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	sts g_maxLoad,__zero_reg__
 /* epilogue start */
 	ret
@@ -79,8 +90,15 @@ SCHED_Run:
 /* stack size = 14 */
 .L__stack_usage = 14
 	call TIMER_GetTick
+<<<<<<< HEAD
 	movw r12,r22
 	movw r14,r24
+=======
+	movw r12,r24
+	lsl r25
+	sbc r14,r14
+	sbc r15,r15
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	mov r11,__zero_reg__
 	ldi r24,lo8(25)
 	mov r10,r24
@@ -194,8 +212,15 @@ SCHED_Run:
 	brsh .+2
 	rjmp .L6
 	call TIMER_GetTick
+<<<<<<< HEAD
 	movw r4,r22
 	movw r6,r24
+=======
+	movw r4,r24
+	lsl r25
+	sbc r6,r6
+	sbc r7,r7
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	std Y+20,r4
 	std Y+21,r5
 	std Y+22,r6
@@ -204,12 +229,20 @@ SCHED_Run:
 	ldd r31,Y+1
 	icall
 	call TIMER_GetTick
+<<<<<<< HEAD
 	movw r26,r24
 	movw r24,r22
+=======
+	mov __tmp_reg__,r25
+	lsl r0
+	sbc r26,r26
+	sbc r27,r27
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	sub r24,r4
 	sbc r25,r5
 	sbc r26,r6
 	sbc r27,r7
+<<<<<<< HEAD
 	ldd r4,Y+18
 	ldd r5,Y+19
 	mov r7,__zero_reg__
@@ -218,10 +251,21 @@ SCHED_Run:
 	cpc r5,r25
 	cpc r6,r26
 	cpc r7,r27
+=======
+	ldd r20,Y+18
+	ldd r21,Y+19
+	ldi r23,0
+	ldi r22,0
+	cp r20,r24
+	cpc r21,r25
+	cpc r22,r26
+	cpc r23,r27
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	brsh .L7
 	std Y+19,r25
 	std Y+18,r24
 .L7:
+<<<<<<< HEAD
 	lds r4,g_busyTime
 	lds r5,g_busyTime+1
 	lds r6,g_busyTime+2
@@ -234,6 +278,20 @@ SCHED_Run:
 	sts g_busyTime+1,r5
 	sts g_busyTime+2,r6
 	sts g_busyTime+3,r7
+=======
+	lds r20,g_busyTime
+	lds r21,g_busyTime+1
+	lds r22,g_busyTime+2
+	lds r23,g_busyTime+3
+	add r24,r20
+	adc r25,r21
+	adc r26,r22
+	adc r27,r23
+	sts g_busyTime,r24
+	sts g_busyTime+1,r25
+	sts g_busyTime+2,r26
+	sts g_busyTime+3,r27
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	mul r10,r16
 	movw r30,r0
 	mul r10,r17
@@ -382,6 +440,7 @@ SCHED_GetLoadPercent:
 /* stack size = 4 */
 .L__stack_usage = 4
 	call TIMER_GetTick
+<<<<<<< HEAD
 	lds r12,g_lastLoadCheck
 	lds r13,g_lastLoadCheck+1
 	lds r14,g_lastLoadCheck+2
@@ -394,6 +453,24 @@ SCHED_GetLoadPercent:
 	sbci r23,3
 	cpc r24,__zero_reg__
 	cpc r25,__zero_reg__
+=======
+	mov __tmp_reg__,r25
+	lsl r0
+	sbc r26,r26
+	sbc r27,r27
+	lds r20,g_lastLoadCheck
+	lds r21,g_lastLoadCheck+1
+	lds r22,g_lastLoadCheck+2
+	lds r23,g_lastLoadCheck+3
+	sub r24,r20
+	sbc r25,r21
+	sbc r26,r22
+	sbc r27,r23
+	cpi r24,-24
+	sbci r25,3
+	cpc r26,__zero_reg__
+	cpc r27,__zero_reg__
+>>>>>>> d5517793cc5f97094d7b5f65a675596bffebcd3f
 	brlo .L29
 	call SCHED_Run
 .L29:
