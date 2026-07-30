@@ -6,7 +6,7 @@ OBJCOPY = $(PIO)/toolchain-atmelavr/bin/avr-objcopy.exe
 AVRDUDE = $(PIO)/tool-avrdude/avrdude.exe
 
 MCU     = m32
-F_CPU   = 16000000UL
+F_CPU   = 8000000UL
 
 CFLAGS  = -mmcu=atmega32 -DF_CPU=$(F_CPU) -std=c99 -Wall -Os
 DEPFLAGS = -MMD -MP

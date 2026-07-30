@@ -71,8 +71,8 @@ UART_Init:
 	dec r24
 	brne 1b
 	ldi r22,0
-	ldi r23,lo8(36)
-	ldi r24,lo8(-12)
+	ldi r23,lo8(18)
+	ldi r24,lo8(122)
 	ldi r25,0
 	call __udivmodsi4
 	subi r18,1
