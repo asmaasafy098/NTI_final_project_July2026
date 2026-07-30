@@ -378,3 +378,4 @@ ISR(USART_RXC_vect)
     uint8_t ch = UDR;
     CONSOLE_ProcessChar(ch);
 }
+/*  */
