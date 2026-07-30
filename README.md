@@ -1265,7 +1265,7 @@ Summary DONE
 
 Shorouk (Modules) DONE
 
-DataTypes
+DataTypes     | Complete
 
 DataManager   |   Complete
 

@@ -6,12 +6,12 @@
 
 
 
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 1 3 4
-# 9 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 3 4
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 1 3 4
-# 125 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+# 1 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 1 3 4
+# 9 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 3 4
+# 1 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 1 3 4
+# 125 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
 
-# 125 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+# 125 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
 typedef signed int int8_t __attribute__((__mode__(__QI__)));
 typedef unsigned int uint8_t __attribute__((__mode__(__QI__)));
 typedef signed int int16_t __attribute__ ((__mode__ (__HI__)));
@@ -21,14 +21,14 @@ typedef unsigned int uint32_t __attribute__ ((__mode__ (__SI__)));
 
 typedef signed int int64_t __attribute__((__mode__(__DI__)));
 typedef unsigned int uint64_t __attribute__((__mode__(__DI__)));
-# 146 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+# 146 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
 typedef int16_t intptr_t;
 
 
 
 
 typedef uint16_t uintptr_t;
-# 163 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+# 163 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
 typedef int8_t int_least8_t;
 
 
@@ -70,7 +70,7 @@ typedef int64_t int_least64_t;
 
 
 typedef uint64_t uint_least64_t;
-# 217 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+# 217 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
 typedef int8_t int_fast8_t;
 
 
@@ -112,14 +112,14 @@ typedef int64_t int_fast64_t;
 
 
 typedef uint64_t uint_fast64_t;
-# 277 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
+# 277 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\stdint.h" 3 4
 typedef int64_t intmax_t;
 
 
 
 
 typedef uint64_t uintmax_t;
-# 10 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 2 3 4
+# 10 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\lib\\gcc\\avr\\7.3.0\\include\\stdint.h" 2 3 4
 # 5 "MCL/UART/../../Service/STD_Types.h" 2
 
 
@@ -177,28 +177,28 @@ typedef Std_ReturnType STD_ReturnType;
 # 2 "MCL/UART/uart_modified.c" 2
 # 1 "MCL/UART/../../Service/Bit_Math.h" 1
 # 3 "MCL/UART/uart_modified.c" 2
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\interrupt.h" 1 3
-# 38 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\interrupt.h" 3
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 1 3
-# 99 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\sfr_defs.h" 1 3
-# 126 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\sfr_defs.h" 3
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 1 3
-# 77 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 3
+# 1 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\interrupt.h" 1 3
+# 38 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\interrupt.h" 3
+# 1 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 1 3
+# 99 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
+# 1 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\sfr_defs.h" 1 3
+# 126 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\sfr_defs.h" 3
+# 1 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 1 3
+# 77 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 3
 
-# 77 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 3
+# 77 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\inttypes.h" 3
 typedef int32_t int_farptr_t;
 
 
 
 typedef uint32_t uint_farptr_t;
-# 127 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\sfr_defs.h" 2 3
-# 100 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
-# 244 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 1 3
-# 720 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 3
+# 127 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\sfr_defs.h" 2 3
+# 100 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+# 244 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
+# 1 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 1 3
+# 720 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 3
        
-# 721 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 3
+# 721 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\iom32.h" 3
 
        
        
@@ -223,35 +223,35 @@ typedef uint32_t uint_farptr_t;
        
        
        
-# 245 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
-# 703 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\portpins.h" 1 3
-# 704 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+# 245 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+# 703 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 3
+# 1 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\portpins.h" 1 3
+# 704 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
 
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\common.h" 1 3
-# 706 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+# 1 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\common.h" 1 3
+# 706 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
 
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\version.h" 1 3
-# 708 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
-
-
+# 1 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\version.h" 1 3
+# 708 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
 
 
 
 
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\fuse.h" 1 3
-# 248 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\fuse.h" 3
+
+
+# 1 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\fuse.h" 1 3
+# 248 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\fuse.h" 3
 typedef struct
 {
     unsigned char low;
     unsigned char high;
 } __fuse_t;
-# 715 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+# 715 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
 
 
-# 1 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\lock.h" 1 3
-# 718 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
-# 39 "c:\\users\\hp\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\interrupt.h" 2 3
+# 1 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\lock.h" 1 3
+# 718 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\io.h" 2 3
+# 39 "c:\\users\\ahmed\\.platformio\\packages\\toolchain-atmelavr\\avr\\include\\avr\\interrupt.h" 2 3
 # 4 "MCL/UART/uart_modified.c" 2
 # 1 "MCL/UART/uart_registers.h" 1
 # 5 "MCL/UART/uart_modified.c" 2
@@ -351,7 +351,7 @@ Std_ReturnType UART_Init(const UART_ConfigType *addConfig)
     {
         return ((Std_ReturnType)0x01);
     }
-    local_UBRR = (uint16_t)((16000000UL / (16UL * addConfig->baudRate)) - 1UL);
+    local_UBRR = (uint16_t)((8000000UL / (16UL * addConfig->baudRate)) - 1UL);
 
 
 

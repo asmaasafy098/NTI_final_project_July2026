@@ -383,3 +383,13 @@ ISR(INT1_vect)
     /* 2. Set flag for FSM */
     g_estopFlag = 1;
 }
+
+/**
+ * @brief USART RX ISR - Console input
+ */
+ISR(USART_RXC_vect)
+{
+    uint8_t ch = UDR;
+    CONSOLE_ProcessChar(ch);
+}
+/*  */
