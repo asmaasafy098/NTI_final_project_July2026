@@ -8,7 +8,7 @@
   #ifdef F_CPU
     #define UART_F_CPU        F_CPU
   #else
-    #define UART_F_CPU        8000000UL
+    #define UART_F_CPU        16000000UL
   #endif
 #endif
 
@@ -21,7 +21,7 @@
 #define UART_BAUD_115200      115200UL
 
 #ifndef UART_TX_BUF_SIZE
-  #define UART_TX_BUF_SIZE   128U
+  #define UART_TX_BUF_SIZE   256U
 #endif
 #ifndef UART_RX_BUF_SIZE
   #define UART_RX_BUF_SIZE   64U

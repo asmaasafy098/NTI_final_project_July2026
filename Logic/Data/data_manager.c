@@ -9,8 +9,6 @@
 /* ==================== Static Variables ==================== */
 static DriveData_t* g_data;
 static DriveCfg_t* g_cfg;
-static uint32_t g_persistCounter = 0;
-
 /* ==================== Functions Implementation ==================== */
 
 void DataManager_Init(DriveData_t* data, DriveCfg_t* cfg) {
@@ -72,17 +70,4 @@ void DataManager_UpdateError(void) {
 void DataManager_IncrementRunSeconds(void) {
     g_data->runSeconds++;
     g_data->totalRunSec++;
-}
-
-void DataManager_Persist(void) {
-    g_persistCounter++;
-    
-    /* Persist every 5 minutes (300 seconds) */
-    if (g_persistCounter >= 300) {
-        g_persistCounter = 0;
-        g_cfg->totalRunSec = g_data->totalRunSec;
-        g_cfg->startCount = g_data->startCount;
-        /* Call EEPROM save function */
-        /* EEPROM_SaveStatistics(g_data->totalRunSec, g_data->startCount); */
-    }
 }

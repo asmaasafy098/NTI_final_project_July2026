@@ -275,16 +275,7 @@ static void FSM_TransitionTo(DriveState_t newState) {
     g_driveData.state = newState;
 }
 
-/* Applies the current FSM state to the physical bridge every cycle.
- * This is the only place (besides the E-stop ISR itself) that talks
- * to MotorBridge, keeping the "only bridge.c writes the pins" rule
- * intact -- FSM just decides WHAT to ask for.
- *
- * NOTE: PD5/OC1A is not wired in the SimulIDE circuit, so there is no
- * hardware PWM path. BRIDGE_SetDuty() only does bang-bang ON/OFF
- * against a minimum-run threshold; the 100 ms control task still
- * calls BRIDGE_SetDuty(g_driveData.dutyCounts) after PI_Step() runs.
- * FSM only owns direction + master enable here. */
+
 static void FSM_ExecuteActions(void) {
     switch (g_fsm.currentState) {
         case DS_STARTING:

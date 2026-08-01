@@ -37,6 +37,7 @@ Std_ReturnType GPIO_set_pin_value(uint8_t port, uint8_t pin, uint8_t value);
 Std_ReturnType GPIO_write_pin(uint8_t port, uint8_t pin, uint8_t value);
 GPIO_pin_status GPIO_read_pin(uint8_t port, uint8_t pin);
 Std_ReturnType GPIO_toggle_pin(uint8_t port, uint8_t pin);
+Std_ReturnType GPIO_set_pull_up(uint8_t port, uint8_t pin, uint8_t enable);
 #define GPIO_ENABLE    1
 #define GPIO_DISABLE   0
 #endif

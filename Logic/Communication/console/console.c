@@ -13,6 +13,7 @@
 #include "../../../Service/util_math.h"
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 /* ==================== External References ==================== */
 extern DriveData_t g_driveData;
@@ -79,16 +80,19 @@ void CONSOLE_ProcessChar(uint8_t ch) {
     }
     
     /* Handle carriage return or line feed */
-    if (ch == '\r' || ch == '\n') {
-        if (g_console.index > 0) {
-            g_console.buffer[g_console.index] = '\0';
-            g_console.ready = 1;
-            USART_TransmitString("\r\n");
-        } else {
-            USART_TransmitString("\r\n> ");
-        }
-        return;
+ if (ch == '\r' || ch == '\n') {
+
+    UART_SendString("ENTER\r\n");   // أضف هذا السطر
+
+    if (g_console.index > 0) {
+        g_console.buffer[g_console.index] = '\0';
+        g_console.ready = 1;
+        USART_TransmitString("\r\n");
+    } else {
+        USART_TransmitString("\r\n> ");
     }
+    return;
+ }
     
     /* Store character if buffer not full */
     if (g_console.index < CONSOLE_BUFFER_SIZE - 1) {
@@ -103,12 +107,17 @@ void CONSOLE_ExecuteCommand(void) {
     
     /* Parse command */
     CONSOLE_ParseCommand();
+    
     g_console.ready = 0;
     g_console.index = 0;
-    memset(g_console.buffer, 0, CONSOLE_BUFFER_SIZE);
+    /* NOTE: buffer clearing moved to the END of this function — ParseCommand()
+       fills g_argv[] with pointers INTO g_console.buffer (strtok doesn't copy),
+       so clearing the buffer here, before those pointers are used below,
+       wiped out every argument before any strcmp() could match it. */
     
     /* Execute based on first argument */
     if (g_argc > 0) {
+        
         if (strcmp(g_argv[0], "STATUS") == 0) {
             CONSOLE_HandleStatus();
         } else if (strcmp(g_argv[0], "RUN") == 0) {
@@ -147,6 +156,9 @@ void CONSOLE_ExecuteCommand(void) {
             CONSOLE_SendError("ERR CMD");
         }
     }
+    
+    /* Now it's safe to clear — nothing below needs g_argv[] anymore */
+    memset(g_console.buffer, 0, CONSOLE_BUFFER_SIZE);
     
     /* Print prompt */
     USART_TransmitString("> ");
@@ -222,7 +234,8 @@ void CONSOLE_SendHelp(void) {
     CONSOLE_SendResponse("");
 }
 
-uint8_t CONSOLE_IsCommandReady(void) {
+uint8_t CONSOLE_IsCommandReady(void)
+{
     return g_console.ready;
 }
 

@@ -28,8 +28,18 @@ Std_ReturnType UART_Init(const UART_ConfigType *addConfig)
     }
     local_UBRR = (uint16_t)((UART_F_CPU / (16UL * addConfig->baudRate)) - 1UL);
 
-    UART_UBRRH_REG = (uint8_t)((local_UBRR >> 8) & 0x0FU);
     UART_UBRRL_REG = (uint8_t)local_UBRR;
+
+    /* UBRRH and UCSRC share the same I/O address (0x40) on the ATmega32.
+       SimulIDE's model doesn't correctly disambiguate them via URSEL, so
+       writing both corrupts whichever is written first. UBRRH's required
+       value here is 0x00 anyway (same as its power-on reset default), so
+       we skip writing it entirely and only touch this shared address once
+       -- for UCSRC below. */
+    uint8_t ubrrh_val = (uint8_t)((local_UBRR >> 8) & 0x0FU);
+    if (ubrrh_val != 0U) {
+        UART_UBRRH_REG = ubrrh_val;
+    }
 
     SET_BIT(local_UCSRC, UART_URSEL_BIT);
     CLR_BIT(local_UCSRC, UART_UMSEL_BIT);

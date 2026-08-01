@@ -3,7 +3,7 @@
 
 #include "../../Service/STD_Types.h"
 #include "../../MCL/I2C/i2c_interface.h"
-#include "../../Logic/Data/data_types.h"
+
 /* ================================================================================
  *  AiP31068 CHARACTER LCD DRIVER - PUBLIC INTERFACE (HAL, native I2C)
  *  ------------------------------------------------------------------------------
@@ -88,72 +88,178 @@
 
 /* ---------------- Handle ---------------- */
 /**
- * @brief One I2C display instance: its bus address, its geometry and the
- *        driver's private shadow of the controller state.
- *
- * Fill the CONFIGURATION fields before calling LCD_Aip31068_Init().
- * The RUNTIME fields belong to the driver.
- *
- * @var LCD_Aip31068_HandleType::i2cAddress  7-bit slave address (usually 0x3E).
- * @var LCD_Aip31068_HandleType::rows        Character lines (1, 2 or 4).
- * @var LCD_Aip31068_HandleType::cols        Characters per line (8, 16, 20, ...).
+ * @brief Per-display state. One handle per physical LCD on the bus.
+ * @var LCD_Aip31068_HandleType::i2cAddress  7-bit I2C slave address (e.g. LCD_AIP31068_DEFAULT_ADDRESS).
+ * @var LCD_Aip31068_HandleType::rows        Number of visible rows (e.g. 2).
+ * @var LCD_Aip31068_HandleType::cols        Number of visible columns (e.g. 16).
  */
 typedef struct
 {
-    /* ---- configuration: fill these before Init ---- */
     uint8_t i2cAddress;
     uint8_t rows;
     uint8_t cols;
-
-    /* ---- runtime: owned by the driver, do not modify ---- */
-    uint8_t initialized;
-    uint8_t displayControl;
-    uint8_t entryMode;
-    uint8_t cursorRow;
-    uint8_t cursorCol;
 } LCD_Aip31068_HandleType;
+
 
 /* ================================================================================
  *  FUNCTION PROTOTYPES
  * ============================================================================== */
-/* ---------------- High-level app helpers (defined in lcd_aip31068_i2c.c) ---------------- */
-Std_ReturnType LCD_InitDefault(void);
-Std_ReturnType LCD_Update(const DriveData_t *pData);
-Std_ReturnType LCD_ShowTrip(Trip_t tripCode);
 
-
-/* ---------------- Low-level driver API ---------------- */
-
+/**
+ * @brief  Initializes the controller: 8-bit/2-line/5x8 font, display on, clear,
+ *         increment entry mode. Call once per handle after I2C_InitMaster().
+ * @param  handle  Handle with i2cAddress/rows/cols already set.
+ * @return E_OK/E_NOK.
+ */
 Std_ReturnType LCD_Aip31068_Init(LCD_Aip31068_HandleType *handle);
 
+/**
+ * @brief  Sends one raw instruction byte (control byte 0x00). Use it for
+ *         controller features this API does not wrap.
+ * @param  handle   Initialized display.
+ * @param  command  Instruction byte, e.g. LCD_AIP31068_CMD_HOME.
+ * @return E_OK/E_NOK (E_NOK if the slave did not acknowledge).
+ */
 Std_ReturnType LCD_Aip31068_SendCommand(LCD_Aip31068_HandleType *handle, uint8_t command);
 
+/**
+ * @brief  Writes one character at the cursor position (control byte 0x40).
+ * @param  handle     Initialized display.
+ * @param  character  ASCII code, or 0..7 for a custom character.
+ * @return E_OK/E_NOK.
+ */
 Std_ReturnType LCD_Aip31068_WriteChar(LCD_Aip31068_HandleType *handle, uint8_t character);
 
+/**
+ * @brief  Writes a NUL-terminated string from the cursor position. The whole
+ *         string goes out in ONE I2C transaction (single control byte followed
+ *         by every character), which is what makes this driver fast enough to
+ *         repaint a screen without flicker.
+ * @param  handle   Initialized display.
+ * @param  pString  '\0'-terminated text; must not be NULL.
+ * @return E_OK/E_NOK.
+ * @note   Text longer than the line does not wrap - position with SetCursor.
+ */
 Std_ReturnType LCD_Aip31068_WriteString(LCD_Aip31068_HandleType *handle, const uint8_t *pString);
 
+/**
+ * @brief  Convenience: move to (row, column) and write a string there.
+ * @param  handle   Initialized display.
+ * @param  row      Zero-based line index.
+ * @param  column   Zero-based character index.
+ * @param  pString  '\0'-terminated text; must not be NULL.
+ * @return E_OK/E_NOK.
+ */
 Std_ReturnType LCD_Aip31068_WriteStringAt(LCD_Aip31068_HandleType *handle,
                                           uint8_t row, uint8_t column,
                                           const uint8_t *pString);
 
+/**
+ * @brief  Writes a signed integer in decimal at the cursor position.
+ * @param  handle  Initialized display.
+ * @param  number  Value to print; negatives get a leading '-'.
+ * @return E_OK/E_NOK.
+ * @note   Shrinking values leave a stale digit behind - pad the field or
+ *         repaint the line.
+ */
 Std_ReturnType LCD_Aip31068_WriteNumber(LCD_Aip31068_HandleType *handle, sint32_t number);
 
+/**
+ * @brief  Moves the cursor to a zero-based (row, column) using the geometry
+ *         stored in the handle.
+ * @param  handle  Initialized display.
+ * @param  row     0 .. rows-1.
+ * @param  column  0 .. cols-1.
+ * @return E_OK/E_NOK (E_NOK if the position is off the display).
+ */
 Std_ReturnType LCD_Aip31068_SetCursor(LCD_Aip31068_HandleType *handle,
                                       uint8_t row, uint8_t column);
 
+/**
+ * @brief  Clears the screen and homes the cursor.
+ * @param  handle  Initialized display.
+ * @return E_OK/E_NOK.
+ * @note   Blocks ~2 ms; do not call it on every repaint or the screen flickers.
+ */
 Std_ReturnType LCD_Aip31068_Clear(LCD_Aip31068_HandleType *handle);
 
+/**
+ * @brief  Homes the cursor without erasing the text.
+ * @param  handle  Initialized display.
+ * @return E_OK/E_NOK.
+ */
 Std_ReturnType LCD_Aip31068_Home(LCD_Aip31068_HandleType *handle);
 
+/**
+ * @brief  Turns the visible display on or off (the text in DDRAM survives).
+ * @param  handle  Initialized display.
+ * @param  on      1 = visible, 0 = blank.
+ * @return E_OK/E_NOK.
+ */
 Std_ReturnType LCD_Aip31068_DisplayOnOff(LCD_Aip31068_HandleType *handle, uint8_t on);
 
+/**
+ * @brief  Shows or hides the underline cursor.
+ * @param  handle  Initialized display.
+ * @param  on      1 = show, 0 = hide.
+ * @return E_OK/E_NOK.
+ */
 Std_ReturnType LCD_Aip31068_CursorOnOff(LCD_Aip31068_HandleType *handle, uint8_t on);
 
+/**
+ * @brief  Enables or disables the blinking block cursor.
+ * @param  handle  Initialized display.
+ * @param  on      1 = blink, 0 = steady.
+ * @return E_OK/E_NOK.
+ */
 Std_ReturnType LCD_Aip31068_BlinkOnOff(LCD_Aip31068_HandleType *handle, uint8_t on);
 
+/**
+ * @brief  Shifts the displayed window one character left or right without
+ *         changing DDRAM. Call repeatedly on a timer to scroll.
+ * @param  handle   Initialized display.
+ * @param  toRight  1 = right, 0 = left.
+ * @return E_OK/E_NOK.
+ */
 Std_ReturnType LCD_Aip31068_ShiftDisplay(LCD_Aip31068_HandleType *handle, uint8_t toRight);
 
+/**
+ * @brief  Stores a 5x8 glyph in CGRAM slot 0..7; print it with WriteChar(slot).
+ * @param  handle    Initialized display.
+ * @param  location  CGRAM slot 0..7.
+ * @param  pPattern  Eight bytes, top row first, bits 4..0 used. Must not be NULL.
+ * @return E_OK/E_NOK.
+ * @note   Returns the cursor to (0,0) so the next write lands in DDRAM again.
+ */
 Std_ReturnType LCD_Aip31068_CreateCustomChar(LCD_Aip31068_HandleType *handle,
                                              uint8_t location, const uint8_t *pPattern);
+
+
+/* ================================================================================
+ *  HIGH-LEVEL APP HELPERS (defined in lcd_aip31068_i2c.c)
+ * ============================================================================== */
+
+/**
+ * @brief  Initializes the module-owned handle with default address/geometry
+ *         and starts the display. Call once after I2C_InitMaster().
+ * @return E_OK/E_NOK.
+ */
+Std_ReturnType LCD_InitDefault(void);
+
+/**
+ * @brief  Repaints the two status lines (setpoint/actual/direction, duty/
+ *         current/voltage/temperature) from live drive data.
+ * @param  pData  Drive data snapshot; must not be NULL.
+ * @return E_OK/E_NOK.
+ */
+Std_ReturnType LCD_Update(const DriveData_t *pData);
+
+/**
+ * @brief  Shows the tripped-state screen, alternating between "!! TRIPPED !!"
+ *         and the trip code every ~1.5s (call once per LCD task tick, 250ms).
+ * @param  tripCode  Active trip code.
+ * @return E_OK/E_NOK.
+ */
+Std_ReturnType LCD_ShowTrip(Trip_t tripCode);
 
 #endif /* LCD_AIP31068_I2C_H */

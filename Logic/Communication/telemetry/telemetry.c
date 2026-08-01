@@ -8,6 +8,7 @@
 #include "../../Control/drive_fsm/drive_fsm.h"
 #include "../../Control/protection/protection.h"
 #include "../../../MCL/Timer/timer_interface.h"
+#include <stdio.h>
 
 /* ==================== Static Variables ==================== */
 static uint8_t g_telemetryEnabled = 1;
