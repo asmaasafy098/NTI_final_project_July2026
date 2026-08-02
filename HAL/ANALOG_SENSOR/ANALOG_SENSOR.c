@@ -1,7 +1,8 @@
 #include "../../Service/STD_Types.h"
 #include "../../MCL/ADC/ADC_Interfaces.h"  /* استخدام MCL وإضافة حرف s لـ Interfaces */
 #include "ANALOG_SENSOR.h"
-
+#include <stdio.h>
+#include "../../MCL/UART/uart_interface.h"
 Std_ReturnType ANALOG_Init(void)
 {
     ADC_ConfigType cfg = {

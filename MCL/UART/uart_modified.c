@@ -29,8 +29,18 @@ Std_ReturnType UART_Init(const UART_ConfigType *addConfig)
     }
     local_UBRR = (uint16_t)((UART_F_CPU / (16UL * addConfig->baudRate)) - 1UL);
 
-    UART_UBRRH_REG = (uint8_t)((local_UBRR >> 8) & 0x0FU);
     UART_UBRRL_REG = (uint8_t)local_UBRR;
+
+    /* UBRRH and UCSRC share the same I/O address (0x40) on the ATmega32.
+       SimulIDE's model doesn't correctly disambiguate them via URSEL, so
+       writing both corrupts whichever is written first. UBRRH's required
+       value here is 0x00 anyway (same as its power-on reset default), so
+       we skip writing it entirely and only touch this shared address once
+       -- for UCSRC below. */
+    uint8_t ubrrh_val = (uint8_t)((local_UBRR >> 8) & 0x0FU);
+    if (ubrrh_val != 0U) {
+        UART_UBRRH_REG = ubrrh_val;
+    }
 
     SET_BIT(local_UCSRC, UART_URSEL_BIT);
     CLR_BIT(local_UCSRC, UART_UMSEL_BIT);
@@ -75,8 +85,15 @@ Std_ReturnType UART_SendByte(uint8_t uint8Data)
     uint8_t  sreg;
 
     local_NextHead = (uint16_t)((UART_TxHead + 1U) & UART_TX_BUF_MASK);
-
-    while (local_NextHead == UART_TxTail) { }
+    uint32_t local_SpinGuard = 0UL;
+    while (local_NextHead == UART_TxTail)
+    {
+        local_SpinGuard++;
+        if (local_SpinGuard > 200000UL)
+        {
+            return E_NOK;
+        }
+    }
 
     /* UART_TxHead/UART_TxBuf are also touched by USART_UDRE_vect (which
      * advances UART_TxTail) and can now be re-entered from USART_RXC_vect

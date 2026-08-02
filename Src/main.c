@@ -58,8 +58,6 @@ int main(void)
 {
     /* ===== STEP 1: Disable Global Interrupts ===== */
     cli();
-
-    /* ===== STEP 2: Initialize Core System & UART ===== */
     UART_ConfigType uartCfg = {
         .baudRate = UART_BAUD_9600,
         .dataSize = UART_DATA_8BITS,
@@ -85,11 +83,9 @@ int main(void)
     UART_SendString_P(PSTR("BOOT1: UART OK\r\n"));
 
     /* ===== STEP 3: Initialize Hardware (MCAL) ===== */
-    /* I2C for LCD */
     I2C_MasterConfigType i2cCfg = { I2C_SCL_100KHZ };
     I2C_InitMaster(&i2cCfg);
-    
-    /* ADC */
+
     ADC_ConfigType adcCfg = {
         .uint8ReferenceVoltage = ADC_REF_AVCC,
         .uint8Prescaler = ADC_PRESCALER_128
@@ -114,11 +110,8 @@ int main(void)
 
     /* Timer0 for system tick (1ms) */
     Timer0_Init();
-    
-    /* Timer2 for buzzer */
     Timer2_Init();
 
-    /* External Interrupts */
     EXTI_ConfigType extiCfg1 = { .line = EXTI_INT1, .sense = EXTI_SENSE_RISING };
     EXTI_ConfigType extiCfg0 = { .line = EXTI_INT0, .sense = EXTI_SENSE_RISING };
     EXTI_Init(&extiCfg1);
@@ -161,11 +154,11 @@ int main(void)
 
     PI_Init(&g_pi, g_driveCfg.kp, g_driveCfg.ki);
     PI_InitLimits(&g_pi, PWM_MIN_RUN, PWM_TOP);
-    
+
     RAMP_Init(&g_ramp);
     RAMP_SetLimits(&g_ramp, g_driveCfg.minRpm, g_driveCfg.maxRpm);
     RAMP_SetRates(&g_ramp, g_driveCfg.accelRpmPerSec, g_driveCfg.decelRpmPerSec);
-    
+
     PROTECT_Init();
     FSM_Init();
     FSM_SetDeadTime(g_driveCfg.deadTimeMs);
@@ -194,20 +187,22 @@ int main(void)
 
     while (1) {
         SCHED_Run();
+
+        uint8_t rxByte;
+        while (UART_ReceiveByteNonBlocking(&rxByte) == E_OK) {
+            CONSOLE_ProcessChar(rxByte);
+        }
+
         if (CONSOLE_IsCommandReady()) {
             CONSOLE_ExecuteCommand();
         }
     }
-    
+
     return 0;
 }
 
 /* ==================== Task Functions ==================== */
 
-/**
- * @brief Task_Panel - Called every 10ms
- * Polls buttons and updates LEDs
- */
 void Task_Panel(void)
 {
     /* Live-read the physical E-Stop switch (same pin as the INT1 ISR,
@@ -222,7 +217,7 @@ void Task_Panel(void)
 
     PANEL_Poll();
     Panel_Event_t event = PANEL_GetEvent();
-    
+
     switch (event) {
         case PNL_START:
             if (!FSM_RequestStart()) {
@@ -249,29 +244,25 @@ void Task_Panel(void)
         default:
             break;
     }
-    
-    /* Update status LEDs based on FSM state */
+
     DriveState_t state = FSM_GetState();
     if (state == DS_RUNNING) {
-        PANEL_SetRunLED(1, 0);  /* Steady ON */
+        PANEL_SetRunLED(1, 0);
     } else if (state == DS_STARTING || state == DS_RAMP_DOWN) {
-        PANEL_SetRunLED(1, 1);  /* Blink */
+        PANEL_SetRunLED(1, 1);
     } else {
-        PANEL_SetRunLED(0, 0);  /* OFF */
+        PANEL_SetRunLED(0, 0);
     }
-    
-    /* Fault LED */
+
     if (FSM_IsTripped()) {
         PANEL_SetFaultLED(1);
     } else {
         PANEL_SetFaultLED(0);
     }
-    
-    /* Direction LEDs */
+
     MotorDir_t dir = FSM_GetDirection();
     PANEL_SetDirectionLEDs(dir);
-    
-    /* Update Local/Remote mode */
+
     if (PANEL_IsLocalMode()) {
         g_driveData.remote = 0;
     } else {
@@ -279,10 +270,6 @@ void Task_Panel(void)
     }
 }
 
-/**
- * @brief Task_Current - Called every 50ms
- * Reads current and checks short-circuit
- */
 void Task_Current(void)
 {
     static Trip_t lastCurrentTrip = TRIP_NONE;   /* NEW */
@@ -290,11 +277,9 @@ void Task_Current(void)
     /* Read current from ADC */
     uint16_t current = ANALOG_GetCurrent();
     g_driveData.currentmA = current;
-    
-    /* Update I2T accumulator */
+
     PROTECT_UpdateI2T(current, g_driveCfg.ratedCurrentmA);
-    
-    /* Short-circuit check (FR-10) */
+
     if (current >= g_driveCfg.shortTripmA) {
         FSM_RequestTrip(TRIP_SHORT);
         if (lastCurrentTrip != TRIP_SHORT) {          /* NEW: only once */
@@ -306,10 +291,6 @@ void Task_Current(void)
     }
 }
 
-/**
- * @brief Task_Control - Called every 100ms
- * Main control loop: Tacho -> Ramp -> Protect -> PI -> Bridge
- */
 void Task_Control(void)
 {
     static Trip_t lastControlTrip = TRIP_NONE;   /* NEW: only send each trip event once */
@@ -317,32 +298,24 @@ void Task_Control(void)
     /* ===== 1. Update FSM First ===== */
     FSM_Run();
 
-    /* ===== 2. Update Tacho ===== */
     TACHO_Update();
     g_driveData.measuredRpm = TACHO_GetRPM();
-    
-    /* ===== 3. Update Setpoint ===== */
+
     int16_t setpoint;
     if (g_driveData.remote) {
-        /* Remote mode: setpoint from console */
         setpoint = g_driveData.setpointRpm;
     } else {
-        /* Local mode: setpoint from potentiometer */
         setpoint = ANALOG_GetSetpoint();
         g_driveData.setpointRpm = setpoint;
     }
-    
-    /* ===== 4. Update Ramp ===== */
+
     RAMP_SetTarget(&g_ramp, setpoint);
     g_driveData.rampedRpm = RAMP_Step(&g_ramp);
-    
-    /* ===== 5. Update Error ===== */
+
     g_driveData.errorRpm = g_driveData.rampedRpm - g_driveData.measuredRpm;
-    
-    /* ===== 6. Evaluate Protection (Before PI!) ===== */
+
     Trip_t trip = PROTECT_Evaluate(&g_driveData, &g_driveCfg);
     if (trip != TRIP_NONE) {
-        /* Trip detected - stop the motor */
         FSM_RequestTrip(trip);
         BRIDGE_ForceStop();
         if (lastControlTrip != trip) {                 /* NEW: only once per new trip */
@@ -356,10 +329,8 @@ void Task_Control(void)
     /* ===== 7. PI Controller ===== */
     int16_t duty;
     if (FSM_IsRunning()) {
-        /* Running: apply PI control */
         duty = PI_Step(&g_pi, g_driveData.rampedRpm, g_driveData.measuredRpm);
     } else {
-        /* Stopped: force duty to 0 */
         duty = 0;
         PI_Reset(&g_pi);
     }
@@ -383,7 +354,7 @@ void Task_LCD(void)
 {
     static uint8_t lastTrip = 0;
     Trip_t currentTrip = PROTECT_GetActiveTrip();
-    
+
     if (FSM_IsTripped()) {
         if (currentTrip != lastTrip) {
             lastTrip = currentTrip;
@@ -395,18 +366,12 @@ void Task_LCD(void)
     }
 }
 
-/**
- * @brief Task_SlowSensors - Called every 500ms
- */
 void Task_SlowSensors(void)
 {
     g_driveData.busmV = ANALOG_GetBusVoltage();
     g_driveData.tempC = ANALOG_GetTemperature();
 }
 
-/**
- * @brief Task_Telemetry - Called every 1s
- */
 void Task_Telemetry(void)
 {
     /* Send telemetry */
@@ -415,9 +380,6 @@ void Task_Telemetry(void)
 
 //* ==================== Interrupt Service Routines ==================== */
 
-/**
- * @brief INT1 ISR - Emergency Stop
- */
 ISR(INT1_vect)
 {
     /* Disable bridge and clear direction pins */
