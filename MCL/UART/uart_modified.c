@@ -82,8 +82,15 @@ Std_ReturnType UART_SendByte(uint8_t uint8Data)
 {
     uint16_t local_NextHead = 0U;
     local_NextHead = (uint16_t)((UART_TxHead + 1U) & UART_TX_BUF_MASK);
-
-    while (local_NextHead == UART_TxTail) { }
+    uint32_t local_SpinGuard = 0UL;
+    while (local_NextHead == UART_TxTail)
+    {
+        local_SpinGuard++;
+        if (local_SpinGuard > 200000UL)
+        {
+            return E_NOK;
+        }
+    }
 
     UART_TxBuf[UART_TxHead] = uint8Data;
     UART_TxHead = local_NextHead;
@@ -92,7 +99,6 @@ Std_ReturnType UART_SendByte(uint8_t uint8Data)
 
     return E_OK;
 }
-
 Std_ReturnType UART_ReceiveByte(uint8_t *puint8Data)
 {
     if (puint8Data == NULL) {

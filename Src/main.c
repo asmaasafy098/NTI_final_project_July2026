@@ -59,19 +59,6 @@ int main(void)
 {
     /* ===== STEP 1: Disable Global Interrupts ===== */
     cli();
-
-    /* ===== STEP 2: Initialize UART FIRST, then enable interrupts
-       immediately. Every boot message below (BOOT1..4, console banner)
-       is queued through the 128-byte TX ring buffer, which only drains
-       via the UDRE interrupt. If global interrupts stay off while all
-       of that text (~190 bytes total) gets queued, the buffer overflows
-       and UART_SendByte() spins forever waiting for space that nothing
-       can free -- this was the real bug. Enabling interrupts here, right
-       after UART_Init(), lets the buffer drain continuously as each
-       message is queued, so it never fills. No other peripheral's
-       interrupt can fire yet because each one is enabled individually,
-       later, inside its own _Init() call (EXTI_Init, Timer0_Init,
-       Timer2_Init) -- the global I-bit being on early is harmless. */
     UART_ConfigType uartCfg = {
         .baudRate = UART_BAUD_9600,
         .dataSize = UART_DATA_8BITS,
@@ -79,7 +66,7 @@ int main(void)
         .stopBits = UART_STOP_1BIT
     };
     UART_Init(&uartCfg);
-    sei();
+    
 
     UART_SendString("\r\n--- SYSTEM STARTING ---\r\n");
     UART_SendString("BOOT1: UART OK\r\n");
@@ -159,6 +146,7 @@ int main(void)
     SCHED_AddTask(Task_StepperTick, "Stepper", 1, 0);
 
     UART_SendString("BOOT4: SCHEDULER READY\r\n");
+    sei();
 
     /* ===== STEP 7: Run ===== */
     while (1) {

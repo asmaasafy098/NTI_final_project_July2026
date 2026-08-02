@@ -1,7 +1,8 @@
 #include "../../Service/STD_Types.h"
 #include "../../MCL/ADC/ADC_Interfaces.h"  /* استخدام MCL وإضافة حرف s لـ Interfaces */
 #include "ANALOG_SENSOR.h"
-
+#include <stdio.h>
+#include "../../MCL/UART/uart_interface.h"
 Std_ReturnType ANALOG_Init(void)
 {
     ADC_ConfigType cfg = {
@@ -17,10 +18,15 @@ uint16_t ANALOG_GetSetpoint(void)   /* channel 0 -> 0..3000 RPM */
     return (uint16_t)(((uint32_t)raw * 3000UL) / 1023UL);
 }
 
-uint16_t ANALOG_GetCurrent(void)    /* channel 1 -> 0..20000 mA */
+uint16_t ANALOG_GetCurrent(void)
 {
     uint16_t raw = 0;
     (void)ADC_ReadChannelBlocking(ANALOG_CH_CURRENT, &raw);
+
+    char txt[30];
+    sprintf(txt, "RAW=%u\r\n", raw);
+    UART_SendString(txt);
+
     return (uint16_t)(((uint32_t)raw * 20000UL) / 1023UL);
 }
 

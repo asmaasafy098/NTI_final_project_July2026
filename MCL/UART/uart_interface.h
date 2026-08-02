@@ -24,7 +24,7 @@
   #define UART_TX_BUF_SIZE   256U
 #endif
 #ifndef UART_RX_BUF_SIZE
-  #define UART_RX_BUF_SIZE   64U
+  #define UART_RX_BUF_SIZE   32U
 #endif
 
 #define UART_TX_BUF_MASK   (UART_TX_BUF_SIZE - 1U)
