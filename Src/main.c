@@ -9,8 +9,8 @@
 #include <avr/interrupt.h>
 #include "../Service/STD_Types.h"
 #include "../Service/Bit_Math.h"
+#include <avr/pgmspace.h>
 #include "../Logic/Data/data_types.h"
-#include "../Logic/Data/data_manager.h"
 #include "../Logic/Control/drive_fsm/drive_fsm.h"
 #include "../Logic/Control/pi_controller/pi_controller.h"
 #include "../Logic/Control/ramp_generator/ramp_generator.h"
@@ -18,7 +18,6 @@
 #include "../Logic/Scheduler/scheduler.h"
 #include "../Logic/Communication/console/console.h"
 #include "../Logic/Communication/telemetry/telemetry.h"
-#include "../Logic/Data/eeprom_stub.h"
 
 /* ==================== MCAL Includes ==================== */
 #include "../MCL/GPIO/GPIO_Interface.h"
@@ -35,7 +34,6 @@
 #include "../HAL/ANALOG_SENSOR/ANALOG_SENSOR.h"
 #include "../HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h"
 #include "../HAL/BUZZER/BUZZER.h"
-#include "../HAL/Stepper_L298P/Stepper_L298P.h"
 #include "../HAL/MotorBridge/MotorBridge.h"
 
 /* ==================== Global Variables ==================== */
@@ -54,7 +52,6 @@ void Task_Control(void);
 void Task_LCD(void);
 void Task_SlowSensors(void);
 void Task_Telemetry(void);
-void Task_StepperTick(void);  /* For non-blocking stepper moves */
 
 /* ==================== Main Function ==================== */
 int main(void)
@@ -70,8 +67,22 @@ int main(void)
         .stopBits = UART_STOP_1BIT
     };
     UART_Init(&uartCfg);
-    UART_SendString("\r\n--- SYSTEM STARTING ---\r\n");
-    UART_SendString("BOOT1: UART OK\r\n");
+
+    /* NOTE: sei() moved here on purpose. UART_SendByte()/UART_SendString()
+       only queue bytes into a software ring buffer; the actual byte-by-byte
+       transmission happens inside the USART_UDRE_vect ISR. If interrupts
+       stay disabled while the boot/console banners are printed, the ring
+       buffer (128 bytes) fills up faster than it can ever be drained and
+       UART_SendByte() spins forever in its "buffer full" wait loop -
+       deadlocking main() before it ever reaches the old sei() call at the
+       end of init. Enabling interrupts immediately after UART_Init() lets
+       the UDRE ISR drain the buffer as it fills, so no boot text can ever
+       overflow it. No other peripheral is configured yet, so nothing else
+       can spuriously interrupt at this point. */
+    sei();
+
+    UART_SendString_P(PSTR("\r\n--- SYSTEM STARTING ---\r\n"));
+    UART_SendString_P(PSTR("BOOT1: UART OK\r\n"));
 
     /* ===== STEP 3: Initialize Hardware (MCAL) ===== */
     /* I2C for LCD */
@@ -84,6 +95,22 @@ int main(void)
         .uint8Prescaler = ADC_PRESCALER_128
     };
     ADC_Init(&adcCfg);
+
+    /* The very first ADC conversion right after enabling the ADC/changing
+     * the reference (and after switching the input mux to a new channel)
+     * can return an unreliable value on real AVR hardware, before the
+     * reference/mux has settled. Do one throwaway conversion on each
+     * channel here and discard it, so the first REAL reading each task
+     * takes is trustworthy. Without this, a garbage first current sample
+     * could look like an overcurrent spike and trip TRIP_SHORT immediately
+     * at boot (same risk exists for temperature/voltage trips). */
+    {
+        uint16_t dummy;
+        (void)ADC_ReadChannelBlocking(ANALOG_CH_SETPOINT, &dummy);
+        (void)ADC_ReadChannelBlocking(ANALOG_CH_CURRENT, &dummy);
+        (void)ADC_ReadChannelBlocking(ANALOG_CH_BUS_VOLTAGE, &dummy);
+        (void)ADC_ReadChannelBlocking(ANALOG_CH_TEMPERATURE, &dummy);
+    }
 
     /* Timer0 for system tick (1ms) */
     Timer0_Init();
@@ -99,7 +126,7 @@ int main(void)
     
     /* NOTE: Timer1 is initialized inside BRIDGE_Init() for PWM */
     
-    UART_SendString("BOOT2: MCAL OK\r\n");
+    UART_SendString_P(PSTR("BOOT2: MCAL OK\r\n"));
 
     /* ===== STEP 4: Initialize HAL ===== */
     LCD_InitDefault();
@@ -108,7 +135,7 @@ int main(void)
     PANEL_Init();
     BUZZER_Init();
     BRIDGE_Init();  /* This sets up Timer1 PWM */
-    UART_SendString("BOOT3: HAL OK\r\n");
+    UART_SendString_P(PSTR("BOOT3: HAL OK\r\n"));
 
     /* ===== STEP 5: Default Configuration & APP ===== */
     g_driveCfg.magic            = 0x4D44;
@@ -132,7 +159,6 @@ int main(void)
     g_driveCfg.latchedTrip      = TRIP_NONE;
     g_driveCfg.checksum         = 0;
 
-    DataManager_Init(&g_driveData, &g_driveCfg);
     PI_Init(&g_pi, g_driveCfg.kp, g_driveCfg.ki);
     PI_InitLimits(&g_pi, PWM_MIN_RUN, PWM_TOP);
     
@@ -145,6 +171,12 @@ int main(void)
     FSM_SetDeadTime(g_driveCfg.deadTimeMs);
     CONSOLE_Init();
     TELEMETRY_Init();
+
+    /* Without this, UART_RxCallBack stays NULL forever and the RX ISR has
+     * nowhere to forward received bytes - CONSOLE_ProcessChar() never runs,
+     * so typed commands (HELP, RUN, ...) are silently swallowed with no
+     * echo and no response, even though the bytes do arrive on the wire. */
+    UART_SetRxCallBack(CONSOLE_ProcessChar);
     
     /* ===== STEP 6: Initialize Scheduler ===== */
     SCHED_Init();
@@ -154,13 +186,12 @@ int main(void)
     SCHED_AddTask(Task_LCD, "LCD", 250, 4);
     SCHED_AddTask(Task_SlowSensors, "SlowSensors", 500, 3);
     SCHED_AddTask(Task_Telemetry, "Telemetry", 1000, 5);
-    SCHED_AddTask(Task_StepperTick, "Stepper", 1, 0);  /* 1ms tick for stepper */
 
-    UART_SendString("BOOT4: SCHEDULER READY, ENABLING INTERRUPTS...\r\n");
+    UART_SendString_P(PSTR("BOOT4: SCHEDULER READY, RUNNING...\r\n"));
 
-    /* ===== STEP 7: Enable Interrupts & Run ===== */
-    sei();
-    
+    /* ===== STEP 7: Run ===== */
+    /* (Interrupts were already enabled right after UART_Init() - see note above) */
+
     while (1) {
         SCHED_Run();
         if (CONSOLE_IsCommandReady()) {
@@ -179,13 +210,23 @@ int main(void)
  */
 void Task_Panel(void)
 {
+    /* Live-read the physical E-Stop switch (same pin as the INT1 ISR,
+     * PD3) every 10ms. estopRaw must reflect the CURRENT pin level (not
+     * just "an edge happened once") because FSM_RequestReset() checks
+     * "!g_driveData.estopRaw" to decide whether the E-Stop loop has been
+     * physically cleared before allowing the operator to acknowledge and
+     * resume. Without this, the E-Stop switch cut the motor for an
+     * instant (via the ISR) but the FSM never actually knew the system
+     * was stopped, and could never be reset back out of DS_ESTOP either. */
+    g_driveData.estopRaw = (GPIO_read_pin(GPIO_PORTD, GPIO_PIN3) == GPIO_HIGH) ? 1U : 0U;
+
     PANEL_Poll();
     Panel_Event_t event = PANEL_GetEvent();
     
     switch (event) {
         case PNL_START:
             if (!FSM_RequestStart()) {
-                CONSOLE_SendError("ERR START");
+                CONSOLE_SendError(PSTR("ERR START"));
             }
             break;
 
@@ -195,13 +236,13 @@ void Task_Panel(void)
 
         case PNL_REVERSE:
             if (!FSM_RequestReverse()) {
-                CONSOLE_SendError("ERR REV");
+                CONSOLE_SendError(PSTR("ERR REV"));
             }
             break;
 
         case PNL_RESET:
             if (!FSM_RequestReset()) {
-                CONSOLE_SendError("ERR ACTIVE");
+                CONSOLE_SendError(PSTR("ERR ACTIVE"));
             }
             break;
 
@@ -244,6 +285,8 @@ void Task_Panel(void)
  */
 void Task_Current(void)
 {
+    static Trip_t lastCurrentTrip = TRIP_NONE;   /* NEW */
+
     /* Read current from ADC */
     uint16_t current = ANALOG_GetCurrent();
     g_driveData.currentmA = current;
@@ -254,7 +297,12 @@ void Task_Current(void)
     /* Short-circuit check (FR-10) */
     if (current >= g_driveCfg.shortTripmA) {
         FSM_RequestTrip(TRIP_SHORT);
-        TELEMETRY_SendTripEvent(TRIP_SHORT, &g_driveData);
+        if (lastCurrentTrip != TRIP_SHORT) {          /* NEW: only once */
+            TELEMETRY_SendTripEvent(TRIP_SHORT, &g_driveData);
+            lastCurrentTrip = TRIP_SHORT;              /* NEW */
+        }
+    } else {
+        lastCurrentTrip = TRIP_NONE;                   /* NEW: reset when clear */
     }
 }
 
@@ -264,6 +312,8 @@ void Task_Current(void)
  */
 void Task_Control(void)
 {
+    static Trip_t lastControlTrip = TRIP_NONE;   /* NEW: only send each trip event once */
+
     /* ===== 1. Update FSM First ===== */
     FSM_Run();
 
@@ -295,9 +345,13 @@ void Task_Control(void)
         /* Trip detected - stop the motor */
         FSM_RequestTrip(trip);
         BRIDGE_ForceStop();
-        TELEMETRY_SendTripEvent(trip, &g_driveData);
+        if (lastControlTrip != trip) {                 /* NEW: only once per new trip */
+            TELEMETRY_SendTripEvent(trip, &g_driveData);
+            lastControlTrip = trip;                     /* NEW */
+        }
         return;  /* Exit early - don't apply PI output */
     }
+    lastControlTrip = TRIP_NONE;                         /* NEW: reset once trip clears */
     
     /* ===== 7. PI Controller ===== */
     int16_t duty;
@@ -310,15 +364,18 @@ void Task_Control(void)
         PI_Reset(&g_pi);
     }
     
-    /* ===== 8. Apply to Bridge ===== */
-    DataManager_UpdateDuty(duty);
-    BRIDGE_SetDuty(duty);
+    /* ===== 8. Apply to Bridge =====
+     * PI_Step() output is already in raw OCR1A counts (0..PWM_TOP), because
+     * PI_InitLimits(&g_pi, PWM_MIN_RUN, PWM_TOP) clamps it to that range.
+     * BRIDGE_SetDuty() also expects raw counts (it writes its argument
+     * straight into TIMER_OCR1A_REG). Converting to a 0-100 percentage
+     * here and passing THAT into BRIDGE_SetDuty() was double-scaling the
+     * duty cycle down to a small fraction of what the PI controller
+     * actually asked for - that's why the motor barely turned/didn't turn. */
+    BRIDGE_SetDuty((uint16_t)duty);
     BRIDGE_SetDirection(g_driveData.direction);
     
-    /* ===== 9. Update data manager ===== */
-    DataManager_UpdateError();
 }
-
 /**
  * @brief Task_LCD - Called every 250ms
  */
@@ -352,22 +409,8 @@ void Task_SlowSensors(void)
  */
 void Task_Telemetry(void)
 {
-    /* Update run hours if running */
-    if (FSM_IsRunning() && g_driveData.measuredRpm >= g_driveCfg.minRpm) {
-        DataManager_IncrementRunSeconds();
-    }
-    
     /* Send telemetry */
     TELEMETRY_Update(&g_driveData);
-}
-
-/**
- * @brief Task_StepperTick - Called every 1ms
- * Updates non-blocking stepper motor moves
- */
-void Task_StepperTick(void)
-{
-    Stepper_L298P_Tick();
 }
 
 //* ==================== Interrupt Service Routines ==================== */
@@ -377,20 +420,20 @@ void Task_StepperTick(void)
  */
 ISR(INT1_vect)
 {
-    /* 1. Force PWM to 0 */
-    OCR1A = 0;
-    
-    /* 2. Disable bridge and clear direction pins */
-    CLR_BIT(PORTB, PB2);  /* EN = 0 */
-    CLR_BIT(PORTB, PB1);  /* IN2 = 0 */
-    CLR_BIT(PORTB, PB0);  /* IN1 = 0 */
-    
-    /* 3. Set flag for FSM */
+    /* Disable bridge and clear direction pins */
+ Timer1_SetDuty(0);
+
+ CLR_BIT(PORTB, PB1);
+ CLR_BIT(PORTB, PB0);  /* IN1 = 0 */
+
     g_estopFlag = 1;
 }
+/**
+ * @brief INT0 ISR - Tacho pulse counting     
+ * Must be minimal: only increment counter (NFR-10)
+ */
+ISR(INT0_vect)
+{
+    TACHO_PulseISR();
+}
 
-/* ============================================================ */
-/* NOTE: USART RX ISR is defined in uart_modified.c             */
-/*       DO NOT define ISR(USART_RXC_vect) here                 */
-/* ============================================================ */
-/*  */

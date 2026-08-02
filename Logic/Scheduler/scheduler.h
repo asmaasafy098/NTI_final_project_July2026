@@ -9,7 +9,7 @@
 #include "STD_Types.h"
 
 /* ==================== Task Structure ==================== */
-#define MAX_TASKS 10
+#define MAX_TASKS 6
 
 typedef struct {
     void (*task)(void);

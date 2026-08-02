@@ -126,20 +126,24 @@ static void FSM_HandleStopped(void) {
     g_driveData.dutyPct = 0;
 }
 
-static void FSM_HandleStarting(void) {
-    /* Check if at setpoint */
+static void FSM_HandleStarting(void)
+{
     if (RAMP_AtTarget(&g_ramp) &&
-        ABS(g_driveData.measuredRpm - g_driveData.rampedRpm) <= 100) {
+        ABS(g_driveData.measuredRpm - g_driveData.rampedRpm) <= 250)
+    {
         g_fsm.atSpeedCounter++;
-        if (g_fsm.atSpeedCounter >= 100) {  /* 100 * 10ms tick = 1 second */
+
+        if (g_fsm.atSpeedCounter >= 20)   /* 200 ms */
+        {
             FSM_TransitionTo(DS_RUNNING);
             g_fsm.atSpeedCounter = 0;
         }
-    } else {
+    }
+    else
+    {
         g_fsm.atSpeedCounter = 0;
     }
 }
-
 static void FSM_HandleRunning(void) {
     /* Normal running - PI controller handles speed */
     /* Check if setpoint below minRpm */
@@ -275,16 +279,7 @@ static void FSM_TransitionTo(DriveState_t newState) {
     g_driveData.state = newState;
 }
 
-/* Applies the current FSM state to the physical bridge every cycle.
- * This is the only place (besides the E-stop ISR itself) that talks
- * to MotorBridge, keeping the "only bridge.c writes the pins" rule
- * intact -- FSM just decides WHAT to ask for.
- *
- * NOTE: PD5/OC1A is not wired in the SimulIDE circuit, so there is no
- * hardware PWM path. BRIDGE_SetDuty() only does bang-bang ON/OFF
- * against a minimum-run threshold; the 100 ms control task still
- * calls BRIDGE_SetDuty(g_driveData.dutyCounts) after PI_Step() runs.
- * FSM only owns direction + master enable here. */
+
 static void FSM_ExecuteActions(void) {
     switch (g_fsm.currentState) {
         case DS_STARTING:

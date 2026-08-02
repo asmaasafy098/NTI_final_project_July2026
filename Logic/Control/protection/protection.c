@@ -26,8 +26,14 @@ void PROTECT_Init(void) {
 }
 
 Trip_t PROTECT_Evaluate(const DriveData_t* data, const DriveCfg_t* cfg) {
-    Trip_t trip = TRIP_NONE;
-    
+  Trip_t trip = TRIP_NONE;
+
+    if (data->busmV > cfg->overVoltmV)
+    {
+        char txt[40];
+        sprintf(txt, "BUS=%u LIM=%u\r\n", data->busmV, cfg->overVoltmV);
+        UART_SendString(txt);
+    }
     /* ===== PRIORITY 1: E-Stop (Highest) ===== */
     if (data->estopRaw) {
         trip = TRIP_ESTOP;

@@ -8,11 +8,11 @@ AVRDUDE = $(PIO)/tool-avrdude/avrdude.exe
 MCU     = atmega32
 F_CPU   = 16000000UL
 
-CFLAGS  = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -std=c99 -Wall -Os -g
+CFLAGS  = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -std=c99 -Wall -Os -g -ffunction-sections -fdata-sections
 DEPFLAGS = -MMD -MP
-LDFLAGS = -mmcu=$(MCU)
+LDFLAGS = -mmcu=$(MCU) -Wl,--gc-sections
 
-C_SOURCES := $(wildcard Src/*.c) \
+C_SOURCES := $(filter-out %/Stepper_L298P/stepper_l298p.c,$(wildcard Src/*.c) \
              $(wildcard Service/*.c) \
              $(wildcard MCL/GPIO/*.c) \
              $(wildcard MCL/ADC/*.c) \
@@ -35,7 +35,7 @@ C_SOURCES := $(wildcard Src/*.c) \
              $(wildcard Logic/Control/protection/*.c) \
              $(wildcard Logic/Control/ramp_generator/*.c) \
              $(wildcard Logic/Data/*.c) \
-             $(wildcard Logic/Scheduler/*.c)
+             $(wildcard Logic/Scheduler/*.c))
 
 INCLUDE_DIRS := . \
                 Src \

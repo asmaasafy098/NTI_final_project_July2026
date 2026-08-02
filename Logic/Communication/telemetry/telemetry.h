@@ -46,5 +46,5 @@ void TELEMETRY_SetEnabled(uint8_t enable);
  * @return 1 if enabled, 0 otherwise
  */
 uint8_t TELEMETRY_IsEnabled(void);
-
+void TELEMETRY_ResetTripEvent(void);
 #endif /* TELEMETRY_H_ */

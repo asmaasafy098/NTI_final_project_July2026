@@ -17,11 +17,16 @@ uint16_t ANALOG_GetSetpoint(void)   /* channel 0 -> 0..3000 RPM */
     return (uint16_t)(((uint32_t)raw * 3000UL) / 1023UL);
 }
 
-uint16_t ANALOG_GetCurrent(void)    /* channel 1 -> 0..20000 mA */
-{
-    uint16_t raw = 0;
+uint16_t ANALOG_GetCurrent(void)   
+{ uint16_t raw = 0;
+    char txt[32];
+
     (void)ADC_ReadChannelBlocking(ANALOG_CH_CURRENT, &raw);
-    return (uint16_t)(((uint32_t)raw * 20000UL) / 1023UL);
+
+    sprintf(txt, "RAW=%u\r\n", raw);
+    UART_SendString(txt);
+
+    return (uint16_t)(((uint32_t)raw * 20000UL) / 1023UL);;
 }
 
 uint16_t ANALOG_GetBusVoltage(void) /* channel 2 -> 0..60000 mV */
