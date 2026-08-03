@@ -8,7 +8,7 @@
   #ifdef F_CPU
     #define UART_F_CPU        F_CPU
   #else
-    #define UART_F_CPU        16000000UL
+    #define UART_F_CPU        8000000UL
   #endif
 #endif
 

@@ -18,18 +18,17 @@ void RAMP_Init(Ramp_t* ramp) {
     ramp->maxRpm = 3000;
     ramp->atTarget = 1;
 }
-
-void RAMP_SetTarget(Ramp_t* ramp, int16_t target) {
-    /* target == 0 means "stop" (FR-03: below minRpm while running
-     * commands a stop, not a crawl). Clamping 0 up to minRpm here
-     * made the ramp physically unable to ever reach zero -- it would
-     * decelerate down to minRpm and get stuck there. Only clamp to
-     * [minRpm, maxRpm] for genuine run setpoints. */
-    if (target <= 0) {
+void RAMP_SetTarget(Ramp_t* ramp, int16_t target)
+{
+    if (target <= 0)
+    {
         ramp->target = 0;
-    } else {
+    }
+    else
+    {
         ramp->target = Util_Clamp(target, ramp->minRpm, ramp->maxRpm);
     }
+
     ramp->atTarget = 0;
 }
 
@@ -58,9 +57,18 @@ int16_t RAMP_Step(Ramp_t* ramp) {
         ramp->current -= step;
     }
     
-    /* Clamp current value: floor is 0, not minRpm -- otherwise the
-     * ramp can never fully decelerate to a stop (see RAMP_SetTarget). */
-    ramp->current = Util_Clamp(ramp->current, 0, ramp->maxRpm);
+    /* Clamp current value */
+   if (ramp->target == 0)
+ {
+    if (ramp->current < 0)
+        ramp->current = 0;
+   }
+ else
+  {
+    ramp->current = Util_Clamp(ramp->current,
+                               ramp->minRpm,
+                               ramp->maxRpm);
+ }
     ramp->output = ramp->current;
     
     /* Check if at target */

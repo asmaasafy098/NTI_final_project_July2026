@@ -30,9 +30,3 @@ d:\users\hp\desktop\final_project\service\std_types.h:
 HAL/MotorBridge/../../MCL/Timer/timer_interface.h:
 
 HAL/MotorBridge/../../MCL/Timer/timer_registers.h:
-
-HAL/MotorBridge/../../MCL/Timer/../../Service/STD_Types.h:
-
-HAL/MotorBridge/../../MCL/Timer/timer_interface.h:
-
-HAL/MotorBridge/../../MCL/Timer/timer_registers.h:

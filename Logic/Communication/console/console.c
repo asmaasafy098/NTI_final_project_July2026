@@ -70,7 +70,6 @@ void CONSOLE_ProcessChar(uint8_t ch) {
      * space, and it cannot run while nested inside this ISR. */
 
     /* Echo back if enabled */
-    g_console.echo = 1;
     if (g_console.echo) {
         UART_SendByte_NonBlocking(ch);
     }

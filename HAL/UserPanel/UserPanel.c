@@ -8,7 +8,9 @@
 #include "../MCL/GPIO/GPIO_Interface.h"
 #include "../MCL/Timer/timer_interface.h"
 #include "../../Service/STD_Types.h"
-
+#include "../../Service/Bit_Math.h"
+#include <stdio.h>
+#include "../../../MCL/UART/uart_interface.h"
 /* ==================== Pin Definitions ==================== */
 #define BUTTON_START_PIN    GPIO_PIN5   /* PC5 */
 #define BUTTON_STOP_PIN     GPIO_PIN6   /* PC6 */
@@ -105,8 +107,7 @@ Panel_Event_t PANEL_GetEvent(void)
 
 uint8_t PANEL_IsLocalMode(void)
 {
-    /* PD4 low = Local mode */
-    return (GPIO_read_pin(GPIO_PORTD, BUTTON_MODE_PIN) == GPIO_LOW) ? 1 : 0;
+    return (GPIO_read_pin(GPIO_PORTD, BUTTON_MODE_PIN) == GPIO_HIGH) ? 1 : 0;
 }
 
 void PANEL_SetRunLED(uint8_t state, uint8_t blink)

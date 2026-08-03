@@ -47,16 +47,18 @@ void SCHED_Run(void) {
         
         /* Check if task should run */
         if (currentTime >= g_tasks[i].nextRun) {
-            /* Record start time for load measurement (local only - no
-             * per-task consumer ever read the old startTime/maxDuration
-             * fields, so they were removed to save RAM) */
+            /* Record start time for load measurement */
             taskStartTime = TIMER_GetTick();
+            g_tasks[i].startTime = taskStartTime;
             
             /* Execute task */
             g_tasks[i].task();
             
             /* Calculate execution time */
             uint32_t execTime = TIMER_GetTick() - taskStartTime;
+            if (execTime > g_tasks[i].maxDuration) {
+                g_tasks[i].maxDuration = (uint16_t)execTime;
+            }
             
             /* Update busy time for load calculation */
             g_busyTime += execTime;
@@ -102,6 +104,7 @@ uint8_t SCHED_AddTask(void (*task)(void), const char* name,
     g_tasks[g_taskCount].lastRun = 0;
     g_tasks[g_taskCount].nextRun = offset;
     g_tasks[g_taskCount].overrun = 0;
+    g_tasks[g_taskCount].maxDuration = 0;
     g_tasks[g_taskCount].enabled = 1;
     
     g_taskCount++;

@@ -2,7 +2,7 @@
 #include "../../MCL/ADC/ADC_Interfaces.h"  /* استخدام MCL وإضافة حرف s لـ Interfaces */
 #include "ANALOG_SENSOR.h"
 #include <stdio.h>
-#include "../../MCL/UART/uart_interface.h"
+#include "../../../MCL/UART/uart_interface.h"
 Std_ReturnType ANALOG_Init(void)
 {
     ADC_ConfigType cfg = {
@@ -11,10 +11,16 @@ Std_ReturnType ANALOG_Init(void)
     }; 
     return ADC_Init(&cfg);
 }
-uint16_t ANALOG_GetSetpoint(void)   /* channel 0 -> 0..3000 RPM */
+uint16_t ANALOG_GetSetpoint(void)
 {
     uint16_t raw = 0;
+
     (void)ADC_ReadChannelBlocking(ANALOG_CH_SETPOINT, &raw);
+
+    char txt[40];
+    sprintf(txt, "SP_RAW=%u\r\n", raw);
+    UART_SendString(txt);
+
     return (uint16_t)(((uint32_t)raw * 3000UL) / 1023UL);
 }
 
@@ -30,10 +36,15 @@ uint16_t ANALOG_GetCurrent(void)
     return (uint16_t)(((uint32_t)raw * 20000UL) / 1023UL);;
 }
 
-uint16_t ANALOG_GetBusVoltage(void) /* channel 2 -> 0..60000 mV */
+uint16_t ANALOG_GetBusVoltage(void)
 {
     uint16_t raw = 0;
     (void)ADC_ReadChannelBlocking(ANALOG_CH_BUS_VOLTAGE, &raw);
+
+    char txt[40];
+    sprintf(txt, "RAW=%u\r\n", raw);
+    UART_SendString(txt);
+
     return (uint16_t)(((uint32_t)raw * 60000UL) / 1023UL);
 }
 
