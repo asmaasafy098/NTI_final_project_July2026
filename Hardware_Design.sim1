@@ -1,6 +1,6 @@
 <circuit version="1.1.0-SR2" rev="260312" stepSize="1000000" stepsPS="1000000" NLsteps="100000" reaStep="1000000" animate="1" >
 
-<item itemtype="MCU" CircId="mega32-1" mainComp="false" Show_id="true" Show_Val="false" Pos="-96,-148" rotation="0" hflip="1" vflip="1" label="mega32-1" idLabPos="-1.38501,-20.6925" labelrot="0" valLabPos="-16,20" valLabRot="0" Frequency="16 MHz" Program="D:/Users/HP/Desktop/Attempts_and_Tasks/NTI-Final-Project_2026/build/firmware.hex" Auto_Load="true" saveEepr="true" Logic_Symbol="false" Wdt_enabled="false" MainMcu="true" SerialMon="-1" />
+<item itemtype="MCU" CircId="mega32-1" mainComp="false" Show_id="true" Show_Val="false" Pos="-96,-148" rotation="0" hflip="1" vflip="1" label="mega32-1" idLabPos="-1.38501,-20.6925" labelrot="0" valLabPos="-16,20" valLabRot="0" Frequency="16 MHz" Program="build/firmware.hex" Auto_Load="true" saveEepr="true" Logic_Symbol="false" Wdt_enabled="false" MainMcu="true" SerialMon="-1" />
 
 <item itemtype="Tunnel" CircId="Tunnel-2" mainComp="false" Show_id="false" Show_Val="false" Pos="-40,-4" rotation="180" hflip="1" vflip="1" label="Tunnel-2" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="C1" IsBus="false" />
 
@@ -54,7 +54,7 @@
 
 <item itemtype="Tunnel" CircId="Tunnel-28" mainComp="false" Show_id="false" Show_Val="false" Pos="-104,-220" rotation="450" hflip="1" vflip="1" label="Tunnel-28" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="GRN" IsBus="false" />
 
-<item itemtype="Potentiometer" CircId="Potentiometer-29" mainComp="false" ShowProp="Resistance" Show_id="true" Show_Val="true" Pos="180,-264" rotation="-270" hflip="1" vflip="1" label="Speed setpoint" idLabPos="-24.2807,-42.7602" labelrot="0" valLabPos="15,-20" valLabRot="0" Resistance="1 kΩ" Value_Ohm="923 Ω" Slider="false" Scale="1" />
+<item itemtype="Potentiometer" CircId="Potentiometer-29" mainComp="false" ShowProp="Resistance" Show_id="true" Show_Val="true" Pos="180,-264" rotation="-270" hflip="1" vflip="1" label="Speed setpoint" idLabPos="-24.2807,-42.7602" labelrot="0" valLabPos="15,-20" valLabRot="0" Resistance="1 kΩ" Value_Ohm="439 Ω" Slider="false" Scale="1" />
 
 <item itemtype="Potentiometer" CircId="Potentiometer-30" mainComp="false" ShowProp="Resistance" Show_id="true" Show_Val="true" Pos="204,-120" rotation="-270" hflip="1" vflip="1" label="DC bus voltage" idLabPos="-25.9368,-43.8643" labelrot="0" valLabPos="15,-20" valLabRot="0" Resistance="1 kΩ" Value_Ohm="350 Ω" Slider="false" Scale="1" />
 
@@ -619,5 +619,7 @@
 <item itemtype="Connector" uid="Connector-328" startpinid="Tunnel-127-pin" endpinid="Node-215-0" pointList="-120,4,-112,4" />
 
 <item itemtype="Connector" uid="Connector-329" startpinid="Node-215-2" endpinid="mega32-1-PORTD5" pointList="-112,4,-104,4" />
+
+<item itemtype="Connector" uid="Connector-330" startpinid="AudioOut-67-lPin" endpinid="Tunnel-68-pin" pointList="-116,144,-128,144,-128,140" />
 
 </circuit>
