@@ -224,32 +224,51 @@ void Task_Panel(void)
     PANEL_Poll();
     Panel_Event_t event = PANEL_GetEvent();
     
-    switch (event) {
-        case PNL_START:
-            if (!FSM_RequestStart()) {
-                CONSOLE_SendError(PSTR("ERR START"));
-            }
-            break;
+    switch (event)
+{
+    case PNL_START:
+        if (!FSM_RequestStart())
+        {
+            CONSOLE_SendError(PSTR("ERR START"));
+        }
+        else
+        {
+            BUZZER_SetMode(BUZZ_ACTION);
+        }
+        break;
 
-        case PNL_STOP:
-            FSM_RequestStop();
-            break;
+    case PNL_STOP:
+        if (FSM_RequestStop())
+        {
+            BUZZER_SetMode(BUZZ_ACTION);
+        }
+        break;
 
-        case PNL_REVERSE:
-            if (!FSM_RequestReverse()) {
-                CONSOLE_SendError(PSTR("ERR REV"));
-            }
-            break;
+    case PNL_REVERSE:
+        if (!FSM_RequestReverse())
+        {
+            CONSOLE_SendError(PSTR("ERR REV"));
+        }
+        else
+        {
+            BUZZER_SetMode(BUZZ_ACTION);
+        }
+        break;
 
-        case PNL_RESET:
-            if (!FSM_RequestReset()) {
-                CONSOLE_SendError(PSTR("ERR ACTIVE"));
-            }
-            break;
+    case PNL_RESET:
+        if (!FSM_RequestReset())
+        {
+            CONSOLE_SendError(PSTR("ERR ACTIVE"));
+        }
+        else
+        {
+            BUZZER_SetMode(BUZZ_ACTION);
+        }
+        break;
 
-        default:
-            break;
-    }
+    default:
+        break;
+}
     
     /* Update status LEDs based on FSM state */
     DriveState_t state = FSM_GetState();
@@ -278,6 +297,7 @@ void Task_Panel(void)
     } else {
         g_driveData.remote = 1;
     }
+    BUZZER_Update();
 }
 
 /**
