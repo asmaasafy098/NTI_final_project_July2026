@@ -21,10 +21,10 @@
 #define UART_BAUD_115200      115200UL
 
 #ifndef UART_TX_BUF_SIZE
-  #define UART_TX_BUF_SIZE   128U
+  #define UART_TX_BUF_SIZE   32U
 #endif
 #ifndef UART_RX_BUF_SIZE
-  #define UART_RX_BUF_SIZE   64U
+  #define UART_RX_BUF_SIZE   16U
 #endif
 
 #define UART_TX_BUF_MASK   (UART_TX_BUF_SIZE - 1U)
@@ -68,13 +68,16 @@ typedef void (*UART_RxCallBackType)(uint8_t receivedByte);
 Std_ReturnType UART_Init(const UART_ConfigType *addConfig);
 Std_ReturnType UART_DeInit(void);
 Std_ReturnType UART_SendByte(uint8_t uint8Data);
+Std_ReturnType UART_SendByte_NonBlocking(uint8_t uint8Data);
 Std_ReturnType UART_ReceiveByte(uint8_t *puint8Data);
 Std_ReturnType UART_ReceiveByteNonBlocking(uint8_t *puint8Data);
 Std_ReturnType UART_SendString(const char *pString);
+Std_ReturnType UART_SendString_P(const char *pProgmemString);
 Std_ReturnType UART_ReceiveString(uint8_t *buffer, uint16_t maxLength, uint8_t terminator);
 Std_ReturnType UART_SetRxCallBack(UART_RxCallBackType callBack);
 Std_ReturnType UART_TxBusy(void);
 void USART_TransmitByte(uint8_t byte);
 void USART_TransmitString(const char *str);
+void USART_TransmitString_P(const char *str);
 
 #endif

@@ -10,7 +10,7 @@
 #include "data_types.h"
 
 /* ==================== Constants ==================== */
-#define CONSOLE_BUFFER_SIZE     64
+#define CONSOLE_BUFFER_SIZE     32
 #define MAX_COMMAND_ARGS        8
 #define COMMAND_DELIMITERS      " \t\r\n"
 
@@ -45,6 +45,7 @@ void CONSOLE_ExecuteCommand(void);
  * @param str Response string
  */
 void CONSOLE_SendResponse(const char* str);
+void CONSOLE_SendResponse_P(const char* progmemStr);
 
 /**
  * @brief Send error message

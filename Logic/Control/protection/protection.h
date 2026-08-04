@@ -16,7 +16,7 @@ typedef struct {
     uint8_t tripped;
     uint8_t latched;
     uint32_t i2tAccum;
-    uint16_t i2tLimit;
+    uint32_t i2tLimit;
     uint8_t tempCounter;
     uint8_t underVoltCounter;
     uint8_t overVoltCounter;

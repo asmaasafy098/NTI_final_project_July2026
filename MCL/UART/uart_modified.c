@@ -1,6 +1,7 @@
 #include "../../Service/STD_Types.h"
 #include "../../Service/Bit_Math.h"
 #include <avr/interrupt.h>
+#include <avr/pgmspace.h>
 #include "uart_registers.h"
 #include "uart_interface.h"
 
@@ -71,16 +72,54 @@ Std_ReturnType UART_DeInit(void)
 Std_ReturnType UART_SendByte(uint8_t uint8Data)
 {
     uint16_t local_NextHead = 0U;
+    uint8_t  sreg;
+
     local_NextHead = (uint16_t)((UART_TxHead + 1U) & UART_TX_BUF_MASK);
 
     while (local_NextHead == UART_TxTail) { }
 
+    /* UART_TxHead/UART_TxBuf are also touched by USART_UDRE_vect (which
+     * advances UART_TxTail) and can now be re-entered from USART_RXC_vect
+     * (via CONSOLE_ProcessChar()'s echo, once a RX callback is registered).
+     * Protect the read-modify-write of the shared index/buffer so a byte
+     * echoed from inside the RX ISR can never interleave with a call
+     * already in progress from main-line code. */
+    sreg = SREG;
+    cli();
     UART_TxBuf[UART_TxHead] = uint8Data;
     UART_TxHead = local_NextHead;
+    SREG = sreg;
 
     SET_BIT(UART_UCSRB_REG, UART_UDRIE_BIT);
 
     return E_OK;
+}
+
+Std_ReturnType UART_SendByte_NonBlocking(uint8_t uint8Data)
+{
+    uint16_t local_NextHead;
+    uint8_t  sreg;
+    Std_ReturnType status;
+
+    sreg = SREG;
+    cli();
+
+    local_NextHead = (uint16_t)((UART_TxHead + 1U) & UART_TX_BUF_MASK);
+    if (local_NextHead == UART_TxTail) {
+        /* Buffer full - drop this byte instead of blocking. Safe to call
+         * from inside the RX ISR: waiting here would deadlock, since only
+         * the UDRE ISR can free space, and it can't run while nested
+         * inside another ISR. */
+        status = E_NOK;
+    } else {
+        UART_TxBuf[UART_TxHead] = uint8Data;
+        UART_TxHead = local_NextHead;
+        SET_BIT(UART_UCSRB_REG, UART_UDRIE_BIT);
+        status = E_OK;
+    }
+
+    SREG = sreg;
+    return status;
 }
 
 Std_ReturnType UART_ReceiveByte(uint8_t *puint8Data)
@@ -123,6 +162,21 @@ Std_ReturnType UART_SendString(const char *pString)
 
     for (local_Index = 0U; pString[local_Index] != '\0'; local_Index++) {
         (void)UART_SendByte((uint8_t)pString[local_Index]);
+    }
+
+    return E_OK;
+}
+
+Std_ReturnType UART_SendString_P(const char *pProgmemString)
+{
+    char c;
+
+    if (pProgmemString == NULL) {
+        return E_NOK;
+    }
+
+    while ((c = (char)pgm_read_byte(pProgmemString++)) != '\0') {
+        (void)UART_SendByte((uint8_t)c);
     }
 
     return E_OK;
@@ -180,6 +234,11 @@ void USART_TransmitByte(uint8_t byte)
 void USART_TransmitString(const char *str)
 {
     UART_SendString(str);
+}
+
+void USART_TransmitString_P(const char *str)
+{
+    UART_SendString_P(str);
 }
 
 ISR(USART_RXC_vect)

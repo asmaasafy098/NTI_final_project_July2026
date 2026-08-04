@@ -18,9 +18,17 @@ void RAMP_Init(Ramp_t* ramp) {
     ramp->maxRpm = 3000;
     ramp->atTarget = 1;
 }
+void RAMP_SetTarget(Ramp_t* ramp, int16_t target)
+{
+    if (target <= 0)
+    {
+        ramp->target = 0;
+    }
+    else
+    {
+        ramp->target = Util_Clamp(target, ramp->minRpm, ramp->maxRpm);
+    }
 
-void RAMP_SetTarget(Ramp_t* ramp, int16_t target) {
-    ramp->target = Util_Clamp(target, ramp->minRpm, ramp->maxRpm);
     ramp->atTarget = 0;
 }
 
@@ -50,7 +58,17 @@ int16_t RAMP_Step(Ramp_t* ramp) {
     }
     
     /* Clamp current value */
-    ramp->current = Util_Clamp(ramp->current, ramp->minRpm, ramp->maxRpm);
+   if (ramp->target == 0)
+ {
+    if (ramp->current < 0)
+        ramp->current = 0;
+   }
+ else
+  {
+    ramp->current = Util_Clamp(ramp->current,
+                               ramp->minRpm,
+                               ramp->maxRpm);
+ }
     ramp->output = ramp->current;
     
     /* Check if at target */

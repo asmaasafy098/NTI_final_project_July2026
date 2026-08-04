@@ -5,9 +5,9 @@ build/Logic/Communication/telemetry/telemetry.o: \
  Logic/Communication/telemetry/../console/console.h \
  Logic/Communication/telemetry/../../Control/drive_fsm/drive_fsm.h \
  Logic/Communication/telemetry/../../Control/protection/protection.h \
- Logic/Communication/telemetry/../../../MCL/Timer/timer_interface.h \
- Logic/Communication/telemetry/../../../MCL/Timer/../../Service/STD_Types.h \
- Logic/Communication/telemetry/../../../MCL/Timer/timer_registers.h
+ d:\users\hp\desktop\final_project\mcl\timer\timer_interface.h \
+ d:\users\hp\desktop\final_project\service\std_types.h \
+ d:\users\hp\desktop\final_project\mcl\timer\timer_registers.h
 
 Logic/Communication/telemetry/telemetry.h:
 
@@ -21,8 +21,8 @@ Logic/Communication/telemetry/../../Control/drive_fsm/drive_fsm.h:
 
 Logic/Communication/telemetry/../../Control/protection/protection.h:
 
-Logic/Communication/telemetry/../../../MCL/Timer/timer_interface.h:
+d:\users\hp\desktop\final_project\mcl\timer\timer_interface.h:
 
-Logic/Communication/telemetry/../../../MCL/Timer/../../Service/STD_Types.h:
+d:\users\hp\desktop\final_project\service\std_types.h:
 
-Logic/Communication/telemetry/../../../MCL/Timer/timer_registers.h:
+d:\users\hp\desktop\final_project\mcl\timer\timer_registers.h:

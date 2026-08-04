@@ -10,7 +10,9 @@
 #include "../MotorBridge/MotorBridge.h"
 #include "../../Data/data_manager.h"
 #include "../../../Service/util_math.h"
-
+#include <stdio.h>
+#include "../../../MCL/UART/uart_interface.h"
+#include "../../HAL/ANALOG_SENSOR/ANALOG_SENSOR.h"
 /* ==================== External References ==================== */
 extern DriveData_t g_driveData;
 extern DriveCfg_t g_driveCfg;
@@ -57,7 +59,7 @@ void FSM_Run(void) {
     }
 
     /* Update state timer (called every 10ms) */
-    g_fsm.stateTimer += 10;
+    g_fsm.stateTimer += 100;
 
     /* Check E-Stop first (highest priority) */
     if (g_driveData.estopRaw && g_fsm.currentState != DS_ESTOP) {
@@ -125,21 +127,44 @@ static void FSM_HandleStopped(void) {
     g_driveData.dutyCounts = 0;
     g_driveData.dutyPct = 0;
 }
+static void FSM_HandleStarting(void)
+{
+    char txt[100];
 
-static void FSM_HandleStarting(void) {
-    /* Check if at setpoint */
+    sprintf(txt,
+            "RT=%u RR=%d MR=%d DIFF=%d CNT=%lu\r\n",
+            (unsigned)RAMP_AtTarget(&g_ramp),
+            g_driveData.rampedRpm,
+            g_driveData.measuredRpm,
+            ABS(g_driveData.measuredRpm - g_driveData.rampedRpm),
+            (unsigned long)g_fsm.atSpeedCounter);
+
+    UART_SendString(txt);
+
     if (RAMP_AtTarget(&g_ramp) &&
-        ABS(g_driveData.measuredRpm - g_driveData.rampedRpm) <= 100) {
-        g_fsm.atSpeedCounter++;
-        if (g_fsm.atSpeedCounter >= 100) {  /* 100 * 10ms tick = 1 second */
-            FSM_TransitionTo(DS_RUNNING);
-            g_fsm.atSpeedCounter = 0;
+        ABS(g_driveData.measuredRpm - g_driveData.rampedRpm) <= 250)
+    {
+        if (g_fsm.atSpeedCounter < 20)
+        {
+            g_fsm.atSpeedCounter++;
         }
-    } else {
+    }
+    else
+    {
+        UART_SendString("RESET CNT\r\n");
+        if (g_fsm.atSpeedCounter > 0)
+        {
+            g_fsm.atSpeedCounter--;
+        }
+    }
+
+    if (g_fsm.atSpeedCounter >= 20)
+    {
+        UART_SendString("RUNNING\r\n");
+        FSM_TransitionTo(DS_RUNNING);
         g_fsm.atSpeedCounter = 0;
     }
 }
-
 static void FSM_HandleRunning(void) {
     /* Normal running - PI controller handles speed */
     /* Check if setpoint below minRpm */
@@ -175,16 +200,21 @@ static void FSM_HandleDeadTime(void) {
     }
 }
 
-static void FSM_HandleCoasting(void) {
+static void FSM_HandleCoasting(void)
+{
     /* Wait for 500ms then go to stopped */
-    if (g_fsm.stateTimer >= 500) {
+    if (g_fsm.stateTimer >= 500)
+    {
         FSM_TransitionTo(DS_STOPPED);
     }
 }
-
-static void FSM_HandleTripped(void) {
-    /* Stay in tripped state until acknowledged */
-    /* Buzzer and fault LED are handled externally */
+static void FSM_HandleTripped(void)
+{
+    if (PROTECT_GetActiveTrip() == TRIP_NONE)
+    {
+        g_driveData.activeTrip = TRIP_NONE;
+        FSM_TransitionTo(DS_STOPPED);
+    }
 }
 
 static void FSM_HandleEStop(void) {
@@ -275,16 +305,7 @@ static void FSM_TransitionTo(DriveState_t newState) {
     g_driveData.state = newState;
 }
 
-/* Applies the current FSM state to the physical bridge every cycle.
- * This is the only place (besides the E-stop ISR itself) that talks
- * to MotorBridge, keeping the "only bridge.c writes the pins" rule
- * intact -- FSM just decides WHAT to ask for.
- *
- * NOTE: PD5/OC1A is not wired in the SimulIDE circuit, so there is no
- * hardware PWM path. BRIDGE_SetDuty() only does bang-bang ON/OFF
- * against a minimum-run threshold; the 100 ms control task still
- * calls BRIDGE_SetDuty(g_driveData.dutyCounts) after PI_Step() runs.
- * FSM only owns direction + master enable here. */
+
 static void FSM_ExecuteActions(void) {
     switch (g_fsm.currentState) {
         case DS_STARTING:
@@ -363,25 +384,45 @@ uint8_t FSM_IsTripped(void) {
     return (g_fsm.currentState == DS_TRIPPED ||
             g_fsm.currentState == DS_ESTOP);
 }
+uint8_t FSM_RequestStart(void)
+{char txt[80];
 
-uint8_t FSM_RequestStart(void) {
-    if (g_fsm.currentState != DS_STOPPED) {
-        return 0;  /* Not in stopped state */
+sprintf(txt, "REMOTE=%d\r\n", g_driveData.remote);
+UART_SendString(txt);
+
+/* في وضع Local اقرأ قيمة البوتنشيومتر مباشرة */
+if (!g_driveData.remote)
+{
+    g_driveData.setpointRpm = ANALOG_GetSetpoint();
+}
+
+    sprintf(txt,
+            "START: STATE=%d SP=%d MIN=%d TRIP=%d\r\n",
+            g_fsm.currentState,
+            g_driveData.setpointRpm,
+            g_driveCfg.minRpm,
+            PROTECT_GetActiveTrip());
+    UART_SendString(txt);
+
+    if (g_fsm.currentState != DS_STOPPED)
+    {
+        UART_SendString("FAIL STATE\r\n");
+        return 0;
     }
 
-    if (g_fsm.currentState == DS_TRIPPED || g_fsm.currentState == DS_ESTOP) {
-        return 0;  /* Tripped */
+    if (g_driveData.setpointRpm < g_driveCfg.minRpm)
+    {
+        UART_SendString("FAIL SPEED\r\n");
+        return 0;
     }
 
-    if (g_driveData.setpointRpm < g_driveCfg.minRpm) {
-        return 0;  /* Setpoint below minRpm */
-    }
+    UART_SendString("START OK\r\n");
 
     g_fsm.direction = DIR_FORWARD;
     FSM_TransitionTo(DS_STARTING);
+
     return 1;
 }
-
 uint8_t FSM_RequestStop(void) {
     if (g_fsm.currentState == DS_RUNNING || g_fsm.currentState == DS_STARTING) {
         FSM_TransitionTo(DS_RAMP_DOWN);
@@ -411,28 +452,51 @@ uint8_t FSM_RequestReverse(void) {
     return 1;
 }
 
-uint8_t FSM_RequestReset(void) {
-    if (g_fsm.currentState == DS_TRIPPED) {
-        /* Check if cause is cleared */
+uint8_t FSM_RequestReset(void)
+{
+    char txt[80];
+
+    sprintf(txt,
+            "RESET: STATE=%d ACTIVE=%d ESTOP=%d\r\n",
+            g_fsm.currentState,
+            PROTECT_GetActiveTrip(),
+            g_driveData.estopRaw);
+    UART_SendString(txt);
+
+    if (g_fsm.currentState == DS_TRIPPED)
+    {
         Trip_t activeTrip = PROTECT_GetActiveTrip();
-        if (activeTrip == TRIP_NONE) {
+
+        if (activeTrip == TRIP_NONE)
+        {
+            UART_SendString("RESET->STOPPED\r\n");
+
             g_fsm.tripPending = 0;
+            PROTECT_Reset();              // أضف هذا السطر
             FSM_TransitionTo(DS_STOPPED);
             return 1;
         }
-        return 0;  /* Cause still active */
+
+        UART_SendString("RESET FAIL ACTIVE TRIP\r\n");
+        return 0;
     }
 
-    if (g_fsm.currentState == DS_ESTOP) {
-        /* Check if E-Stop contact is closed */
-        if (!g_driveData.estopRaw) {
+    if (g_fsm.currentState == DS_ESTOP)
+    {
+        if (!g_driveData.estopRaw)
+        {
+            UART_SendString("RESET ESTOP->STOPPED\r\n");
+
             FSM_TransitionTo(DS_STOPPED);
             return 1;
         }
-        return 0;  /* E-Stop still open */
+
+        UART_SendString("RESET FAIL ESTOP\r\n");
+        return 0;
     }
 
-    return 0;  /* Not in tripped state */
+    UART_SendString("RESET FAIL STATE\r\n");
+    return 0;
 }
 
 uint8_t FSM_RequestEmergencyStop(void) {

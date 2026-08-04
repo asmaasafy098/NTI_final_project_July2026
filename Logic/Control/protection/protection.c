@@ -5,7 +5,8 @@
 
 #include "protection.h"
 #include "util_math.h"
-
+#include <stdio.h> 
+#include "../../../MCL/UART/uart_interface.h"
 static ProtectionData_t g_protect;
 
 /* ==================== Functions Implementation ==================== */
@@ -26,8 +27,14 @@ void PROTECT_Init(void) {
 }
 
 Trip_t PROTECT_Evaluate(const DriveData_t* data, const DriveCfg_t* cfg) {
-    Trip_t trip = TRIP_NONE;
-    
+  Trip_t trip = TRIP_NONE;
+
+    if (data->busmV > cfg->overVoltmV)
+    {
+        char txt[40];
+        sprintf(txt, "BUS=%u LIM=%u\r\n", data->busmV, cfg->overVoltmV);
+        UART_SendString(txt);
+    }
     /* ===== PRIORITY 1: E-Stop (Highest) ===== */
     if (data->estopRaw) {
         trip = TRIP_ESTOP;
@@ -58,15 +65,15 @@ Trip_t PROTECT_Evaluate(const DriveData_t* data, const DriveCfg_t* cfg) {
     }
     
     /* ===== PRIORITY 5: Under Voltage ===== */
-    if (data->busmV < cfg->underVoltmV) {
+    /*if (data->busmV < cfg->underVoltmV) {
         g_protect.underVoltCounter++;
-        if (g_protect.underVoltCounter >= 5) {  /* 500ms */
+        if (g_protect.underVoltCounter >= 5) {  
             trip = TRIP_UNDERVOLT;
             goto TRIP_ACTIVE;
         }
     } else {
         g_protect.underVoltCounter = 0;
-    }
+    }*/
     
     /* ===== PRIORITY 6: Over Voltage ===== */
     if (data->busmV > cfg->overVoltmV) {

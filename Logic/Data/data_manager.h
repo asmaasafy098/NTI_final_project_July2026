@@ -67,9 +67,4 @@ void DataManager_UpdateError(void);
  */
 void DataManager_IncrementRunSeconds(void);
 
-/**
- * @brief Persist data to EEPROM
- */
-void DataManager_Persist(void);
-
 #endif /* DATA_MANAGER_H_ */
