@@ -65,7 +65,7 @@ Trip_t PROTECT_Evaluate(const DriveData_t* data, const DriveCfg_t* cfg) {
     }
     
     /* ===== PRIORITY 5: Under Voltage ===== */
-    /*if (data->busmV < cfg->underVoltmV) {
+    if (data->busmV < cfg->underVoltmV) {
         g_protect.underVoltCounter++;
         if (g_protect.underVoltCounter >= 5) {  
             trip = TRIP_UNDERVOLT;
@@ -73,7 +73,7 @@ Trip_t PROTECT_Evaluate(const DriveData_t* data, const DriveCfg_t* cfg) {
         }
     } else {
         g_protect.underVoltCounter = 0;
-    }*/
+    }
     
     /* ===== PRIORITY 6: Over Voltage ===== */
     if (data->busmV > cfg->overVoltmV) {
