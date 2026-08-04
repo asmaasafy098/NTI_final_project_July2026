@@ -261,5 +261,5 @@ Std_ReturnType LCD_Update(const DriveData_t *pData);
  * @return E_OK/E_NOK.
  */
 Std_ReturnType LCD_ShowTrip(Trip_t tripCode);
-
+Std_ReturnType LCD_ReInit(void);
 #endif /* LCD_AIP31068_I2C_H */

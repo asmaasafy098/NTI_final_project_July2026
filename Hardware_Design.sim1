@@ -54,13 +54,13 @@
 
 <item itemtype="Tunnel" CircId="Tunnel-28" mainComp="false" Show_id="false" Show_Val="false" Pos="-104,-220" rotation="450" hflip="1" vflip="1" label="Tunnel-28" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="GRN" IsBus="false" />
 
-<item itemtype="Potentiometer" CircId="Potentiometer-29" mainComp="false" ShowProp="Resistance" Show_id="true" Show_Val="true" Pos="180,-264" rotation="-270" hflip="1" vflip="1" label="Speed setpoint" idLabPos="-24.2807,-42.7602" labelrot="0" valLabPos="15,-20" valLabRot="0" Resistance="1 kΩ" Value_Ohm="439 Ω" Slider="false" Scale="1" />
+<item itemtype="Potentiometer" CircId="Potentiometer-29" mainComp="false" ShowProp="Resistance" Show_id="true" Show_Val="true" Pos="180,-264" rotation="-270" hflip="1" vflip="1" label="Speed setpoint" idLabPos="-24.2807,-42.7602" labelrot="0" valLabPos="15,-20" valLabRot="0" Resistance="1 kΩ" Value_Ohm="179 Ω" Slider="false" Scale="1" />
 
-<item itemtype="Potentiometer" CircId="Potentiometer-30" mainComp="false" ShowProp="Resistance" Show_id="true" Show_Val="true" Pos="204,-120" rotation="-270" hflip="1" vflip="1" label="DC bus voltage" idLabPos="-25.9368,-43.8643" labelrot="0" valLabPos="15,-20" valLabRot="0" Resistance="1 kΩ" Value_Ohm="350 Ω" Slider="false" Scale="1" />
+<item itemtype="Potentiometer" CircId="Potentiometer-30" mainComp="false" ShowProp="Resistance" Show_id="true" Show_Val="true" Pos="204,-120" rotation="-270" hflip="1" vflip="1" label="DC bus voltage" idLabPos="-25.9368,-43.8643" labelrot="0" valLabPos="15,-20" valLabRot="0" Resistance="1 kΩ" Value_Ohm="468 Ω" Slider="false" Scale="1" />
 
 <item itemtype="Potentiometer" CircId="Potentiometer-31" mainComp="false" ShowProp="Resistance" Show_id="true" Show_Val="true" Pos="36,-288" rotation="-270" hflip="1" vflip="1" label="Motor current" idLabPos="-25.3848,-42.7602" labelrot="0" valLabPos="15,-20" valLabRot="0" Resistance="1 kΩ" Value_Ohm="889 Ω" Slider="false" Scale="1" />
 
-<item itemtype="Potentiometer" CircId="Potentiometer-32" mainComp="false" ShowProp="Resistance" Show_id="true" Show_Val="true" Pos="60,-132" rotation="-270" hflip="1" vflip="1" label="Motor temperature" idLabPos="-30.9052,-42.7602" labelrot="0" valLabPos="15,-20" valLabRot="0" Resistance="1 kΩ" Value_Ohm="800 Ω" Slider="false" Scale="1" />
+<item itemtype="Potentiometer" CircId="Potentiometer-32" mainComp="false" ShowProp="Resistance" Show_id="true" Show_Val="true" Pos="60,-132" rotation="-270" hflip="1" vflip="1" label="Motor temperature" idLabPos="-30.9052,-42.7602" labelrot="0" valLabPos="15,-20" valLabRot="0" Resistance="1 kΩ" Value_Ohm="580 Ω" Slider="false" Scale="1" />
 
 <item itemtype="Tunnel" CircId="Tunnel-33" mainComp="false" Show_id="false" Show_Val="false" Pos="8,-288" rotation="0" hflip="1" vflip="1" label="Tunnel-33" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="A1" IsBus="false" />
 

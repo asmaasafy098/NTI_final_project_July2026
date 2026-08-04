@@ -101,7 +101,7 @@ typedef struct {
 typedef struct {
     uint16_t magic;           /* 0x4D44 signature */
     uint8_t version;          /* 0x01 */
-    uint16_t maxRpm;          /* 3000 */
+    uint16_t maxRpm;          /* 2800 */
     uint16_t minRpm;          /* 200 */
     uint16_t accelRpmPerSec;  /* 600 */
     uint16_t decelRpmPerSec;  /* 900 */

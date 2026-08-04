@@ -8,9 +8,9 @@ build/HAL/UserPanel/UserPanel.o: HAL/UserPanel/UserPanel.c \
  Src/../MCL/Timer/timer_registers.h \
  HAL/UserPanel/../../Service/STD_Types.h \
  HAL/UserPanel/../../Service/Bit_Math.h \
- d:\users\hp\desktop\final_project\mcl\uart\uart_interface.h \
- d:\users\hp\desktop\final_project\service\std_types.h \
- d:\users\hp\desktop\final_project\mcl\uart\uart_registers.h
+ Logic/Communication/console/../../../MCL/UART/uart_interface.h \
+ Logic/Communication/console/../../../MCL/UART/../../Service/STD_Types.h \
+ Logic/Communication/console/../../../MCL/UART/uart_registers.h
 
 HAL/UserPanel/UserPanel.h:
 
@@ -34,8 +34,8 @@ HAL/UserPanel/../../Service/STD_Types.h:
 
 HAL/UserPanel/../../Service/Bit_Math.h:
 
-d:\users\hp\desktop\final_project\mcl\uart\uart_interface.h:
+Logic/Communication/console/../../../MCL/UART/uart_interface.h:
 
-d:\users\hp\desktop\final_project\service\std_types.h:
+Logic/Communication/console/../../../MCL/UART/../../Service/STD_Types.h:
 
-d:\users\hp\desktop\final_project\mcl\uart\uart_registers.h:
+Logic/Communication/console/../../../MCL/UART/uart_registers.h:

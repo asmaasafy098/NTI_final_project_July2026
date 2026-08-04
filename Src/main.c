@@ -211,92 +211,181 @@ int main(void)
  */
 void Task_Panel(void)
 {
-    /* Live-read the physical E-Stop switch (same pin as the INT1 ISR,
-     * PD3) every 10ms. estopRaw must reflect the CURRENT pin level (not
-     * just "an edge happened once") because FSM_RequestReset() checks
-     * "!g_driveData.estopRaw" to decide whether the E-Stop loop has been
-     * physically cleared before allowing the operator to acknowledge and
-     * resume. Without this, the E-Stop switch cut the motor for an
-     * instant (via the ISR) but the FSM never actually knew the system
-     * was stopped, and could never be reset back out of DS_ESTOP either. */
-    g_driveData.estopRaw = (GPIO_read_pin(GPIO_PORTD, GPIO_PIN3) == GPIO_HIGH) ? 1U : 0U;
+    /* ============================================================
+     * Live-read physical E-Stop switch
+     * PD3
+     * ============================================================ */
+    g_driveData.estopRaw =
+        (GPIO_read_pin(GPIO_PORTD, GPIO_PIN3) == GPIO_HIGH) ? 1U : 0U;
 
+
+    /* ============================================================
+     * Poll Panel
+     * ============================================================ */
     PANEL_Poll();
+
     Panel_Event_t event = PANEL_GetEvent();
-    
+
+
+    /* ============================================================
+     * Process Panel Event
+     * ============================================================ */
     switch (event)
-{
-    case PNL_START:
-        if (!FSM_RequestStart())
-        {
-            CONSOLE_SendError(PSTR("ERR START"));
-        }
-        else
-        {
-            BUZZER_SetMode(BUZZ_ACTION);
-        }
-        break;
+    {
+        /* ==================== START ==================== */
 
-    case PNL_STOP:
-        if (FSM_RequestStop())
-        {
-            BUZZER_SetMode(BUZZ_ACTION);
-        }
-        break;
+        case PNL_START:
 
-    case PNL_REVERSE:
-        if (!FSM_RequestReverse())
-        {
-            CONSOLE_SendError(PSTR("ERR REV"));
-        }
-        else
-        {
-            BUZZER_SetMode(BUZZ_ACTION);
-        }
-        break;
+            if (!FSM_RequestStart())
+            {
+                CONSOLE_SendError(PSTR("ERR START"));
+            }
+            else
+            {
+                BUZZER_SetMode(BUZZ_ACTION);
+            }
 
-    case PNL_RESET:
-        if (!FSM_RequestReset())
-        {
-            CONSOLE_SendError(PSTR("ERR ACTIVE"));
-        }
-        else
-        {
-            BUZZER_SetMode(BUZZ_ACTION);
-        }
-        break;
+            break;
 
-    default:
-        break;
-}
-    
-    /* Update status LEDs based on FSM state */
-    DriveState_t state = FSM_GetState();
-    if (state == DS_RUNNING) {
-        PANEL_SetRunLED(1, 0);  /* Steady ON */
-    } else if (state == DS_STARTING || state == DS_RAMP_DOWN) {
-        PANEL_SetRunLED(1, 1);  /* Blink */
-    } else {
-        PANEL_SetRunLED(0, 0);  /* OFF */
+
+        /* ==================== STOP ==================== */
+
+        case PNL_STOP:
+
+            if (FSM_RequestStop())
+            {
+                BUZZER_SetMode(BUZZ_ACTION);
+            }
+
+            break;
+
+
+        /* ==================== REVERSE ==================== */
+
+        case PNL_REVERSE:
+
+            if (!FSM_RequestReverse())
+            {
+                CONSOLE_SendError(PSTR("ERR REV"));
+            }
+            else
+            {
+                BUZZER_SetMode(BUZZ_ACTION);
+            }
+
+            break;
+
+
+        /* ========================================================
+         * RESET SHORT PRESS
+         *
+         * Less than 3 seconds:
+         * Re-initialize LCD only.
+         *
+         * IMPORTANT:
+         * Do NOT call FSM_RequestReset() here.
+         * ======================================================== */
+
+        case PNL_RESET:
+
+            LCD_ReInit();
+
+            break;
+
+
+        /* ========================================================
+         * RESET LONG PRESS
+         *
+         * 3 seconds or more:
+         * Acknowledge / reset active trip.
+         * ======================================================== */
+
+        case PNL_RESET_ACK:
+
+            if (!FSM_RequestReset())
+            {
+                CONSOLE_SendError(PSTR("ERR ACTIVE"));
+            }
+            else
+            {
+                BUZZER_SetMode(BUZZ_ACTION);
+            }
+
+            break;
+
+
+        /* ==================== NO EVENT ==================== */
+
+        default:
+            break;
     }
-    
-    /* Fault LED */
-    if (FSM_IsTripped()) {
+
+
+    /* ============================================================
+     * Update Run LED according to FSM state
+     * ============================================================ */
+
+    DriveState_t state = FSM_GetState();
+
+    if (state == DS_RUNNING)
+    {
+        /* Steady ON */
+        PANEL_SetRunLED(1, 0);
+    }
+    else if ((state == DS_STARTING) ||
+             (state == DS_RAMP_DOWN))
+    {
+        /* Blinking */
+        PANEL_SetRunLED(1, 1);
+    }
+    else
+    {
+        /* OFF */
+        PANEL_SetRunLED(0, 0);
+    }
+
+
+    /* ============================================================
+     * Fault LED
+     * ============================================================ */
+
+    if (FSM_IsTripped())
+    {
         PANEL_SetFaultLED(1);
-    } else {
+    }
+    else
+    {
         PANEL_SetFaultLED(0);
     }
-    
-    /* Direction LEDs */
+
+
+    /* ============================================================
+     * Direction LEDs
+     * ============================================================ */
+
     MotorDir_t dir = FSM_GetDirection();
+
     PANEL_SetDirectionLEDs(dir);
-    
-    /* Update Local/Remote mode */
-    if (PANEL_IsLocalMode()) {
+
+
+    /* ============================================================
+     * Local / Remote Mode
+     * ============================================================ */
+
+    if (PANEL_IsLocalMode())
+    {
         g_driveData.remote = 0;
-    } else {
+    }
+    else
+    {
         g_driveData.remote = 1;
     }
+
+
+    /* ============================================================
+     * Update Buzzer
+     * ============================================================ */
+
     BUZZER_Update();
 }
 

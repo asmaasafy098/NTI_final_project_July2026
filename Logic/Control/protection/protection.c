@@ -25,107 +25,156 @@ void PROTECT_Init(void) {
     g_protect.overspeedCounter = 0;
     g_protect.noFeedbackCounter = 0;
 }
+Trip_t PROTECT_Evaluate(const DriveData_t* data, const DriveCfg_t* cfg)
+{
+    Trip_t trip = TRIP_NONE;
 
-Trip_t PROTECT_Evaluate(const DriveData_t* data, const DriveCfg_t* cfg) {
-  Trip_t trip = TRIP_NONE;
-
-    if (data->busmV > cfg->overVoltmV)
-    {
-        char txt[40];
-        sprintf(txt, "BUS=%u LIM=%u\r\n", data->busmV, cfg->overVoltmV);
-        UART_SendString(txt);
-    }
     /* ===== PRIORITY 1: E-Stop (Highest) ===== */
-    if (data->estopRaw) {
+    if (data->estopRaw)
+    {
         trip = TRIP_ESTOP;
         goto TRIP_ACTIVE;
     }
-    
+
     /* ===== PRIORITY 2: Short Circuit ===== */
-    if (data->currentmA >= cfg->shortTripmA) {
+    if (data->currentmA >= cfg->shortTripmA)
+    {
         trip = TRIP_SHORT;
         goto TRIP_ACTIVE;
     }
-    
+
     /* ===== PRIORITY 3: Overload (I2T) ===== */
-    if (g_protect.i2tAccum >= g_protect.i2tLimit) {
+    if (g_protect.i2tAccum >= g_protect.i2tLimit)
+    {
         trip = TRIP_OVERLOAD;
         goto TRIP_ACTIVE;
     }
-    
+
     /* ===== PRIORITY 4: Over Temperature ===== */
-    if (data->tempC >= cfg->overTempC) {
+    if (data->tempC >= cfg->overTempC)
+    {
         g_protect.tempCounter++;
-        if (g_protect.tempCounter >= 20) {  /* 2 seconds */
+
+        if (g_protect.tempCounter >= 20)
+        {
             trip = TRIP_OVERTEMP;
             goto TRIP_ACTIVE;
         }
-    } else {
+    }
+    else
+    {
         g_protect.tempCounter = 0;
     }
-    
+
     /* ===== PRIORITY 5: Under Voltage ===== */
-    if (data->busmV < cfg->underVoltmV) {
+    
+    if (data->busmV < cfg->underVoltmV)
+    {
         g_protect.underVoltCounter++;
-        if (g_protect.underVoltCounter >= 5) {  
+
+        if (g_protect.underVoltCounter >= 5)
+        {
             trip = TRIP_UNDERVOLT;
             goto TRIP_ACTIVE;
         }
-    } else {
+    }
+    else
+    {
         g_protect.underVoltCounter = 0;
     }
-    
+
     /* ===== PRIORITY 6: Over Voltage ===== */
-    if (data->busmV > cfg->overVoltmV) {
+    if (data->busmV > cfg->overVoltmV)
+    {
         g_protect.overVoltCounter++;
-        if (g_protect.overVoltCounter >= 2) {  /* 200ms */
+
+        if (g_protect.overVoltCounter >= 2)
+        {
             trip = TRIP_OVERVOLT;
             goto TRIP_ACTIVE;
         }
-    } else {
+    }
+    else
+    {
         g_protect.overVoltCounter = 0;
     }
-    
+
     /* ===== PRIORITY 7: Stall ===== */
-    if (data->dutyPct > 50 && data->measuredRpm < 100) {
+    if ((data->dutyPct > 50) &&
+        (data->measuredRpm < 100))
+    {
         g_protect.stallCounter++;
-        if (g_protect.stallCounter >= 30) {  /* 3 seconds */
+
+        if (g_protect.stallCounter >= 30)
+        {
             trip = TRIP_STALL;
             goto TRIP_ACTIVE;
         }
-    } else {
+    }
+    else
+    {
         g_protect.stallCounter = 0;
     }
-    
+
     /* ===== PRIORITY 8: Overspeed ===== */
-    if (data->measuredRpm > data->setpointRpm + 500) {
-        g_protect.overspeedCounter++;
-        if (g_protect.overspeedCounter >= 10) {  /* 1 second */
-            trip = TRIP_OVERSPEED;
-            goto TRIP_ACTIVE;
-        }
-    } else {
-        g_protect.overspeedCounter = 0;
+    /*
+     * Overspeed occurs if:
+     *
+     * 1) Actual RPM > Setpoint + 500 RPM
+     *
+     * OR
+     *
+     * 2) Actual RPM > configured maximum RPM
+     *
+     * The condition must remain true for 10 evaluations.
+     * Task_Control() runs protection every 100 ms,
+     * therefore 10 counts = approximately 1 second.
+     */
+   /* ===== PRIORITY 8: Overspeed ===== */
+if ((data->setpointRpm > 2600) ||
+    (data->measuredRpm > 2600))
+{
+    g_protect.overspeedCounter++;
+
+    if (g_protect.overspeedCounter >= 10)
+    {
+        trip = TRIP_OVERSPEED;
+        goto TRIP_ACTIVE;
     }
-    
+}
+else
+{
+    g_protect.overspeedCounter = 0;
+}
+
     /* ===== PRIORITY 9: No Feedback ===== */
-    if (data->dutyPct > 20 && data->measuredRpm == 0) {
+    if ((data->dutyPct > 20) &&
+        (data->measuredRpm == 0))
+    {
         g_protect.noFeedbackCounter++;
-        if (g_protect.noFeedbackCounter >= 20) {  /* 2 seconds */
+
+        if (g_protect.noFeedbackCounter >= 20)
+        {
             trip = TRIP_NOFEEDBACK;
             goto TRIP_ACTIVE;
         }
-    } else {
+    }
+    else
+    {
         g_protect.noFeedbackCounter = 0;
     }
-    
+
     /* ===== No Trip ===== */
     g_protect.activeTrip = TRIP_NONE;
+
     return TRIP_NONE;
 
+
 TRIP_ACTIVE:
+
     g_protect.activeTrip = trip;
     g_protect.tripped = 1;
+
     return trip;
 }
 

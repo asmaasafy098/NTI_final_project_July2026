@@ -4,7 +4,7 @@ build/HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.o: \
  HAL/LCD_Aip31068_i2c/../../Logic/Data/data_types.h Service/STD_Types.h \
  HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h \
  HAL/LCD_Aip31068_i2c/../../MCL/I2C/i2c_interface.h \
- d:\users\hp\desktop\final_project\service\std_types.h \
+ HAL/LCD_Aip31068_i2c/../../MCL/I2C/../../Service/STD_Types.h \
  HAL/LCD_Aip31068_i2c/../../MCL/I2C/i2c_registers.h
 
 HAL/LCD_Aip31068_i2c/../../Service/STD_Types.h:
@@ -17,6 +17,6 @@ HAL/LCD_Aip31068_i2c/lcd_aip31068_i2c.h:
 
 HAL/LCD_Aip31068_i2c/../../MCL/I2C/i2c_interface.h:
 
-d:\users\hp\desktop\final_project\service\std_types.h:
+HAL/LCD_Aip31068_i2c/../../MCL/I2C/../../Service/STD_Types.h:
 
 HAL/LCD_Aip31068_i2c/../../MCL/I2C/i2c_registers.h:

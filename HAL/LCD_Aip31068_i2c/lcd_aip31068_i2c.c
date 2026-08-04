@@ -809,3 +809,7 @@ Std_ReturnType LCD_Test(void)
 
     return E_OK;
 }
+Std_ReturnType LCD_ReInit(void)
+{
+    return LCD_Aip31068_Init(&g_lcdHandle);
+}

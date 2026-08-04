@@ -11,12 +11,14 @@
 #include "../Logic/Data/data_types.h"
 
 /* ==================== Button Events ==================== */
-typedef enum {
+typedef enum
+{
     PNL_NONE = 0,
     PNL_START,
     PNL_STOP,
     PNL_REVERSE,
-    PNL_RESET
+    PNL_RESET,
+    PNL_RESET_ACK
 } Panel_Event_t;
 
 /* ==================== Functions ==================== */
