@@ -58,47 +58,64 @@ Std_ReturnType I2C_Stop(void)
     return E_OK;
 }
 
-
 Std_ReturnType I2C_WriteByte(uint8_t data)
 {
-    uint32_t timeout = 0;
+    uint32_t timeout = 0U;
+    uint8_t status;
 
     I2C_TWDR_REG = data;
-    I2C_TWCR_REG = (1 << I2C_TWINT_BIT) | (1 << I2C_TWEN_BIT);
 
-    while (GET_BIT(I2C_TWCR_REG, I2C_TWINT_BIT) == 0) 
+    I2C_TWCR_REG =
+        (1U << I2C_TWINT_BIT) |
+        (1U << I2C_TWEN_BIT);
+
+    while (GET_BIT(I2C_TWCR_REG, I2C_TWINT_BIT) == 0U)
     {
         timeout++;
+
         if (timeout > I2C_TIMEOUT)
         {
-            return E_NOK; // خروج بفشل
+            return E_NOK;
         }
     }
 
-    uint8_t status = I2C_TWSR_REG & 0xF8;
-    if ((status != 0x18) && (status != 0x28) && (status != 0x40))
-    {
-        return E_NOK;   /* not ACKed */
-    }
-    return E_OK;
-}
+    status = I2C_TWSR_REG & 0xF8U;
 
+    /*
+     * 0x18 = SLA+W transmitted, ACK received
+     * 0x28 = DATA transmitted, ACK received
+     */
+    if ((status == 0x18U) || (status == 0x28U))
+    {
+        return E_OK;
+    }
+
+    return E_NOK;
+}
 
 Std_ReturnType I2C_WriteAddress(uint8_t address, uint8_t rw_bit)
 {
     Std_ReturnType local_Status;
 
     local_Status = I2C_Start();
+
     if (local_Status != E_OK)
     {
         return local_Status;
     }
 
-    /* address byte = 7-bit address shifted left + R/W bit (0=write, 1=read) */
-    local_Status = I2C_WriteByte((uint8_t)((address << 1) | (rw_bit & 0x01U)));
-    return local_Status;
-}
+    local_Status = I2C_WriteByte(
+        (uint8_t)((address << 1) | (rw_bit & 0x01U))
+    );
 
+    if (local_Status != E_OK)
+    {
+        I2C_Stop();
+        return E_NOK;
+    }
+
+    return E_OK;
+}
 
 Std_ReturnType I2C_WriteData(uint8_t data)
 {

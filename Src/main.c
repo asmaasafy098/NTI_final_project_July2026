@@ -394,16 +394,14 @@ void Task_Control(void)
  */
 void Task_LCD(void)
 {
-    static uint8_t lastTrip = 0;
     Trip_t currentTrip = PROTECT_GetActiveTrip();
-    
-    if (FSM_IsTripped()) {
-        if (currentTrip != lastTrip) {
-            lastTrip = currentTrip;
-            LCD_ShowTrip(currentTrip);
-        }
-    } else {
-        lastTrip = 0;
+
+    if (FSM_IsTripped())
+    {
+        LCD_ShowTrip(currentTrip);
+    }
+    else
+    {
         LCD_Update(&g_driveData);
     }
 }
